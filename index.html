@@ -7117,6 +7117,28 @@ CATALOG_ALL.trim().split('\n').forEach(function (ln) {
   if (p[5 - 1]) PREREQ[p[0]] = p[4];
 });
 
+/* ---- Title corrections, checked against the Actuarial Science, BSLAS catalog page directly.
+   Several ASRM codes had wrong or blank titles in the scraped course data. Titles only —
+   hours and requirement structure were already correct and are untouched. ---- */
+[
+  ['ASRM 406', 'Linear Algebra with Financial Applications'],
+  ['ASRM 409', 'Stochastic Processes for Finance and Insurance'],
+  ['ASRM 410', 'Investments and Financial Markets'],
+  ['ASRM 441', 'Statistics for Risk Modeling I'],
+  ['ASRM 442', 'Statistics for Risk Modeling II'],
+  ['ASRM 454', 'Generalized Linear Models'],
+  ['ASRM 455', 'Predictive Analytics'],
+  ['ASRM 461', 'Loss Models'],
+  ['ASRM 462', 'Advanced Loss Models, Credibility, and Ratemaking'],
+  ['ASRM 469', 'Casualty Actuarial Mathematics'],
+  ['ASRM 471', 'Life Contingencies I'],
+  ['ASRM 472', 'Life Contingencies II'],
+  ['STAT 432', 'Basics of Statistical Learning']
+].forEach(function (x) {
+  if (!CAT[x[0]]) CAT[x[0]] = { t: x[1], h: 3, hr: '3', a: '', cat: 1 };
+  else CAT[x[0]].t = x[1];
+});
+
 /* ============================ MAJORS ============================ */
 const MAJORS = {};
 function M(o) { MAJORS[o.id] = o; }
@@ -31934,9 +31956,43 @@ const PROGRAMS = {};
     }
   });
   Object.values(PROGRAMS).forEach(p => { if (p.parent && PROGRAMS[p.parent]) PROGRAMS[p.parent].kids.push(p.slug); });
+
+  /* ---------- split "pick one track" sections into real, selectable concentrations ----------
+     Some major pages (Physics is the current case) list several named "X Track" sections in
+     one requirements table instead of separate concentration pages, with a plain-text note
+     ("students are required to complete one track") that the row data itself never encodes as
+     a choice. Detect that pattern and turn each track into a normal concentration — the same
+     mechanism Math's concentration pages already use, wired through prog.kids. */
+  Object.keys(PROGRAMS).forEach(function (slug) {
+    const p = PROGRAMS[slug];
+    if (p.kind !== 'major') return;
+    const byTbl = {};
+    p.reqs.forEach(function (r) { (byTbl[r.tbl] = byTbl[r.tbl] || []).push(r); });
+    Object.keys(byTbl).forEach(function (tbl) {
+      const names = [...new Set(byTbl[tbl].map(r => r.sec).filter(s => /\btrack\b/i.test(s || '')))];
+      if (names.length < 2) return;
+      names.forEach(function (name) {
+        const clean = name.replace(/\s*\d+\s*$/, '').trim() || name;
+        const cslug = slug + '::' + clean.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        PROGRAMS[cslug] = {
+          slug: cslug, name: p.name.split(',')[0] + ': ' + clean, coll: p.coll, kind: 'conc',
+          parent: slug, status: p.status, total: 0, kids: [], synthetic: true,
+          reqs: byTbl[tbl].filter(function (r) { return r.sec === name; }).map(function (r) {
+            return Object.assign({}, r, { sec: clean });
+          })
+        };
+        p.kids.push(cslug);
+      });
+      p.reqs = p.reqs.filter(function (r) { return String(r.tbl) !== tbl || names.indexOf(r.sec) < 0; });
+    });
+  });
 })();
 const PROG_LIST = Object.values(PROGRAMS).sort((a, b) => a.name.localeCompare(b.name));
-const MAJOR_LIST = PROG_LIST.filter(p => p.kind === 'major');
+/* Temporary: while requirement data is being checked against the catalog major by major,
+   only these are offered as a starting major. Concentrations of an allowed major (via
+   prog.kids) still work normally. Minors are untouched. */
+const ALLOWED_MAJORS = ['las/mathematics-bslas', 'las/actuarial-science-bslas', 'engineering/physics-bs'];
+const MAJOR_LIST = PROG_LIST.filter(p => p.kind === 'major' && ALLOWED_MAJORS.indexOf(p.slug) > -1);
 const MINOR_LIST = PROG_LIST.filter(p => p.kind === 'minor');
 
 /* ---------- hours ---------- */
@@ -32366,9 +32422,21 @@ function prereqCheck(courses) {
   return issues;
 }
 
+/* Concentration pages only list their own extra rows — the catalog's own note: a student's
+   full requirement set is the major's rows plus the chosen concentration's rows. Build that
+   merged view here rather than auditing the concentration alone. */
+function effectiveProgram(prog) {
+  if (!prog || !prog.synthetic || !prog.parent || !PROGRAMS[prog.parent]) return prog;
+  const root = PROGRAMS[prog.parent];
+  return Object.assign({}, prog, {
+    reqs: root.reqs.concat(prog.reqs),
+    total: prog.total || root.total
+  });
+}
+
 /* ---------- degree-level checks ---------- */
 function degreeAudit() {
-  const prog = PROGRAMS[state.prog] || MAJOR_LIST[0];
+  const prog = effectiveProgram(PROGRAMS[state.prog] || MAJOR_LIST[0]);
   const courses = pool();
   const used = new Set();
   const major = auditProgram(prog, courses, used);
@@ -33351,7 +33419,11 @@ const DEFAULT_PLAN = {
   if (!state.prior) state.prior = [];
   if (state.sems && state.sems.length) normalizeSems();
   if (state.priorOpen === undefined) state.priorOpen = false;
-  if (!PROGRAMS[state.prog]) state.prog = 'engineering/computer-science-bs';
+  (function () {
+    const cur = PROGRAMS[state.prog];
+    const root = cur && cur.parent ? cur.parent : state.prog;
+    if (!cur || ALLOWED_MAJORS.indexOf(root) < 0) state.prog = 'las/mathematics-bslas';
+  })();
   state.minors = (state.minors || []).filter(s => PROGRAMS[s]);
   if (!state.lang) state.lang = { mode: state.flags && state.flags.langExempt ? 'exam' : 'none' };
   renderChrome(); renderFilters();
