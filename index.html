@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Illini Degree Planner — UIUC 2026–2027 Catalog</title>
-<meta name="description" content="Unofficial semester planner and requirement checker for 17 UIUC majors and 10 minors, built on the 2026-2027 catalog.">
+<meta name="description" content="Unofficial semester planner and requirement checker for UIUC majors and the Computer Science minor, built on the 2026-2027 catalog.">
 <meta name="color-scheme" content="light">
 <meta property="og:title" content="Illini Degree Planner">
-<meta property="og:description" content="Plan semesters, track major, minor and graduation requirements, and see exactly what is missing.">
+<meta property="og:description" content="Plan semesters, track major, Computer Science minor and graduation requirements, and see exactly what is missing.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -279,7 +279,7 @@ select.subjsel{font-family:var(--mono);font-size:11px;border:1px solid var(--lin
 </div>
 
 <div class="footer">
-  <strong>This is an unofficial planning tool, not a degree audit.</strong> It is not affiliated with or endorsed by the University of Illinois. Your official requirements live in your college\'s degree audit and with your academic advisor — confirm anything here before you register or apply to graduate. Programs and requirements come from the uploaded 2026–2027 catalog requirement dataset; courses, prerequisites, and gen-ed designations from the uploaded course datasets. Free-text requirement rules that cannot be resolved to course codes are listed for you to confirm, never counted automatically. Placeholder codes like <code>MATH 4--</code> mean "any 400-level MATH"; a <code>4--</code> placeholder fills any elective slot at the 400 level or below. AP, IB, transfer, and proficiency credit go in the "Credit you already have" card and count toward requirements like any other course — the catalog awards equivalency by score, so add the specific course each score cleared.
+  <strong>This is an unofficial planning tool, not a degree audit.</strong> It is not affiliated with or endorsed by the University of Illinois. Your official requirements live in your college's degree audit and with your academic advisor — confirm anything here before you register or apply to graduate. Programs and requirements come from the uploaded 2026–2027 catalog requirement dataset; courses, prerequisites, and gen-ed designations from the uploaded course datasets. Free-text requirement rules that cannot be resolved to course codes are listed for you to confirm, never counted automatically. Placeholder codes like <code>MATH 4--</code> mean "any 400-level MATH"; a <code>4--</code> placeholder fills any elective slot at the 400 level or below. AP, IB, transfer, and proficiency credit go in the "Credit you already have" card and count toward requirements like any other course — the catalog awards equivalency by score, so add the specific course each score cleared.
 </div>
 
 <div class="bankwrap" id="bankWrap">
@@ -7139,871 +7139,6 @@ CATALOG_ALL.trim().split('\n').forEach(function (ln) {
   else CAT[x[0]].t = x[1];
 });
 
-/* ============================ MAJORS ============================ */
-const MAJORS = {};
-function M(o) { MAJORS[o.id] = o; }
-
-M({
-  id: 'EE', name: 'Electrical Engineering, BS', college: 'Grainger', hours: 128, lang: '3rd',
-  gpa: 'Min overall & technical GPA 2.0 (TGPA on ECE courses except ECE 316).',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'ENG 100', h: 1, alt: ['ENG 300'], altNote: 'external transfers take ENG 300' }] },
-    {
-      n: 'Foundational Math & Science', h: 33, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['MATH 257', 'MATH 416'], h: 3, lab: 'Linear algebra' },
-        { c: 'MATH 285', h: 3 }, { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 213', h: 2 }, { c: 'PHYS 214', h: 2 }
-      ]
-    },
-    {
-      n: 'EE Technical Core', h: 31, items: [
-        { c: 'ECE 110', h: 3 }, { c: 'ECE 120', h: 4 }, { c: 'ECE 220', h: 4 }, { c: 'ECE 210', h: 4 },
-        { c: 'ECE 313', h: 3, alt: ['STAT 410'], altNote: 'STAT 410 may substitute' },
-        { c: 'ECE 329', h: 3 }, { c: 'ECE 340', h: 3 }, { c: 'ECE 385', h: 3 },
-        { c: 'ECE 445', h: 4, combo: [['ECE 496', 'ECE 499']], altNote: 'ECE 496 + ECE 499 may substitute; satisfies Advanced Composition' }
-      ]
-    },
-    {
-      n: 'Technical Electives', h: 31, items: [
-        {
-          bucket: 'Approved technical electives', h: 31, m: { min: 100 },
-          cons: [{ h: 21, lab: '≥21 hrs ECE', m: { subj: ['ECE'] } }, { h: 6, lab: '≥6 hrs non-ECE', m: { notSubj: ['ECE'] } }]
-        },
-        { manual: '≥3 hrs Advanced Core Electives (from the departmental list)' },
-        { manual: '≥3 ECE Lab courses, at least one Hardware Lab' }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives to reach 128 hrs', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['ENG 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'ECE 110', 'COMP I'],
-    ['MATH 231', 'PHYS 211', 'ECE 120', 'GEN HUM', 'CULT WEST'],
-    ['MATH 241', 'PHYS 212', 'ECE 220', 'ECE 210'],
-    ['MATH 285', 'MATH 257', 'PHYS 213', 'PHYS 214', 'GEN SBS'],
-    ['ECE 313', 'ECE 329', 'ECE 385', 'ECE 3--', 'CULT NONWEST'],
-    ['ECE 340', 'ECE 4--', 'ECE 4--', 'ANY 3--', 'GEN HUM'],
-    ['ECE 445', 'ECE 4--', 'ECE 4--', 'GEN SBS', 'CULT USM'],
-    ['ECE 4--', 'ECE 4--', 'ECE 4--', 'ANY 3--', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'CMPE', name: 'Computer Engineering, BS', college: 'Grainger', hours: 128, lang: '3rd',
-  gpa: 'Min overall & technical GPA 2.0.',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'ENG 100', h: 1 }] },
-    {
-      n: 'Foundational Math & Science', h: 29, items: [
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['MATH 257', 'MATH 416'], h: 3, lab: 'Linear algebra' },
-        { c: 'MATH 285', h: 3 }, { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 213', h: 2 }, { c: 'PHYS 214', h: 2 },
-        { flag: 'No general chemistry required, unlike EE.' }
-      ]
-    },
-    {
-      n: 'CompE Technical Core', h: 36, items: [
-        { c: 'ECE 110', h: 3 }, { c: 'ECE 120', h: 4 }, { c: 'ECE 210', h: 4 }, { c: 'ECE 220', h: 4 },
-        { c: 'CS 173', h: 3, alt: ['MATH 213'], altNote: 'MATH 213 may substitute' },
-        { c: 'CS 225', h: 4 }, { c: 'ECE 313', h: 3, alt: ['STAT 410'], altNote: 'STAT 410 may substitute' },
-        { c: 'ECE 374', h: 4 }, { c: 'ECE 385', h: 3 }, { c: 'ECE 391', h: 4 }
-      ]
-    },
-    {
-      n: 'Technical Electives', h: 30, items: [
-        { bucket: 'Approved technical electives', h: 30, m: { min: 100 } },
-        { manual: '≥1 Electrical Engineering Foundations course' },
-        { manual: '≥3 Advanced Computing Electives' },
-        { manual: '≥1 Design elective — ECE 445 (or ECE 496+499) also clears Advanced Composition; choosing ECE 411 instead means a separate Advanced Composition course is required' }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives to reach 128 hrs', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['ENG 100', 'MATH 221', 'ECE 110', 'COMP I', 'GEN HUM'],
-    ['MATH 231', 'PHYS 211', 'ECE 120', 'CS 173', 'CULT WEST'],
-    ['MATH 241', 'PHYS 212', 'ECE 220', 'CS 225'],
-    ['MATH 285', 'MATH 257', 'PHYS 213', 'PHYS 214', 'ECE 210'],
-    ['ECE 313', 'ECE 374', 'ECE 385', 'GEN SBS', 'CULT NONWEST'],
-    ['ECE 391', 'ECE 4--', 'ECE 4--', 'GEN HUM', 'CULT USM'],
-    ['ECE 445', 'ECE 4--', 'CS 4--', 'GEN SBS'],
-    ['ECE 4--', 'CS 4--', 'ANY 3--', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'ME', name: 'Mechanical Engineering, BS', college: 'Grainger (MechSE)', hours: 128, lang: '3rd',
-  gpa: 'ME 470 fulfils Advanced Composition; ECON 102/103 counts as a Social & Behavioral Sciences gen ed.',
-  flagged: 'The undergraduate ME technical-core hour total and the full technical-elective list were NOT fully captured in the source audit. Re-verify at mechse.illinois.edu.',
-  groups: [
-    { n: 'Orientation & Economics', items: [{ c: 'ENG 100', h: 1 }, { c: 'ME 290', h: 0 }, { oneof: ['ECON 102', 'ECON 103'], h: 3, lab: 'Intro economics' }] },
-    {
-      n: 'Foundational Math & Science', h: 29, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 257', h: 3 }, { c: 'MATH 285', h: 3 },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }
-      ]
-    },
-    {
-      n: 'ME Technical Core (partial — flagged)', items: [
-        { c: 'CS 101', h: 3, alt: ['CS 124', 'ECE 220'], altNote: 'CS 124 or ECE 220 may substitute' },
-        { c: 'ECE 205', h: 3 },
-        { oneof: ['TAM 211', 'TAM 210'], h: 3, lab: 'Statics' }, { c: 'TAM 212', h: 3 }, { c: 'TAM 251', h: 3 },
-        { c: 'ME 200', h: 3 }, { c: 'ME 310', h: 3 }, { c: 'ME 320', h: 3 }, { c: 'ME 340', h: 3 },
-        { c: 'ME 360', h: 3 }, { c: 'ME 370', h: 3 }, { c: 'ME 371', h: 3 }, { c: 'ME 470', h: 3 },
-        { flag: 'Statics/dynamics/solid-mechanics TAM courses are encoded from the audit prose, not an exact catalog list.' }
-      ]
-    },
-    { n: 'Technical & free electives', items: [{ bucket: 'Technical electives (track or customised plan)', h: 21, m: { min: 200 } }, { bucket: 'Free electives to reach 128 hrs', fill: 1, m: {} }] }
-  ],
-  concs: [
-    { id: 'none', n: 'No declared track' },
-    { id: 'dm', n: 'Design & Mechanics (advising grouping)' }, { id: 'mf', n: 'Manufacturing' },
-    { id: 'cr', n: 'Controls & Robotics' }, { id: 'ft', n: 'Fluid & Thermal Sciences' },
-    { id: 'en', n: 'Energy' }, { id: 'bm', n: 'Biomechanics' }
-  ],
-  track: [
-    ['ENG 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['MATH 231', 'PHYS 211', 'CS 101', 'GEN HUM', 'CULT WEST'],
-    ['MATH 241', 'PHYS 212', 'TAM 211', 'ME 290', 'ECON 102'],
-    ['MATH 285', 'MATH 257', 'TAM 212', 'TAM 251', 'ME 200'],
-    ['ECE 205', 'ME 310', 'ME 340', 'ME 370', 'CULT NONWEST'],
-    ['ME 320', 'ME 360', 'ME 371', 'ME 4--', 'GEN HUM'],
-    ['ME 470', 'ME 4--', 'ME 4--', 'GEN SBS', 'CULT USM'],
-    ['ME 4--', 'ANY 4--', 'FREE ELEC', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'AE', name: 'Aerospace Engineering, BS', college: 'Grainger', hours: 128, lang: '3rd',
-  gpa: 'AE 443 fulfils Advanced Composition. No named concentrations.',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'AE 100', h: 2 }, { c: 'ENG 100', h: 1 }] },
-    {
-      n: 'Foundational Math & Science', h: 29, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 257', h: 3 }, { c: 'MATH 285', h: 3 },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }
-      ]
-    },
-    {
-      n: 'AE Technical Core', h: 58, items: [
-        { c: 'AE 140', h: 2 }, { c: 'AE 202', h: 3 }, { c: 'AE 311', h: 3 }, { c: 'AE 312', h: 3 }, { c: 'AE 321', h: 3 },
-        { c: 'AE 323', h: 3 }, { c: 'AE 352', h: 3 }, { c: 'AE 353', h: 3 }, { c: 'AE 370', h: 3 },
-        { oneof: ['AE 433', 'AE 434'], h: 3, lab: 'Propulsion' },
-        { c: 'AE 442', h: 3 }, { c: 'AE 443', h: 3 }, { c: 'AE 460', h: 2 }, { c: 'AE 461', h: 2 }, { c: 'AE 483', h: 2 },
-        { c: 'CS 101', h: 3, alt: ['CS 124'], altNote: 'CS 124 may substitute' },
-        { c: 'ECE 205', h: 3 }, { c: 'ME 200', h: 3 }, { c: 'MSE 280', h: 3 }, { c: 'TAM 210', h: 2 }, { c: 'TAM 212', h: 3 }
-      ]
-    },
-    {
-      n: 'Technical Electives', h: 12, items: [
-        { bucket: 'Technical electives', h: 12, m: { min: 200 }, cons: [{ h: 6, lab: '≥6 hrs AE', m: { subj: ['AE'] } }] }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives (~10 hrs) to reach 128', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['AE 100', 'ENG 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['AE 140', 'MATH 231', 'PHYS 211', 'CS 101', 'CULT WEST'],
-    ['MATH 241', 'PHYS 212', 'TAM 210', 'MSE 280', 'GEN HUM'],
-    ['AE 202', 'TAM 212', 'MATH 257', 'MATH 285', 'ME 200'],
-    ['AE 311', 'AE 321', 'AE 352', 'ECE 205', 'GEN SBS'],
-    ['AE 312', 'AE 323', 'AE 353', 'AE 370', 'CULT NONWEST'],
-    ['AE 442', 'AE 433', 'AE 460', 'AE 483', 'AE 4--', 'GEN HUM'],
-    ['AE 443', 'AE 461', 'AE 4--', 'AE 4--', 'ANY 4--', 'CULT USM', 'GEN SBS']
-  ]
-});
-
-M({
-  id: 'ENVE', name: 'Environmental Engineering, BS', college: 'Grainger (CEE)', hours: 128, lang: '3rd',
-  gpa: 'Launched Fall 2024. ECE 316 fulfils a Humanities gen ed AND Advanced Composition.',
-  flagged: 'No single named senior-design capstone — design is embedded in Primary Field courses. Re-verify at cee.illinois.edu.',
-  groups: [
-    { n: 'Orientation & Professional Development', h: 8, items: [{ c: 'CEE 190', h: 4 }, { c: 'CEE 495', h: 0 }, { c: 'ECE 316', h: 3 }, { c: 'ENG 100', h: 1 }] },
-    {
-      n: 'Foundational Math & Science', h: 32, items: [
-        { c: 'ATMS 202', h: 3 }, { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 }, { c: 'CHEM 104', h: 3 }, { c: 'CHEM 105', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 257', h: 3 }, { c: 'MATH 285', h: 3 }, { c: 'PHYS 211', h: 4 }
-      ]
-    },
-    {
-      n: 'EnvE Technical Core', h: 35, items: [
-        { c: 'CEE 201', h: 3 }, { c: 'CEE 202', h: 3 }, { c: 'CEE 330', h: 3 }, { c: 'CEE 331', h: 4 }, { c: 'CEE 350', h: 3 },
-        { c: 'CEE 449', h: 3 }, { c: 'CEE 453', h: 4 }, { c: 'CS 101', h: 3 }, { c: 'SE 101', h: 3 }, { c: 'TAM 211', h: 3 }, { c: 'TAM 212', h: 3 }
-      ]
-    },
-    { n: 'Primary Field (choose one)', items: [{ bucket: 'Primary Field coursework (~29–32 hrs)', h: 29, m: { min: 200 } }, { manual: 'Declare one Primary Field with your advisor' }] }
-  ],
-  concs: [
-    { id: 'phe', n: 'Public Health Engineering', groups: [{ n: 'Primary Field notes', items: [{ manual: 'Distinguishing courses include CEE 435, 437, 438, 441 — they count inside the Primary Field hours above' }] }] },
-    { id: 'ow', n: 'One Water', groups: [{ n: 'Primary Field notes', items: [{ manual: 'Distinguishing courses include CEE 440, 442, 444 and CHBE 221/321 — they count inside the Primary Field hours above' }] }] },
-    { id: 'e2s', n: 'Energy & Environmental Sustainability', groups: [{ n: 'Primary Field notes', items: [{ manual: 'Distinguishing courses include CEE 433, 493 and ME 200 — they count inside the Primary Field hours above' }] }] },
-    { id: 'ces', n: 'Climate & Environmental Sustainability' },
-    { id: 'wss', n: 'Water Systems & Sustainability' }
-  ],
-  track: [
-    ['ENG 100', 'CEE 190', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['MATH 231', 'CHEM 104', 'CHEM 105', 'PHYS 211', 'CS 101'],
-    ['MATH 241', 'TAM 211', 'CEE 201', 'ATMS 202', 'CULT WEST'],
-    ['MATH 285', 'MATH 257', 'TAM 212', 'CEE 202', 'SE 101'],
-    ['CEE 330', 'CEE 350', 'ECE 316', 'GEN SBS', 'CULT NONWEST'],
-    ['CEE 331', 'CEE 449', 'CEE 4--', 'GEN HUM', 'GEN SBS'],
-    ['CEE 453', 'CEE 4--', 'CEE 4--', 'CULT USM'],
-    ['CEE 495', 'CEE 4--', 'CEE 4--', 'ANY 4--', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'CIVE', name: 'Civil Engineering, BS', college: 'Grainger (CEE)', hours: 128, lang: '3rd',
-  gpa: 'Requires Program Review Committee approval of each student\'s plan.',
-  flagged: 'The CEE technical-core course list and per-area required courses were NOT captured in the source audit. The technical block below is an hours placeholder only — re-verify at cee.illinois.edu.',
-  groups: [
-    { n: 'Orientation & Economics', h: 5, items: [{ c: 'CEE 190', h: 4 }, { c: 'CEE 495', h: 0 }, { c: 'ENG 100', h: 1 }, { oneof: ['ECON 102', 'ECON 103'], h: 3, lab: 'Intro economics' }] },
-    {
-      n: 'Foundational Math & Science', h: 35, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 }, { c: 'CHEM 104', h: 3 }, { c: 'CHEM 105', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { c: 'MATH 257', h: 3, alt: ['MATH 225', 'MATH 415'], altNote: 'MATH 225 or MATH 415 may substitute' },
-        { c: 'MATH 285', h: 3 }, { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 213', h: 2 }
-      ]
-    },
-    { n: 'CEE Technical Core & Area of Study (flagged)', items: [{ bucket: 'CEE technical core + area coursework', h: 55, m: { min: 200 } }, { manual: 'Choose one of the seven areas of study, or an interdisciplinary program, and get the plan approved' }] }
-  ],
-  concs: [
-    { id: 'cem', n: 'Construction Engineering & Management' }, { id: 'cm', n: 'Construction Materials' },
-    { id: 'ees', n: 'Environmental Engineering & Science' }, { id: 'geo', n: 'Geotechnical Engineering' },
-    { id: 'wr', n: 'Water Resources Engineering & Science' }, { id: 'str', n: 'Structural Engineering' },
-    { id: 'trn', n: 'Transportation Engineering' },
-    { id: 'sris', n: 'Interdisciplinary: Sustainable & Resilient Infrastructure Systems' },
-    { id: 'ewes', n: 'Interdisciplinary: Energy-Water-Environment Sustainability' },
-    { id: 'srhm', n: 'Interdisciplinary: Societal Risk & Hazard Mitigation' }
-  ],
-  track: [
-    ['ENG 100', 'CEE 190', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['MATH 231', 'CHEM 104', 'CHEM 105', 'PHYS 211', 'ECON 102'],
-    ['MATH 241', 'PHYS 212', 'CEE 2--', 'CULT WEST', 'GEN HUM'],
-    ['MATH 285', 'MATH 257', 'PHYS 213', 'CEE 2--', 'CEE 3--'],
-    ['CEE 3--', 'CEE 3--', 'CEE 3--', 'GEN SBS', 'CULT NONWEST'],
-    ['CEE 3--', 'CEE 4--', 'CEE 4--', 'GEN HUM'],
-    ['CEE 4--', 'CEE 4--', 'ANY 4--', 'GEN SBS', 'CULT USM'],
-    ['CEE 495', 'CEE 4--', 'CEE 4--', 'ADV COMP', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'IE', name: 'Industrial Engineering, BS', college: 'Grainger (ISE)', hours: 128, lang: '3rd',
-  gpa: 'SE 494 fulfils Advanced Composition. ECON 102/103 must be one of the SBS gen ed courses.',
-  flagged: 'The catalog prose says "five tracks" while the requirements table and department site list six or seven. Re-verify at ise.illinois.edu.',
-  groups: [
-    { n: 'Orientation & Economics', items: [{ c: 'ENG 100', h: 1 }, { c: 'SE 100', h: 1 }, { c: 'SE 290', h: 0 }, { oneof: ['ECON 102', 'ECON 103'], h: 3, lab: 'Intro economics (counts as SBS)' }] },
-    {
-      n: 'Foundational Math & Science', h: 31, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 257', h: 3 }, { c: 'MATH 285', h: 3 },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 213', h: 2 }
-      ]
-    },
-    {
-      n: 'IE Technical Core', h: 50, items: [
-        { c: 'CS 101', h: 3, alt: ['CS 124'], altNote: 'CS 124 may substitute' },
-        { c: 'ECE 110', h: 3 }, { c: 'IE 300', h: 3 }, { c: 'IE 310', h: 3 }, { c: 'IE 360', h: 3 }, { c: 'IE 361', h: 3 },
-        { c: 'IE 370', h: 3 }, { c: 'IE 371', h: 3 }, { c: 'IE 400', h: 3 }, { c: 'ME 330', h: 4 }, { c: 'SE 101', h: 3 },
-        { c: 'SE 261', h: 2 }, { c: 'SE 494', h: 3 }, { c: 'SE 495', h: 2 }, { c: 'TAM 211', h: 3 }, { c: 'TAM 212', h: 3 }, { c: 'TAM 251', h: 3 }
-      ]
-    },
-    {
-      n: 'Track & Technical Electives', items: [
-        { bucket: 'Track electives', h: 12, m: { min: 300 } },
-        { bucket: 'Technical electives — 3 hrs CS', h: 3, m: { subj: ['CS'] } },
-        { bucket: 'Technical electives — 3 hrs IE', h: 3, m: { subj: ['IE'] } },
-        { bucket: 'Free electives (~11 hrs) to reach 128', fill: 1, m: {} }
-      ]
-    }
-  ],
-  concs: [
-    { id: 'none', n: 'Track not chosen yet' },
-    { id: 'cm', n: 'Computational Methods in IE' }, { id: 'ef', n: 'Economics & Finance' },
-    { id: 'hf', n: 'Human Factors / Ergonomics', groups: [{ n: 'Track core', items: [{ c: 'IE 340', h: 3 }] }] },
-    { id: 'fund', n: 'Industrial Engineering Fundamentals' },
-    { id: 'or', n: 'Operations Research', groups: [{ n: 'Track core', items: [{ c: 'IE 410', h: 3 }, { c: 'IE 411', h: 3 }] }] },
-    { id: 'qe', n: 'Quality Engineering', groups: [{ n: 'Track core', items: [{ c: 'IE 330', h: 3 }] }] },
-    { id: 'scm', n: 'Supply Chain, Manufacturing & Logistics', groups: [{ n: 'Track core', items: [{ c: 'IE 412', h: 3 }] }] }
-  ],
-  track: [
-    ['ENG 100', 'SE 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['MATH 231', 'PHYS 211', 'CS 101', 'SE 101', 'ECON 102'],
-    ['MATH 241', 'PHYS 212', 'TAM 211', 'SE 290', 'PHYS 213'],
-    ['MATH 257', 'MATH 285', 'IE 300', 'TAM 212', 'TAM 251'],
-    ['ECE 110', 'IE 310', 'IE 360', 'ME 330', 'CULT WEST'],
-    ['IE 361', 'IE 370', 'IE 400', 'SE 261', 'GEN HUM'],
-    ['IE 371', 'SE 494', 'IE 4--', 'IE 4--', 'CS 4--', 'CULT NONWEST'],
-    ['SE 495', 'IE 4--', 'IE 4--', 'CS 4--', 'GEN HUM', 'GEN SBS', 'CULT USM']
-  ]
-});
-
-M({
-  id: 'MSE', name: 'Materials Science & Engineering, BS', college: 'Grainger (MatSE)', hours: 128, lang: '3rd',
-  gpa: 'MSE 307 + MSE 308 labs fulfil Advanced Composition.',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'ENG 100', h: 1 }] },
-    {
-      n: 'Foundational Math & Science', h: 35, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 }, { c: 'CHEM 104', h: 3 }, { c: 'CHEM 105', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 257', h: 3 }, { c: 'MATH 285', h: 3 },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 214', h: 2 }
-      ]
-    },
-    {
-      n: 'MSE Core (all students)', items: [
-        { c: 'CS 101', h: 3 }, { c: 'ECE 205', h: 3 }, { c: 'MSE 182', h: 2 }, { c: 'MSE 201', h: 3 }, { c: 'MSE 206', h: 4 },
-        { c: 'MSE 307', h: 3 }, { c: 'MSE 308', h: 3 }, { c: 'MSE 401', h: 3 }, { c: 'MSE 402', h: 3 }, { c: 'MSE 406', h: 3 },
-        { c: 'MSE 494', h: 1 }, { c: 'MSE 495', h: 2 }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives (~10 hrs) to reach 128', fill: 1, m: {} }] }
-  ],
-  concs: [
-    {
-      id: 'other', n: 'All Other Areas', groups: [{
-        n: 'Area requirements', items: [
-          { oneof: ['IE 300', 'STAT 400'], h: 3, lab: 'Statistics' }, { c: 'MSE 304', h: 3 }, { c: 'MSE 405', h: 3 },
-          { bucket: 'Technical electives (incl. MSE 404 topical lectures)', h: 24, m: { min: 200 } }
-        ]
-      }]
-    },
-    {
-      id: 'bio', n: 'Biomaterials Area', groups: [{
-        n: 'Biomaterials requirements', items: [
-          { c: 'CHEM 232', h: 4 }, { oneof: ['IE 300', 'STAT 400'], h: 3, lab: 'Statistics' }, { c: 'MCB 150', h: 4 },
-          { c: 'MCB 450', h: 3 }, { c: 'MCB 252', h: 3 }, { c: 'MSE 470', h: 3 },
-          { bucket: 'Technical electives', h: 14, m: { min: 200 } }
-        ]
-      }]
-    },
-  ],
-  track: [
-    ['ENG 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'MSE 182', 'COMP I'],
-    ['MATH 231', 'CHEM 104', 'CHEM 105', 'PHYS 211', 'CS 101'],
-    ['MATH 241', 'PHYS 212', 'MSE 201', 'MSE 206', 'CULT WEST'],
-    ['MATH 257', 'MATH 285', 'PHYS 214', 'ECE 205', 'IE 300'],
-    ['MSE 307', 'MSE 401', 'MSE 405', 'MSE 304', 'CULT NONWEST'],
-    ['MSE 308', 'MSE 402', 'MSE 406', 'GEN SBS', 'MSE 4--'],
-    ['MSE 494', 'MSE 4--', 'MSE 4--', 'MSE 4--', 'GEN HUM', 'CULT USM'],
-    ['MSE 495', 'MSE 4--', 'MSE 4--', 'MSE 4--', 'GEN SBS', 'GEN HUM']
-  ]
-});
-
-M({
-  id: 'BIOE', name: 'Bioengineering, BS', college: 'Grainger (BIOE)', hours: 128, lang: '3rd',
-  gpa: 'BIOE 400 fulfils Advanced Composition.',
-  flagged: 'The full BIOE technical core and the named concentration tracks/hours were NOT captured in the source audit. The technical block is an hours placeholder — re-verify at bioengineering.illinois.edu.',
-  groups: [
-    { n: 'Orientation', h: 3, items: [{ c: 'ENG 100', h: 1 }, { c: 'BIOE 100', h: 1 }, { c: 'BIOE 120', h: 1 }] },
-    {
-      n: 'Foundational Math & Science (partial)', items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 }, { c: 'CHEM 104', h: 3 }, { c: 'CHEM 105', h: 1 },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'] }, { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 285', h: 3 },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'MCB 150', h: 4 },
-        { c: 'CS 101', h: 3, alt: ['CS 124'], altNote: 'CS 101/124 meets part of Quantitative Reasoning' }
-      ]
-    },
-    { n: 'BIOE Technical Core & Concentration (flagged)', items: [{ c: 'BIOE 400', h: 3 }, { bucket: 'BIOE technical core + subdiscipline coursework', h: 45, m: { min: 200 } }, { manual: 'Choose a subdiscipline in years 3–4 (cell/tissue, biomechanics, bioinstrumentation, imaging, computational/systems)' }] }
-  ],
-  track: [
-    ['ENG 100', 'BIOE 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['BIOE 120', 'MATH 231', 'CHEM 104', 'CHEM 105', 'MCB 150'],
-    ['MATH 241', 'PHYS 211', 'CS 101', 'BIOE 2--', 'CULT WEST'],
-    ['MATH 285', 'PHYS 212', 'BIOE 2--', 'BIOE 3--', 'GEN HUM'],
-    ['BIOE 3--', 'BIOE 3--', 'ANY 3--', 'GEN SBS', 'CULT NONWEST'],
-    ['BIOE 4--', 'BIOE 4--', 'ANY 4--', 'GEN HUM'],
-    ['BIOE 400', 'BIOE 4--', 'ANY 4--', 'GEN SBS', 'CULT USM'],
-    ['BIOE 4--', 'BIOE 4--', 'FREE ELEC', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'NE', name: 'Neural Engineering, BS', college: 'Grainger (Bioengineering)', hours: 128, lang: '3rd',
-  gpa: 'No named concentrations. Newest program — confirm the plan with an advisor.',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'ENG 100', h: 1 }] },
-    {
-      n: 'Foundational Math & Science', h: 34, items: [
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 }, { c: 'CHEM 104', h: 3 }, { c: 'CHEM 105', h: 1 },
-        { c: 'CHEM 232', h: 4, altNote: 'may be taken for 3 hrs; the extra hour becomes a free elective' },
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 }, { c: 'MATH 285', h: 3 }, { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }
-      ]
-    },
-    {
-      n: 'NE Technical Core', h: 54, items: [
-        { c: 'BIOE 205', h: 3 }, { c: 'BIOE 210', h: 3 }, { c: 'BIOE 310', h: 3 }, { c: 'NE 100', h: 2 }, { c: 'NE 330', h: 3 },
-        { c: 'NE 402', h: 4 }, { c: 'NE 412', h: 3 }, { c: 'NE 422', h: 3 }, { c: 'NE 430', h: 3 }, { c: 'NE 431', h: 4 },
-        { c: 'NE 410', h: 3, alt: ['ECE 410'], altNote: 'cross-listed ECE 410 / NE 410' },
-        { c: 'NE 420', h: 3, alt: ['ECE 421'], altNote: 'cross-listed ECE 421 / NE 420' },
-        { c: 'CS 101', h: 3, alt: ['CS 124'], altNote: 'CS 124 may substitute' },
-        { c: 'MCB 150', h: 4 }, { c: 'MCB 250', h: 3 }, { c: 'MCB 252', h: 3 }, { c: 'PSYC 100', h: 4 }
-      ]
-    },
-    {
-      n: 'Electives', items: [
-        { bucket: 'Technical electives from the pre-approved list (BIOE, ECE, ME 483, PSYC 210/404, PHYS 475)', h: 12, m: { subj: ['BIOE', 'ECE', 'NE'], list: ['ME 483', 'PSYC 210', 'PSYC 404', 'PHYS 475'] } },
-        { bucket: 'Free electives (~12 hrs) to reach 128', fill: 1, m: {} }
-      ]
-    }
-  ],
-  track: [
-    ['ENG 100', 'NE 100', 'MATH 221', 'CHEM 102', 'CHEM 103', 'COMP I'],
-    ['MATH 231', 'CHEM 104', 'CHEM 105', 'MCB 150', 'CS 101'],
-    ['MATH 241', 'PHYS 211', 'CHEM 232', 'MCB 250', 'PSYC 100'],
-    ['MATH 285', 'PHYS 212', 'MCB 252', 'BIOE 205', 'CULT WEST'],
-    ['BIOE 210', 'GEN SBS', 'NE 330', 'GEN HUM', 'CULT NONWEST'],
-    ['NE 410', 'BIOE 310', 'NE 430', 'NE 412'],
-    ['NE 402', 'NE 420', 'NE 431', 'GEN HUM', 'CULT USM'],
-    ['NE 422', 'BIOE 4--', 'ECE 4--', 'GEN SBS', 'ADV COMP']
-  ]
-});
-
-M({
-  id: 'CS', name: 'Computer Science, BS', college: 'Grainger (Siebel School)', hours: 128, lang: '3rd',
-  gpa: 'Min technical GPA 2.0 (CS + Math). ≥40 hrs upper-division. CS 211 satisfies Advanced Composition.',
-  groups: [
-    {
-      n: 'Foundational Math & Science', h: 25, items: [
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['MATH 257', 'MATH 415', 'MATH 416'], h: 3, lab: 'Linear algebra' },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 },
-        { bucket: 'Science elective from the NST list (excludes ASTR 100, PHYS 101/102, CHEM 101)', h: 3, m: { attr: 'NAT', exclude: ['PHYS 101', 'PHYS 102'] } }
-      ]
-    },
-    { n: 'Orientation & Professional Development', h: 4, items: [{ c: 'ENG 100', h: 1 }, { oneof: ['CS 211', 'CS 210'], h: 3, lab: 'Ethics (CS 211 also clears Advanced Composition)' }] },
-    {
-      n: 'CS Technical Core', h: 35, items: [
-        { c: 'CS 124', h: 3, alt: ['CS 125'], altNote: 'legacy CS 125 credit satisfies CS 124' },
-        { c: 'CS 128', h: 3 }, { c: 'CS 173', h: 3 }, { c: 'CS 222', h: 1 }, { c: 'CS 225', h: 4 }, { c: 'CS 233', h: 4 },
-        { c: 'CS 341', h: 4 }, { c: 'CS 357', h: 3 }, { c: 'CS 361', h: 3 }, { c: 'CS 374', h: 4 }, { c: 'CS 421', h: 3 }
-      ]
-    },
-    {
-      n: 'Technical & Advanced Electives', items: [
-        { bucket: 'CS technical electives — ≥18 hrs, ≥6 courses (CS 397 and CS 400-level, excluding CS 400/401/402/403/491)', h: 18, m: { subj: ['CS'], min: 397, exclude: ['CS 400', 'CS 401', 'CS 402', 'CS 403', 'CS 491'] } },
-        { manual: '≥1 course from the Team Project Course List' },
-        { manual: '≥3 hrs from a single focus area (specialization)' },
-        { bucket: 'Advanced electives — 2 courses, ≥6 hrs, any 400-level university-wide, letter grade', h: 6, m: { min: 400 } },
-        { bucket: 'Free electives (~24 hrs) to reach 128', fill: 1, m: {} }
-      ]
-    }
-  ],
-  concs: [
-    { id: 'none', n: 'Specialization not chosen' },
-    { id: 'sf', n: '1 — Software Foundations' }, { id: 'amc', n: '2 — Algorithms & Models of Computation' },
-    { id: 'ibd', n: '3 — Intelligence & Big Data' }, { id: 'hsi', n: '4 — Human & Social Impact' },
-    { id: 'med', n: '5 — Media' }, { id: 'sphpc', n: '6 — Scientific, Parallel & High-Performance Computing' },
-    { id: 'dsns', n: '7 — Distributed Systems, Networking & Security' }, { id: 'mach', n: '8 — Machines' }
-  ],
-  track: [
-    ['ENG 100', 'MATH 221', 'CS 124', 'COMP I', 'GEN HUM'],
-    ['MATH 231', 'CS 128', 'CS 173', 'CULT WEST', 'GEN SBS'],
-    ['MATH 241', 'CS 225', 'CS 222', 'PHYS 211'],
-    ['MATH 257', 'CS 233', 'CS 361', 'PHYS 212', 'CULT NONWEST'],
-    ['CS 341', 'CS 357', 'CS 211', 'GEN NAT', 'GEN HUM'],
-    ['CS 374', 'CS 4--', 'CS 4--', 'GEN SBS', 'CULT USM'],
-    ['CS 421', 'CS 4--', 'CS 4--', 'ANY 4--', 'FREE ELEC'],
-    ['CS 4--', 'CS 4--', 'ANY 4--', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'MATH', name: 'Mathematics, BSLAS', college: 'LAS', hours: 120, lang: '4th',
-  gpa: 'Major/supporting ≈54–59 hrs. 12 hrs of 300/400-level in-major must be taken on campus. Major Plan of Study form required (except the Teaching concentration).',
-  groups: [
-    { n: 'Orientation', items: [{ oneof: ['LAS 101', 'LAS 100', 'LAS 102'], h: 1, lab: 'LAS orientation' }] },
-    {
-      n: 'Major Core', items: [
-        { oneof: ['MATH 221', 'MATH 220'], h: 4, lab: 'Calculus I (4–5 hrs)' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['MATH 347', 'MATH 314'], h: 3, lab: 'Transition to proofs' },
-        { c: 'MATH 416', h: 3 },
-        { oneof: ['MATH 417', 'MATH 427'], h: 3, lab: 'Abstract algebra' },
-        { oneof: ['MATH 461', 'STAT 400'], h: 3, lab: 'Probability / statistics' },
-        { oneof: ['CS 101', 'CS 124'], h: 3, lab: 'Computing' },
-        { bucket: 'Approved supporting coursework outside Mathematics (a math-related area, an approved minor, or a double major)', h: 12, m: { notSubj: ['MATH'] } },
-        { bucket: 'Additional approved MATH coursework to reach the 54–59 hr major/supporting total', h: 15, m: { subj: ['MATH', 'ASRM'], min: 300 } }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives to reach 120 hrs', fill: 1, m: {} }] }
-  ],
-  concs: [
-    { id: 'none', n: 'No concentration' },
-    {
-      id: 'appl', n: 'Applied Mathematics', groups: [{
-        n: 'Applied Math concentration', items: [
-          { oneof: ['MATH 424', 'MATH 444', 'MATH 447'], h: 3, lab: 'Real analysis' },
-          { c: 'MATH 441', h: 3 }, { oneof: ['MATH 446', 'MATH 448'], h: 3, lab: 'Complex analysis' }
-        ]
-      }]
-    },
-    { id: 'dopt', n: 'Data Optimization' },
-    { id: 'doc', n: 'Mathematics Doctoral Preparation' },
-    { id: 'teach', n: 'Mathematics Teaching', groups: [{ n: 'Teaching concentration', items: [{ manual: 'Complete the 39-hr Teacher Education Minor in Secondary School Teaching (9–12 licensure)' }] }] }
-  ],
-  track: [
-    ['LAS 101', 'MATH 221', 'COMP I', 'GEN SBS', 'LANG 4TH'],
-    ['MATH 231', 'CS 101', 'LANG 4TH', 'GEN HUM', 'CULT WEST'],
-    ['MATH 241', 'MATH 347', 'LANG 4TH', 'GEN SBS'],
-    ['MATH 416', 'MATH 4--', 'LANG 4TH', 'GEN HUM', 'CULT NONWEST'],
-    ['MATH 417', 'MATH 461', 'ANY 2--', 'ADV COMP', 'GEN NAT'],
-    ['MATH 4--', 'MATH 4--', 'ANY 3--', 'CULT USM', 'GEN NAT'],
-    ['MATH 4--', 'MATH 4--', 'ANY 3--', 'FREE ELEC', 'FREE ELEC'],
-    ['MATH 4--', 'ANY 4--', 'ANY 3--', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'STAT', name: 'Statistics, BSLAS', college: 'LAS', hours: 120, lang: '4th',
-  gpa: 'Language may also be met by the third semester in each of two different languages. Major/supporting ≈70–72 hrs; 12 hrs 300/400-level in-major on campus. Distinction: major GPA 3.90 / 3.95.',
-  groups: [
-    { n: 'Orientation', items: [{ oneof: ['LAS 101', 'LAS 100', 'LAS 102'], h: 1, lab: 'LAS orientation' }] },
-    {
-      n: 'Introductory / Preparatory', h: 19, items: [
-        { oneof: ['MATH 221', 'MATH 220'], h: 4, lab: 'Calculus I' }, { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['STAT 107', 'STAT 200', 'STAT 212'], h: 4, lab: 'Intro statistics / data science' },
-        { oneof: ['MATH 257', 'MATH 415', 'MATH 416'], h: 3, lab: 'Linear algebra' }
-      ]
-    },
-    { n: 'Statistical Core', h: 13, items: [{ c: 'STAT 400', h: 4 }, { c: 'STAT 410', h: 3 }, { c: 'STAT 425', h: 3 }, { c: 'STAT 426', h: 3 }] },
-    {
-      n: 'Advanced Statistics Electives', h: 12, items: [{
-        bucket: 'Four of STAT 385/424/427/428/429/430/431/432/433/434/440/443/447/448/480 (or MATH 444/447)', h: 12,
-        m: { list: ['STAT 385', 'STAT 424', 'STAT 427', 'STAT 428', 'STAT 429', 'STAT 430', 'STAT 431', 'STAT 432', 'STAT 433', 'STAT 434', 'STAT 440', 'STAT 443', 'STAT 447', 'STAT 448', 'STAT 480', 'MATH 444', 'MATH 447'] }
-      }]
-    },
-    { n: 'Supporting & free electives', items: [{ bucket: 'Supporting coursework and free electives to reach 120 hrs', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['LAS 101', 'MATH 221', 'STAT 107', 'COMP I', 'LANG 4TH'],
-    ['MATH 231', 'MATH 257', 'LANG 4TH', 'GEN HUM', 'CULT WEST'],
-    ['MATH 241', 'STAT 200', 'LANG 4TH', 'GEN SBS'],
-    ['STAT 400', 'LANG 4TH', 'GEN NAT', 'CULT NONWEST', 'FREE ELEC'],
-    ['STAT 410', 'STAT 385', 'ADV COMP', 'GEN NAT', 'GEN SBS'],
-    ['STAT 425', 'STAT 4--', 'ANY 3--', 'GEN HUM', 'CULT USM'],
-    ['STAT 426', 'STAT 4--', 'ANY 3--', 'FREE ELEC'],
-    ['STAT 4--', 'STAT 4--', 'ANY 4--', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'IS', name: 'Information Sciences, BS', college: 'iSchool', hours: 123, lang: '3rd',
-  gpa: 'GPA 2.50 overall and 2.50 in all iSchool courses. Must demonstrate proficiency in ≥1 programming language. Pathways are individualised through the upper-division elective block rather than named tracks.',
-  groups: [
-    {
-      n: 'iSchool Core', h: 51, items: [
-        { c: 'IS 101', h: 3 }, { c: 'IS 202', h: 3 }, { c: 'IS 203', h: 3 }, { c: 'IS 204', h: 3 }, { c: 'IS 205', h: 3 }, { c: 'IS 206', h: 3 },
-        { oneof: ['IS 307', 'IS 308', 'IS 309'], h: 3, lab: 'IS 307 / 308 / 309' },
-        { bucket: 'iSchool electives', h: 30, m: { subj: ['IS'] } }
-      ]
-    },
-    { n: 'Outside the school', items: [{ bucket: 'Electives outside the iSchool + gen ed', h: 21, m: { notSubj: ['IS'] } }] },
-    { n: 'Remaining hours', items: [{ bucket: 'Free electives to reach 123 hrs', fill: 1, m: {} }] },
-    { n: 'Proficiency', items: [{ manual: 'Demonstrate proficiency in at least one programming language' }] }
-  ],
-  track: [
-    ['IS 101', 'COMP I', 'LANG 3RD', 'MATH 234', 'CULT WEST'],
-    ['IS 202', 'IS 205', 'LANG 3RD', 'STAT 200', 'GEN HUM'],
-    ['IS 203', 'IS 206', 'LANG 3RD', 'GEN NAT', 'CULT NONWEST'],
-    ['IS 204', 'IS 307', 'ADV COMP', 'GEN NAT', 'GEN SBS'],
-    ['IS 3--', 'IS 3--', 'ANY 2--', 'GEN HUM', 'CULT USM'],
-    ['IS 4--', 'IS 3--', 'ANY 3--', 'FREE ELEC'],
-    ['IS 4--', 'IS 4--', 'IS 3--', 'ANY 3--'],
-    ['IS 4--', 'IS 4--', 'ANY 4--', 'GEN SBS']
-  ]
-});
-
-M({
-  id: 'ISDS', name: 'Information Sciences + Data Science, BS', college: 'iSchool', hours: 120, lang: '3rd',
-  gpa: 'STEM-designated. Distinction: top 10% of the graduating class. Students in any X+Data Science degree cannot also earn the Data Science minor.',
-  groups: [
-    {
-      n: 'Data Science Core', h: 28, items: [
-        { oneof: ['MATH 221', 'MATH 220', 'MATH 234'], h: 4, lab: 'Calculus' },
-        { oneof: ['MATH 227', 'MATH 257'], h: 3, lab: 'Linear algebra' },
-        { oneof: ['STAT 107', 'CS 107', 'IS 107'], h: 4, lab: 'Data Science Discovery' },
-        { c: 'STAT 207', h: 4 }, { c: 'CS 307', h: 4 }, { c: 'CS 277', h: 4 }, { c: 'IS 467', h: 3 }, { c: 'IS 477', h: 3 }
-      ]
-    },
-    {
-      n: 'Information Sciences core & specialization', h: 61, items: [
-        { c: 'IS 101', h: 3 }, { c: 'IS 202', h: 3 }, { c: 'IS 204', h: 3 }, { c: 'IS 205', h: 3 }, { c: 'IS 206', h: 3 },
-        { oneof: ['IS 308', 'IS 309', 'IS 310', 'IS 311'], h: 3, lab: 'IS 308 / 309 / 310 / 311' },
-        { bucket: 'iSchool electives (≥12 hrs of 300/400-level on campus)', h: 43, m: { subj: ['IS'] }, cons: [{ h: 12, lab: '≥12 hrs at 300/400-level', m: { subj: ['IS'], min: 300 } }] }
-      ]
-    },
-    { n: 'Discovery', h: 6, items: [{ bucket: 'Meaningful Research / Discovery Experience', h: 6, m: {} }, { manual: 'Arrange the research or discovery experience with the iSchool' }] }
-  ],
-  track: [
-    ['IS 101', 'MATH 221', 'COMP I', 'LANG 3RD', 'CULT WEST'],
-    ['IS 202', 'IS 205', 'STAT 107', 'LANG 3RD', 'IS 3--'],
-    ['IS 204', 'IS 206', 'MATH 227', 'LANG 3RD', 'GEN HUM'],
-    ['STAT 207', 'CS 277', 'IS 3--', 'IS 3--', 'CULT NONWEST'],
-    ['CS 307', 'IS 308', 'IS 3--', 'GEN HUM', 'ADV COMP'],
-    ['IS 467', 'IS 4--', 'IS 3--', 'GEN SBS', 'CULT USM'],
-    ['IS 477', 'IS 4--', 'IS 4--', 'IS 4--', 'GEN NAT'],
-    ['IS 4--', 'IS 4--', 'IS 4--', 'GEN NAT', 'GEN SBS']
-  ]
-});
-
-M({
-  id: 'ASRM', name: 'Actuarial Science, BSLAS', college: 'LAS (Mathematics)', hours: 120, lang: '4th',
-  gpa: 'Major/supporting ≈58–61 hrs (32–33 hrs actuarial beyond calculus); 12 hrs 300/400-level on campus. Distinction requires passing 2–3 professional actuarial exams.',
-  groups: [
-    { n: 'Orientation', items: [{ oneof: ['LAS 101', 'LAS 100', 'LAS 102'], h: 1, lab: 'LAS orientation' }] },
-    {
-      n: 'Major Requirements', items: [
-        { oneof: ['MATH 221', 'MATH 220'], h: 4, lab: 'Calculus I' }, { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { oneof: ['ASRM 195', 'CS 101', 'CS 124', 'CS 125'], h: 3, lab: 'Computing' },
-        { c: 'ASRM 210', h: 3 },
-        { combo2: [['ASRM 401', 'ASRM 402'], ['STAT 400', 'STAT 410']], h: 7, lab: 'Probability/statistics sequence — ASRM 401+402 (preferred) or STAT 400+410' },
-        { c: 'ASRM 406', h: 3 }, { c: 'ASRM 441', h: 4 },
-        { bucket: '≥12 hrs of 400-level ASRM (409, 410, 442, 454, 462, 469, 471, 472, or approved 499)', h: 12, m: { subj: ['ASRM'], min: 400, exclude: ['ASRM 401', 'ASRM 402', 'ASRM 406', 'ASRM 441'] } },
-        { c: 'FIN 221', h: 3 },
-        { bucket: 'Three courses (9 hrs) from ACCY 200, ECON 302, ECON 303, FIN 230, FIN 300, FIN 321, FIN 431', h: 9, m: { list: ['ACCY 200', 'ECON 302', 'ECON 303', 'FIN 230', 'FIN 300', 'FIN 321', 'FIN 431'] } }
-      ]
-    },
-    { n: 'Free electives', items: [{ bucket: 'Free electives to reach 120 hrs', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['LAS 101', 'MATH 221', 'COMP I', 'LANG 4TH', 'GEN HUM'],
-    ['MATH 231', 'ASRM 195', 'LANG 4TH', 'GEN SBS', 'CULT WEST'],
-    ['MATH 241', 'ASRM 210', 'LANG 4TH', 'ECON 102'],
-    ['ASRM 401', 'FIN 221', 'LANG 4TH', 'GEN NAT', 'CULT NONWEST'],
-    ['ASRM 402', 'ASRM 406', 'ECON 302', 'GEN NAT', 'ADV COMP'],
-    ['ASRM 441', 'ASRM 4--', 'ACCY 200', 'GEN HUM', 'CULT USM'],
-    ['ASRM 4--', 'ASRM 4--', 'FIN 300', 'ANY 3--'],
-    ['ASRM 4--', 'ASRM 4--', 'ANY 4--', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'NEURO', name: 'Neuroscience, BSLAS', college: 'LAS (School of MCB)', hours: 120, lang: '4th',
-  gpa: 'Natural Sciences & Technology gen ed is met by MCB 150, CHEM 102, CHEM 104, PHYS 101, PHYS 102.',
-  flagged: 'The detailed MCB/CHEM/PHYS/NEUR required-course list and core credit hours were NOT captured in the source audit. The core block below is an hours placeholder — re-verify at mcb.illinois.edu / the Neuroscience Program page.',
-  groups: [
-    { n: 'Orientation', items: [{ oneof: ['LAS 101', 'LAS 100', 'LAS 102'], h: 1, lab: 'LAS orientation' }] },
-    { n: 'Science foundation (from the gen-ed embed list)', items: [{ c: 'MCB 150', h: 4 }, { c: 'CHEM 102', h: 3 }, { c: 'CHEM 104', h: 3 }, { c: 'PHYS 101', h: 5 }, { c: 'PHYS 102', h: 5 }] },
-    { n: 'Neuroscience core (flagged)', items: [{ bucket: 'Molecular/cellular biology + neuroscience, neurophysiology, neurochemistry, neuro-pathology coursework', h: 40, m: { min: 200 } }] },
-    { n: 'Free electives', items: [{ bucket: 'Free electives to reach 120 hrs', fill: 1, m: {} }] }
-  ],
-  track: [
-    ['LAS 101', 'MCB 150', 'CHEM 102', 'COMP I', 'LANG 4TH'],
-    ['CHEM 104', 'MATH 221', 'LANG 4TH', 'GEN HUM', 'CULT WEST'],
-    ['PHYS 101', 'MCB 2--', 'LANG 4TH', 'GEN SBS'],
-    ['PHYS 102', 'MCB 3--', 'LANG 4TH', 'CULT NONWEST', 'GEN HUM'],
-    ['MCB 3--', 'PSYC 100', 'ADV COMP', 'STAT 200', 'GEN SBS'],
-    ['MCB 4--', 'ANY 3--', 'ANY 3--', 'CULT USM'],
-    ['MCB 4--', 'MCB 4--', 'ANY 3--', 'FREE ELEC'],
-    ['MCB 4--', 'ANY 4--', 'FREE ELEC', 'FREE ELEC', 'FREE ELEC']
-  ]
-});
-
-M({
-  id: 'PHYS', name: 'Physics, BS', college: 'Grainger', hours: 128, lang: '3rd',
-  gpa: 'Min technical GPA 2.0 (Math & Physics).',
-  flagged: 'The exact upper-division physics core sequence should be checked against the department core list.',
-  groups: [
-    { n: 'Orientation', items: [{ c: 'ENG 100', h: 1 }, { c: 'PHYS 110', h: 0 }] },
-    {
-      n: 'Foundational Math & Science', h: 36, items: [
-        { c: 'MATH 221', h: 4, alt: ['MATH 220'], altNote: 'MATH 220 substitutes — only 4 of 5 hrs count' },
-        { c: 'MATH 231', h: 3 }, { c: 'MATH 241', h: 4 },
-        { c: 'MATH 257', h: 3, alt: ['MATH 415', 'MATH 416'], altNote: 'MATH 415 or MATH 416 may substitute' },
-        { c: 'MATH 285', h: 3, combo: [['MATH 441', 'MATH 442']], altNote: 'MATH 441 + MATH 442 together may substitute' },
-        { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 }, { c: 'PHYS 213', h: 2 }, { c: 'PHYS 214', h: 2 },
-        { c: 'CHEM 102', h: 3 }, { c: 'CHEM 103', h: 1 },
-        { oneof: ['CS 101', 'CS 124'], h: 3, lab: 'Computing' }
-      ]
-    },
-    {
-      n: 'Foundational Physics (upper-division core)', items: [
-        { c: 'PHYS 225', h: 2 }, { c: 'PHYS 325', h: 3 }, { c: 'PHYS 326', h: 3 }, { c: 'PHYS 435', h: 3 },
-        { c: 'PHYS 485', h: 3 }, { c: 'PHYS 486', h: 3 }, { c: 'PHYS 487', h: 3 }, { c: 'PHYS 427', h: 3 },
-        { c: 'PHYS 401', h: 2 }, { c: 'PHYS 403', h: 2 },
-        { flag: 'Verify this sequence against the physics core list — the audit lists these courses without a fixed order.' }
-      ]
-    },
-    { n: 'Track & free electives', items: [{ bucket: 'Track coursework (each track adds 16–24 hrs)', h: 16, m: { min: 200 } }, { bucket: 'Free electives to reach 128 hrs', fill: 1, m: {} }] }
-  ],
-  concs: [
-    { id: 'none', n: 'Track not chosen (a custom, department-approved track is allowed)' },
-    { id: 'astro', n: 'Astrophysics' }, { id: 'bus', n: 'Business' }, { id: 'comp', n: 'Computational Physics' },
-    { id: 'nuc', n: 'Nuclear Physics' }, { id: 'grad', n: 'Graduate Study' }, { id: 'med', n: 'Pre-Med' }, { id: 'law', n: 'Pre-Law' }
-  ],
-  track: [
-    ['ENG 100', 'PHYS 110', 'MATH 221', 'PHYS 211', 'COMP I'],
-    ['MATH 231', 'PHYS 212', 'CHEM 102', 'CHEM 103', 'CULT WEST'],
-    ['MATH 241', 'PHYS 213', 'PHYS 214', 'PHYS 225', 'CS 101'],
-    ['MATH 257', 'MATH 285', 'PHYS 325', 'GEN HUM', 'CULT NONWEST'],
-    ['PHYS 326', 'PHYS 435', 'PHYS 401', 'GEN SBS'],
-    ['PHYS 485', 'PHYS 427', 'PHYS 403', 'GEN HUM', 'CULT USM'],
-    ['PHYS 486', 'PHYS 4--', 'PHYS 4--', 'ANY 3--', 'GEN SBS'],
-    ['PHYS 487', 'PHYS 4--', 'ANY 4--', 'ADV COMP', 'FREE ELEC']
-  ]
-});
-
-/* ============================ MINORS ============================ */
-const MINORS = {};
-function Mi(o) { MINORS[o.id] = o; }
-
-Mi({
-  id: 'CSMIN', n: 'Computer Science Minor', unit: 'Siebel School', hours: 16,
-  excl: ['CS', 'CMPE'], exclNote: 'Excludes CS majors and Computer Engineering majors.',
-  note: 'Minimum 16 total credit hours — add CS coursework if transfer credits fall short. The two upper-level courses must be UIUC credit (one may be study abroad).',
-  groups: [{
-    n: 'Required (13 hrs)', items: [
-      { c: 'CS 173', h: 3 },
-      { c: 'CS 124', h: 3, combo: [['ECE 120', 'ECE 220']], alt: ['CS 125'], altNote: 'ECE 120 + ECE 220 substitutes for CS 124 + CS 128' },
-      { c: 'CS 128', h: 3 }, { c: 'CS 225', h: 4 },
-      { bucket: 'Two upper-level CS courses (300/400-level; excludes CS 397/398 and CS 400/401/402/403/413/491/492/493/494/497/499)', h: 6, m: { subj: ['CS'], min: 300, exclude: ['CS 397', 'CS 398', 'CS 400', 'CS 401', 'CS 402', 'CS 403', 'CS 413', 'CS 491', 'CS 492', 'CS 493', 'CS 494', 'CS 497', 'CS 499'] } }
-    ]
-  }]
-});
-
-Mi({
-  id: 'BUSMIN', n: 'Business Minor for Non-Business Majors', unit: 'Gies', hours: 18,
-  excl: [], exclNote: 'Not open to Gies students or Technology & Management minor students.',
-  note: 'All six courses for a letter grade; sophomore standing to enrol in the core; take online sections where offered; ≥50% of hours in UIUC credit. Designed to be completed within three years — completion is not guaranteed.',
-  groups: [{
-    n: 'Core (12 hrs)', items: [
-      { c: 'ACCY 200', h: 3, combo: [['ACCY 201', 'ACCY 202']], altNote: 'ACCY 201 + ACCY 202 may substitute' },
-      { c: 'BADM 310', h: 3 }, { c: 'BADM 320', h: 3 },
-      { c: 'FIN 221', h: 3, altNote: 'prerequisite ECON 102 or 103' },
-      { bucket: 'Electives — choose 2 (e.g. BADM 275)', h: 6, m: { subj: ['BADM', 'ACCY', 'FIN'] } }
-    ]
-  }]
-});
-
-Mi({
-  id: 'CHEMMIN', n: 'Chemistry Minor', unit: 'LAS', hours: 18,
-  flagged: 'The exact course list and total hours were NOT captured in the source audit. Encoded here only as the general/organic sequence plus advanced electives at ~18–20 hrs — re-verify at chemistry.illinois.edu.',
-  groups: [{
-    n: 'Approximate structure (flagged)', items: [
-      { bucket: 'General/organic chemistry sequence', h: 12, m: { subj: ['CHEM'] } },
-      { bucket: 'Advanced chemistry electives (≥6 advanced hrs)', h: 6, m: { subj: ['CHEM'], min: 300 } }
-    ]
-  }]
-});
-
-Mi({
-  id: 'DSMIN', n: 'Data Science Minor', unit: 'LAS (Statistics)', hours: 21,
-  excl: ['ISDS'], exclNote: 'Open to all undergraduates except students in an "X + Data Science" BS.',
-  note: 'Complete one calculus course (e.g. MATH 234 or 220) and one linear algebra course (e.g. MATH 227 or 257) before CS 307. ≥6 hrs of advanced (300/400-level) credit distinct from any major or other minor. Declare via the Provost\'s Minor Declaration form.',
-  groups: [{
-    n: 'Core & supporting', items: [
-      { oneof: ['STAT 107', 'CS 107', 'IS 107'], h: 4, lab: 'Data Science Discovery' },
-      { c: 'STAT 207', h: 4 }, { c: 'CS 307', h: 4 },
-      {
-        bucket: 'Two Domain-Specific Data Science courses', h: 6,
-        m: { list: ['ATMS 207', 'CS 225', 'CS 277', 'CS 416', 'CS 441', 'GGIS 407', 'IS 357', 'IS 417', 'IS 445', 'LING 406', 'MATH 467', 'STAT 432', 'STAT 440', 'STAT 447', 'STAT 480'] }
-      },
-      { oneof: ['IS 467', 'IS 477'], h: 3, lab: 'Data Ethics' },
-      { manual: 'CS 225 and CS 277 cannot both count toward the domain-specific requirement' }
-    ]
-  }]
-});
-
-Mi({
-  id: 'ECONMIN', n: 'Economics Minor', unit: 'LAS', hours: 18,
-  exclNote: 'Excludes Economics BALAS, Econometrics & Quantitative Economics BSLAS, and CS+Economics BSLAS majors.',
-  note: 'Prerequisites vary by track: Micro/Macro — MATH 220/221 (C or higher; MATH 234 may substitute) + ECON 102 & 202 with ≥2.33 Illinois Econ GPA. Econometrics — MATH 220/221 (C+) + MATH 225 (recommended) + ECON 102/202/203 (≥2.33). At least one ECON course must be taken on campus.',
-  groups: [{
-    n: 'Core (12 hrs) + track (6 hrs)', items: [
-      { c: 'ECON 102', h: 3 }, { c: 'ECON 202', h: 3 }, { c: 'ECON 203', h: 3 }, { c: 'ECON 302', h: 3 },
-      { bucket: 'Track — 6 hrs (Microeconomics, Macroeconomics, or Econometrics)', h: 6, m: { subj: ['ECON'], min: 400 } }
-    ]
-  }]
-});
-
-Mi({
-  id: 'ECEMIN', n: 'Electrical & Computer Engineering Minor', unit: 'Grainger (ECE)', hours: 18,
-  exclNote: 'Open to non-ECE majors; CS majors cannot elect the Computer Engineering Option.',
-  note: 'Completion requires ≥18 hrs of ECE coursework. Differences from the catalog require an ECE advisor Minor Modification form.',
-  groups: [{
-    n: 'Common requirements', items: [
-      { oneof: ['ECE 110', 'ECE 205'], h: 3, lab: 'Circuits' },
-      { oneof: ['CS 101', 'CS 124'], h: 3, lab: 'Programming (waived if ECE 220 is taken)' },
-      { oneof: ['ECE 313', 'IE 300', 'BIOE 310', 'MATH 461', 'MATH 463', 'STAT 400', 'CEE 202', 'CS 361'], h: 3, lab: 'Probability / statistics' }
-    ]
-  }],
-  concs: [
-    {
-      id: 'A', n: 'Option A — Electrical (10–11 hrs)', groups: [{
-        n: 'Option A', items: [{ c: 'ECE 210', h: 4 }, { bucket: 'Two advanced-core ECE courses (ECE 310/329/330/340/342+343)', h: 6, m: { list: ['ECE 310', 'ECE 329', 'ECE 330', 'ECE 340', 'ECE 342', 'ECE 343'] } }]
-      }]
-    },
-    {
-      id: 'B', n: 'Option B — Computing (15–16 hrs)', groups: [{
-        n: 'Option B', items: [{ c: 'ECE 120', h: 4 }, { c: 'ECE 220', h: 4 }, { bucket: 'Two advanced-core ECE courses (e.g. ECE 385)', h: 6, m: { subj: ['ECE'], min: 300 } }]
-      }]
-    }
-  ]
-});
-
-Mi({
-  id: 'CSEMIN', n: 'Computational Science & Engineering Minor', unit: 'Grainger', hours: 18,
-  flagged: 'The full elective structure and exact total hours (typically ~18) were NOT captured in the source audit. Re-verify at cse.illinois.edu.',
-  groups: [{
-    n: 'Core (9 hrs)', items: [
-      { oneof: ['CS 101', 'CS 125', 'CS 225', 'ECE 220', 'LING 402'], h: 3, lab: 'Programming' },
-      { oneof: ['ECE 493', 'MATH 441', 'MATH 442', 'MATH 489', 'MATH 415', 'MATH 444', 'MATH 447', 'MATH 446', 'MATH 448', 'MATH 482', 'MATH 484', 'STAT 408', 'STAT 409', 'STAT 410', 'STAT 420', 'STAT 430', 'MATH 461'], h: 3, lab: 'Applied mathematics' },
-      { oneof: ['CS 411', 'CS 450', 'CSE 401', 'CS 466', 'ECE 448', 'GEOG 489', 'LING 402'], h: 3, lab: 'Computational methods' },
-      { bucket: 'Additional approved coursework (structure flagged)', h: 9, m: { min: 300 } }
-    ]
-  }]
-});
-
-Mi({
-  id: 'MATHMIN', n: 'Mathematics Minor', unit: 'LAS', hours: 19,
-  note: 'Admission requires MATH 241 and at least one 400-level MATH course with C+ or higher. ≥6 hrs of 300/400-level distinct from the major and other minors. Engineering students may need additional coursework. No registration priority. Declare via go.illinois.edu/MinorDeclaration by the start of the final semester.',
-  groups: [{
-    n: 'Requirements', items: [
-      { c: 'MATH 241', h: 4 },
-      { bucket: 'Five courses (15 hrs) across the Algebra / Discrete / Analysis lists', h: 15, m: { list: ['ASRM 406', 'MATH 257', 'MATH 415', 'MATH 416', 'MATH 417', 'MATH 418', 'MATH 427', 'MATH 453', 'MATH 412', 'MATH 413', 'MATH 414', 'MATH 482', 'MATH 285', 'MATH 424', 'MATH 444', 'MATH 447', 'MATH 448', 'MATH 461'], subj: ['MATH'], min: 257 } },
-      { manual: 'Admission gate: MATH 241 + one 400-level MATH course at C+ or higher' }
-    ]
-  }]
-});
-
-Mi({
-  id: 'PHYSMIN', n: 'Physics Minor', unit: 'Grainger', hours: 21,
-  groups: [{
-    n: 'Requirements (21 hrs)', items: [
-      { c: 'PHYS 211', h: 4 }, { c: 'PHYS 212', h: 4 },
-      { oneof: ['PHYS 214', 'PHYS 213'], h: 2, lab: 'PHYS 214 or 213' },
-      { c: 'PHYS 225', h: 2 }, { c: 'PHYS 325', h: 3 }, { c: 'PHYS 435', h: 3 }, { c: 'PHYS 485', h: 3 }
-    ]
-  }]
-});
-
-Mi({
-  id: 'SEMIMIN', n: 'Semiconductor Engineering Minor', unit: 'Grainger (6 departments)', hours: 16,
-  note: 'Open to any student completing the requirements; engineering students can fulfil it within technical electives. ≥6 hrs advanced (300/400-level) distinct from the major and other minors; ≥2 courses at the 400 level; up to 3 hrs of approved independent study may count. Samsung Technology Track scholarships for eligible students (technical GPA ≥3.0).',
-  groups: [{
-    n: 'Core (9 hrs) + electives (7 hrs)', items: [
-      { bucket: 'Core — 9 hrs from ECE 340 / MSE 304; IE 330 / IE 361; ECE 444 / ME 487; MSE 460; NPRE 429; ME 432 / ECE 443', h: 9, m: { list: ['ECE 340', 'MSE 304', 'IE 330', 'IE 361', 'ECE 444', 'ME 487', 'MSE 460', 'NPRE 429', 'ME 432', 'ECE 443'] } },
-      { bucket: 'Electives — 7 hrs from ECE 304/441/442/460/481/488/495; IE 360/412/431; SE 411; MSE 461/485/487/488; ME 453/455', h: 7, m: { list: ['ECE 304', 'ECE 441', 'ECE 442', 'ECE 460', 'ECE 481', 'ECE 488', 'ECE 495', 'IE 360', 'IE 412', 'IE 431', 'SE 411', 'MSE 461', 'MSE 485', 'MSE 487', 'MSE 488', 'ME 453', 'ME 455'] } },
-      { manual: '≥2 courses at the 400 level' }
-    ]
-  }]
-});
-
 /* ==================== SUBSTITUTION REFERENCE ==================== */
 const SUBS = [
   ['MATH 220 ↔ MATH 221', 'Interchangeable for Calculus I, but only 4 of MATH 220\'s 5 hours count toward the requirement.'],
@@ -8013,10 +7148,10 @@ const SUBS = [
   ['ECE 313 ↔ STAT 410', 'Probability requirement in both ECE degrees.'],
   ['MATH 285 ↔ MATH 441 + MATH 442', 'Differential equations — Physics only.'],
   ['ECE 445 ↔ ECE 496 + ECE 499', 'Senior design; either route satisfies Advanced Composition.'],
-  ['ECE 120 + ECE 220 ↔ CS 124 + CS 128', 'CS minor only.'],
+  ['CS 125 ↔ CS 124, CS 126 ↔ CS 128, ECE 120 + ECE 220 ↔ CS 124 + CS 128', 'CS minor.'],
+  ['MATH 213 / 347 / 412 / 413 ↔ CS 173', 'CS minor. MATH 347, 412 and 413 do not count as upper-level courses for the minor.'],
   ['CS 101 ↔ CS 124 ↔ ECE 220', 'Mechanical Engineering computing requirement.'],
   ['MATH 257 ↔ MATH 225 ↔ MATH 415', 'Civil Engineering linear algebra requirement.'],
-  ['ACCY 200 ↔ ACCY 201 + ACCY 202', 'Business minor accounting core.'],
   ['ASRM 401 + 402 ↔ STAT 400 + 410', 'Actuarial Science probability/statistics sequence (ASRM preferred).'],
   ['Design course → Advanced Composition', 'ECE 445, ME 470, SE 494/495, BIOE 400, AE 443, MSE 307/308, TAM 324, CS 211 (CS), ECE 316 (EnvE). Swapping the design course (e.g. ECE 411 in CompE) means a standalone Advanced Composition course is required.'],
   ['Variable-credit courses', 'Many ECE/CS 400-level courses are 3 or 4 hours, MATH 220 is 4–5, CHEM 232 is 3–4. Edit the hours field on any planned course to match what you register for.']
@@ -8152,7 +7287,7 @@ r|a|CMN 111; CMN 112||CMN 101|24||1
 r|r||3-8||25|26|1
 r|r||3-4||25|27|1
 r|r||3||25|28|1
-#las/actuarial-science-bslas|Actuarial Science, BSLAS|LAS|major||ok|
+#las/actuarial-science-bslas|Actuarial Science, BSLAS|LAS|major||ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -8211,52 +7346,6 @@ r|c|FIN 321|||33||2
 r|c|FIN 431|||33||2
 r|c|FIN 432|||33||2
 r|c|FIN 434|||33||2
-#aces/minors/adult-development|Adult Development Minor|ACES|minor||ok|
-r|c|HDFS 105|||40||0
-r|c|HDFS 120|||40||0
-r|c|HDFS 310|||40||0
-r|r||||40|41|0
-r|c|HDFS 225|||42||0
-r|c|HDFS 425|||42||0
-r|c|HDFS 426|||42||0
-r|r||||43|44|0
-r|c|HDFS 207|||43||0
-r|c|HDFS 445|||43||0
-r|c|CMN 336|||43||0
-r|c|CMN 368|||43||0
-r|c|EPSY 407|||43||0
-r|c|HK 404|||43||0
-r|c|PSYC 361|||43||0
-r|c|RST 316|||43||0
-r|c|SOCW 240|||43||0
-r|c|SOCW 315|||43||0
-#media/minors/advertising|Advertising Minor|Media|minor||ok|
-r|c|ADV 150|3||45||0
-r|c|ADV 393|3||45||0
-r|r||||46|47|0
-r|c|ADV 175|3||46||0
-r|c|ADV 200|3||46||0
-r|c|ADV 201|3||46||0
-r|c|ADV 212|3||46||0
-r|c|ADV 214|3||46||0
-r|c|ADV 290|1 to 3||46||0
-r|r||||48|49|0
-r|c|ADV 301|3||48||0
-r|c|ADV 305|3||48||0
-r|c|ADV 311|3||48||0
-r|c|ADV 376|3||48||0
-r|c|ADV 378|3||48||0
-r|c|ADV 391|3||48||0
-r|c|ADV 392|1 to 6||48||0
-r|c|ADV 396|1 to 3||48||0
-r|c|ADV 399|1 to 5||48||0
-r|c|ADV 400|0 to 3||48||0
-r|c|ADV 409|3||48||0
-r|c|ADV 475|3||48||0
-r|c|ADV 480|3||48||0
-r|c|ADV 490|1 to 3||48||0
-r|c|ADV 491|3||48||0
-r|c|ADV 494|3||48||0
 #media/advertising-bs|Advertising, BS|Media|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -8451,16 +7540,6 @@ r|c|TAM 470|3 or 4||69||4
 r|c|TE 401|1 to 4||69||4
 r|c|TMGT 461|4||69||4
 r|r||128||70|71|5
-#las/minors/african-american-studies|African American Studies Minor|LAS|minor||ok|
-r|c|AFRO 100|3||72||0
-r|c|AFRO 490|3||72||0
-r|a|AFRO 220||AFRO 490|72||0
-r|c|AFRO 495|3||72||0
-r|r||3-4||73|74|0
-r|r||3-4||73|75|0
-r|r||3-4||73|76|0
-r|r||3||73|77|0
-r|r||||73|78|0
 #las/african-american-studies-balas|African American Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -8593,37 +7672,6 @@ r|c|AFRO 421|3||94||2
 r|c|AFRO 435|3||94||2
 r|c|AFRO 465|3||94||2
 r|r||||95|96|2
-#las/minors/african-studies|African Studies Minor|LAS|minor||ok|
-r|r||5|||97|0
-r|r||3||98|99|0
-r|c|AFST 210|||98||0
-r|c|AFST 222|||98||0
-r|c|AFST 254|||98||0
-r|c|HIST 111|||98||0
-r|c|HIST 112|||98||0
-r|r||6||98|100|0
-r|r||6||98|101|0
-#ahs/minors/aging-health|Aging Health Minor|Applied Health Sciences|minor||ok|
-r|c|HK 272|3||102||0
-r|c|HK 404|3||102||0
-r|c|RST 316|3||102||0
-r|c|SHS 271|3||102||0
-r|c|HK 271|3||103||0
-r|c|HK 304|3||103||0
-r|c|HK 342|3||103||0
-r|c|HK 351|3||103||0
-r|c|HK 400|3||103||0
-r|c|HK 403|3||103||0
-r|c|HK 405|3||103||0
-r|c|HK 413|3||103||0
-r|c|HK 441|3||103||0
-r|c|HK 459|3||103||0
-r|c|HK 472|3||103||0
-r|c|RST 335|3||103||0
-r|c|SHS 352|3||103||0
-r|c|SHS 480|2||103||0
-r|c|SOCW 240|3||103||0
-r|r||||103|104|0
 #eng_aces/agricultural-biological-engineering-bs-agricultural-engineering-agricultural-science-bsag|Agricultural Biological Engineering Bs Agricultural Engineering Agricultural Science Bsag|ENG_ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -9947,35 +8995,6 @@ r|c|CPSC 352|4||223||1
 r|c|CPSC 382|4||223||1
 r|c|CPSC 418|3||223||1
 r|r||||224|225|1
-#las/minors/american-indian-studies|American Indian Studies Minor|LAS|minor||ok|
-r|c|AIS 101|3||226||0
-r|c|AIS 102|3||226||0
-r|r||12||227|228|0
-r|c|AIS 140|||229||0
-r|c|AIS 165|||229||0
-r|c|AIS 288|||229||0
-r|c|AAS 215|||230||0
-r|c|HIST 277|||230||0
-r|c|HIST 278|||230||0
-r|c|AIS 280|||230||0
-r|c|AIS 430|||230||0
-r|c|AIS 265|||231||0
-r|c|AIS 275|||231||0
-r|c|AIS 451|||231||0
-r|c|AIS 459|||231||0
-r|c|AIS 461|||231||0
-r|c|AIS 285|||232||0
-r|c|AIS 481|||232||0
-#aces/minors/animal-sciences|Animal Sciences Minor|ACES|minor||ok|
-r|c|ANSC 100|4||233||0
-r|c|ANSC 101|3||233||0
-r|r||6-7||233|234|0
-r|c|ANSC 223|||233||0
-r|c|ANSC 224|||233||0
-r|c|ANSC 221|||233||0
-r|c|ANSC 222|||233||0
-r|r||6-8||233|235|0
-r|r||||233|236|0
 #aces/animal-sciences-bs|Animal Sciences, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -10362,18 +9381,6 @@ r|c|ANSC 526|||252||2
 r|c|ANSC 541|||252||2
 r|c|ANSC 542|||252||2
 r|c|ANSC 543|||252||2
-#las/minors/anthropology|Anthropology Minor|LAS|minor||ok|
-r|r||6|||254|0
-r|c|ANTH 220|||||0
-r|a|ANTH 105||ANTH 220|||0
-r|c|ANTH 230|||||0
-r|a|ANTH 103||ANTH 230|||0
-r|c|ANTH 240|||||0
-r|a|ANTH 102||ANTH 240|||0
-r|c|ANTH 270|||||0
-r|a|ANTH 104||ANTH 270|||0
-r|r||6|||255|0
-r|r||6|||256|0
 #las/anthropology-balas|Anthropology, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -10672,46 +9679,6 @@ r|c|HK 453|3||309||2
 r|c|HK 459|3||309||2
 r|c|RST 340|3||309||2
 r|r||Maximum of 6||309|310|2
-#las/minors/arabic-studies|Arabic Studies Minor|LAS|minor||ok|
-r|r||6|||311|0
-r|c|ARAB 405|||||0
-r|c|ARAB 406|||||0
-r|r||6|||312|0
-r|r|||||313|0
-r|r||6|||314|0
-r|c|ARAB 407|||||0
-r|c|ARAB 408|||||0
-r|c|ARAB 409|||||0
-r|c|ARAB 410|||||0
-r|c|ARAB 413|||||0
-r|c|CWL 481|||||0
-r|c|HIST 135|||||0
-r|c|HIST 334|||||0
-r|c|HIST 335|||||0
-r|c|HIST 337|||||0
-r|c|HIST 338|||||0
-r|c|PS 347|||||0
-r|c|REL 214|||||0
-r|c|REL 223|||||0
-r|c|REL 260|||||0
-r|c|REL 403|||||0
-r|c|REL 408|||||0
-r|c|REL 481|||||0
-#faa/minors/architectural-studies|Architectural Studies Minor|Fine & Applied Arts|minor||ok|
-r|c|ARCH 101|2||315||0
-r|c|ARCH 210|3||315||0
-r|c|ARCH 237|3||315||0
-r|c|ARCH 321|3||315||0
-r|c|ARCH 314|||316||0
-r|c|ARCH 402|||316||0
-r|c|ARCH 403|||316||0
-r|c|ARCH 407|||316||0
-r|c|ARCH 412|||316||0
-r|c|ARCH 415|||316||0
-r|c|ARCH 416|||316||0
-r|c|ARCH 417|||316||0
-r|c|ARCH 418|||316||0
-r|c|ARCH 434|||316||0
 #faa/architectural-studies-bs|Architectural Studies, BS|Fine & Applied Arts|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -10881,36 +9848,6 @@ r|r||18|||348|5
 r|r||6|||349|5
 r|r||36|||350|5
 r|r|||||351|5
-#faa/minors/art-design|Art Design Minor|Fine & Applied Arts|minor||ok|
-r|r||3|||352|0
-r|c|ART 100|||||0
-r|c|ART 140|||||0
-r|c|ARTH 110|||||0
-r|r||3|||353|0
-r|c|ART 100|||||0
-r|c|ART 140|||||0
-r|c|ARTH 110|||||0
-r|r|||||354|0
-r|c|ARTJ 209|||||0
-r|c|ARTJ 299|||||0
-r|c|ARTJ 302|||||0
-r|c|ARTJ 398|||||0
-r|c|ARTJ 397|||||0
-r|c|ARTE 260|||||0
-r|c|ARTE 475|||||0
-r|c|ARTE 480|||||0
-r|r||9|||355|0
-r|r|||||356|0
-r|r|||||357|0
-r|r|||||358|0
-r|r|||||359|0
-r|r|||||360|0
-r|c|ARTJ 101|||||0
-r|c|ARTJ 199|||||0
-r|c|ARTJ 301|||||0
-r|c|ARTJ 399|||||0
-r|r||3|||361|0
-r|r|||||362|0
 #faa/art-education-bfa|Art Education, BFA|Fine & Applied Arts|major||ok|130
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -10966,30 +9903,6 @@ r|r||12|||372|8
 r|r||9|||348|8
 r|r||9|||350|8
 r|r|||||373|8
-#faa/minors/art-history|Art History Minor|Fine & Applied Arts|minor||ok|
-r|c|ARTH 110|3||||0
-r|r||3|||374|0
-r|c|ARTH 212|||||0
-r|c|ARTH 214|||||0
-r|c|ARTH 219|||||0
-r|c|ARTH 220|||||0
-r|c|ARTH 320|||||0
-r|c|ARTH 342|||||0
-r|c|ARTH 402|||||0
-r|c|ARTH 403|||||0
-r|c|ARTH 404|||||0
-r|c|ARTH 413|||||0
-r|r|||||375|0
-r|r||6|||376|0
-r|r||3|||377|0
-r|c|ARTH 495|3||||0
-r|r||||378|379|0
-r|r||||378|380|0
-r|c|ARCH 407|||378||0
-r|c|ARCH 412|||378||0
-r|c|ARCH 415|||378||0
-r|c|ARCH 416|||378||0
-r|c|ARCH 417|||378||0
 #las/art-history-balas|Art History, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11216,12 +10129,6 @@ r|r|||||398|2
 r|r|||||399|2
 r|r|||||400|2
 r|r|||||401|2
-#las/minors/asian-american-studies|Asian American Studies Minor|LAS|minor||ok|
-r|c|AAS 100|3||||0
-r|c|AAS 200|3||402||0
-r|c|AAS 215|3||402||0
-r|c|AAS 300|3||402||0
-r|r||||403|404|0
 #las/asian-american-studies-balas|Asian American Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11293,13 +10200,6 @@ r|r||||420|425|1
 r|r||||420|426|1
 r|r||||420|427|1
 r|r||||420|428|1
-#las/minors/astronomy|Astronomy Minor|LAS|minor||ok|
-r|r||3-6||429|23|0
-r|c|ASTR 100|||429||0
-r|k|ASTR 121; ASTR 122|||429||0
-r|c|ASTR 210|||429||0
-r|r||9||430|431|0
-r|r||3-6||430|432|0
 #las/astronomy-bslas|Astronomy, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11379,14 +10279,6 @@ r|c|MATH 231|||454||1
 r|c|MATH 241|||454||1
 r|c|MATH 285|||454||1
 r|c|MATH 415|||454||1
-#las/minors/atmospheric-sciences|Atmospheric Sciences Minor|LAS|minor||ok|
-r|r||0-6|||455|0
-r|c|ATMS 100|||||0
-r|c|ATMS 120|||||0
-r|c|ATMS 140|||||0
-r|c|ATMS 201|||||0
-r|r||12-18|||456|0
-r|r||18|||435|0
 #las/atmospheric-sciences-bslas|Atmospheric Sciences, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11512,29 +10404,6 @@ r|c|BIOC 460|||||1
 r|c|BIOC 406|||||1
 r|c|BIOP 401|||||1
 r|r||10|||473|1
-#engineering/minors/bioengineering|Bioengineering Minor|Grainger Engineering|minor||ok|
-r|c|BIOE 120|1||||0
-r|c|BIOE 414|3||||0
-r|a|CHBE 472||BIOE 414|||0
-r|c|CHEM 232|3||||0
-r|c|MCB 244|3||||0
-r|c|MCB 246|3||||0
-r|a|MCB 250||MCB 246|||0
-r|c|MCB 252|3||||0
-r|c|MCB 253|2||||0
-r|r||3|||474|0
-r|c|BIOE 414|3||||0
-r|c|CHBE 472|3||||0
-r|c|BIOE 480|3||||0
-r|c|CHBE 471|3||||0
-r|c|CHBE 473|3||||0
-r|c|CHBE 474|3||||0
-r|c|ECE 473|3||||0
-r|c|MCB 400|3||||0
-r|c|MCB 450|3||||0
-r|c|MSE 470|3||||0
-r|c|TAM 461|4||||0
-r|r||3 to 4|||475|0
 #engineering/bioengineering-bs|Bioengineering, BS|Grainger Engineering|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11653,27 +10522,6 @@ r|c|TAM 251|3||478||4
 r|c|TAM 445|4||478||4
 r|c|TMGT 461|4||478||4
 r|r||9|||479|5
-#las/minors/biomolecular-engineering|Biomolecular Engineering Minor|LAS|minor||ok|
-r|c|CHBE 221|3||480||0
-r|c|CHEM 232|3||480||0
-r|c|MCB 450|3||480||0
-r|r||||481|482|0
-r|r||||483|484|0
-#bus/minors/business-analytics|Business Analytics Minor|Gies Business|minor||ok|
-r|c|BADM 352|3||485||0
-r|c|BADM 356|3||485||0
-r|c|BADM 358|3||485||0
-r|c|BADM 373|3||485||0
-r|c|BADM 374|3||485||0
-r|r||||486|487|1
-r|c|BADM 336|3||486||1
-r|c|BADM 351|3||486||1
-r|c|BADM 361|3||486||1
-r|c|BADM 362|3||486||1
-r|c|BADM 379|3||486||1
-r|c|BADM 453|3||486||1
-r|c|ACCY 302|3||486||1
-r|c|FIN 464|3||486||1
 #bus/business-data-science-bs|Business Data Science, BS|Gies Business|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -11736,32 +10584,6 @@ r|c|BADM 377|3||491||1
 r|c|BADM 379|3||491||1
 r|r|||||496|2
 r|r||3|||435|2
-#bus/minors/business-non-business|Business Non Business Minor|Gies Business|minor||ok|
-r|c|ACCY 200|3||497||0
-r|r||||497|32|0
-r|k|ACCY 201; ACCY 202|||497||0
-r|c|BADM 310|3||497||0
-r|c|BADM 320|3||497||0
-r|c|FIN 221|3||497||0
-r|c|BADM 275|||498||0
-r|c|BADM 300|||498||0
-r|c|BADM 311|||498||0
-r|c|BADM 312|||498||0
-r|c|BADM 313|||498||0
-r|c|BADM 314|||498||0
-r|c|BADM 323|||498||0
-r|c|BADM 326|||498||0
-r|c|BADM 340|||498||0
-r|c|BADM 350|||498||0
-r|c|BADM 380|||498||0
-r|c|BADM 381|||498||0
-r|c|BDI 367|||498||0
-r|c|BDI 411|||498||0
-r|c|BDI 475|||498||0
-r|c|BDI 477|||498||0
-r|c|FIN 230|||498||0
-r|c|FIN 241|||498||0
-r|c|FIN 435|||498||0
 #bus/business-undeclared|Business Undeclared|Gies Business|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -12200,22 +11022,6 @@ r|c|STAT 430|||514||5
 r|c|STAT 440|||514||5
 r|c|UP 406|||514||5
 r|c|UP 430|||514||5
-#las/minors/chemistry|Chemistry Minor|LAS|minor||ok|
-r|r||8-10|||524|0
-r|c|CHEM 102|||||0
-r|c|CHEM 103|||||0
-r|c|CHEM 104|||||0
-r|c|CHEM 105|||||0
-r|r|||||247|0
-r|c|CHEM 202|||||0
-r|c|CHEM 203|||||0
-r|c|CHEM 204|||||0
-r|c|CHEM 205|||||0
-r|c|CHEM 232|3-4||||0
-r|a|CHEM 236||CHEM 232|||0
-r|c|CHEM 233|2||||0
-r|a|CHEM 237||CHEM 233|||0
-r|r||6-8|||525|0
 #las/chemistry-bs|Chemistry, BS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -12349,43 +11155,6 @@ r|c|NRES 351|||540||3
 r|c|NRES 487|||540||3
 r|c|NRES 490|||540||3
 r|r||||540|545|3
-#aces/minors/child-health-well-being|Child Health Well Being Minor|ACES|minor||ok|
-r|c|HDFS 105|||546||0
-r|c|HDFS 301|||546||0
-r|r||||546|547|0
-r|c|HDFS 305|||546||0
-r|c|HDFS 405|||546||0
-r|c|HDFS 108|||548||0
-r|c|HDFS 208|||548||0
-r|c|HDFS 408|||548||0
-#media/minors/cinema-studies-minor|Cinema Studies Minor Minor|Media|minor||ok|
-r|c|MACS 203|3||549||0
-r|c|MACS 261|3||549||0
-r|c|MACS 262|3||549||0
-r|c|MACS 361|3||549||0
-r|r||||550|551|0
-r|c|MACS 207|||550||0
-r|c|MACS 382|||550||0
-r|c|MACS 383|||550||0
-r|c|MACS 419|||550||0
-r|c|MACS 466|||550||0
-r|c|MACS 470|||550||0
-r|c|MACS 490|||550||0
-r|c|MACS 493|||550||0
-r|c|ITAL 270|||550||0
-r|r||||550|552|0
-r|c|MACS 205|||550||0
-r|c|MACS 211|||550||0
-r|c|MACS 250|||550||0
-r|c|MACS 275|||550||0
-r|c|MACS 335|||550||0
-r|c|MACS 356|||550||0
-r|c|MACS 365|||550||0
-r|c|MACS 375|||550||0
-r|c|MACS 380|||550||0
-r|c|MACS 381|||550||0
-r|c|MACS 432|||550||0
-r|c|MDIA 223|||550||0
 #engineering/civil-engineering-bs|Civil Engineering, BS|Grainger Engineering|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -12953,72 +11722,6 @@ r|c|CEE 417|4||614||5
 r|c|CEE 418|3||614||5
 r|c|CEE 451|3||615||5
 r|c|CEE 453|4||615||5
-#las/minors/classical-civilizations|Classical Civilizations Minor|LAS|minor||ok|
-r|r||18|||616|0
-r|c|CLCV 114|||||0
-r|c|CLCV 115|||||0
-r|c|CLCV 116|||||0
-r|c|CLCV 120|||||0
-r|c|CLCV 131|||||0
-r|c|CLCV 132|||||0
-r|c|CLCV 133|||||0
-r|c|CLCV 160|||||0
-r|c|CLCV 206|||||0
-r|c|CLCV 203|||||0
-r|c|CLCV 220|||||0
-r|c|CLCV 221|||||0
-r|c|CLCV 224|||||0
-r|c|CLCV 225|||||0
-r|c|CLCV 230|||||0
-r|c|CLCV 231|||||0
-r|c|CLCV 232|||||0
-r|c|CLCV 240|||||0
-r|c|CLCV 250|||||0
-r|c|CLCV 322|||||0
-r|c|CLCV 323|||||0
-r|c|CLCV 443|||||0
-r|c|CLCV 444|||||0
-r|c|CLCV 450|||||0
-r|c|CLCV 490|||||0
-r|c|CLCV 491|||||0
-r|c|CLCV 492|||||0
-r|c|CLCV 493|||||0
-r|c|GRKM 260|||||0
-#las/minors/classical-languages|Classical Languages Minor|LAS|minor||ok|
-r|r||Hours|||617|0
-r|c|GRK 101|4||||0
-r|c|GRK 102|4||||0
-r|c|GRK 201|4||||0
-r|c|GRK 202|4||||0
-r|r||6|||618|0
-r|c|GRK 401|||||0
-r|c|GRK 411|||||0
-r|c|GRK 491|||||0
-r|c|GRK 493|||||0
-r|r||Hours|||619|1
-r|c|GRKM 201|5||||1
-r|c|GRKM 202|5||||1
-r|c|GRKM 403|4||||1
-r|c|GRKM 404|4||||1
-r|r||5|||620|1
-r|c|CLCV 120|||||1
-r|c|GRKM 199|||||1
-r|c|GRKM 260|||||1
-r|c|GRKM 453|||||1
-r|c|GRKM 454|||||1
-r|c|GRKM 492|||||1
-r|c|GRKM 493|||||1
-r|r||Hours|||621|2
-r|c|LAT 101|4||||2
-r|c|LAT 102|4||||2
-r|c|LAT 201|4||||2
-r|c|LAT 202|4||||2
-r|r||6|||622|2
-r|c|LAT 401|||||2
-r|c|LAT 411|||||2
-r|c|LAT 460|||||2
-r|c|LAT 491|||||2
-r|c|LAT 493|||||2
 #las/classics-balas|Classics, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -13229,17 +11932,6 @@ r|c|CLCV 492|||639||4
 r|c|CLCV 493|||639||4
 r|c|GRKM 260|||639||4
 r|r||12||639|638|4
-#las/minors/communication|Communication Minor|LAS|minor||ok|
-r|c|CMN 101|3||||0
-r|a|CMN 112||CMN 101|||0
-r|c|CMN 102|4||||0
-r|r||6|||641|0
-r|r||6|||642|0
-r|c|CMN 101|3||||1
-r|a|CMN 112||CMN 101|||1
-r|c|CMN 102|4||||1
-r|r||6|||641|1
-r|r||6|||642|1
 #las/communication-balas|Communication, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -13331,15 +12023,6 @@ r|c|CMN 421|||653||1
 r|c|CMN 423|||653||1
 r|c|CMN 450|||653||1
 r|c|CMN 464|||653||1
-#faa/minors/community-based-art-education|Community Based Art Education Minor|Fine & Applied Arts|minor||ok|
-r|c|ARTE 201|3||||0
-r|c|ARTE 202|3||||0
-r|r|||||654|0
-r|r||6-12|||655|0
-r|c|ART 140|||||0
-r|c|ARTE 260|||||0
-r|c|ARTE 480|||||0
-r|r||0-6|||656|0
 #ahs/community-health-bs/health-education-promotion|Community Health: Health Education Promotion, BS|Applied Health Sciences|conc|ahs/community-health-bs|ok|
 r|r||6-7||657|658|0
 r|r||3-4||657|659|0
@@ -14141,119 +12824,6 @@ r|r||||687|700|1
 r|r||||701|702|1
 r|r||||701|703|1
 r|r||||701|704|1
-#engineering/minors/computational-science-engineering|Computational Science Engineering Minor|Grainger Engineering|minor||ok|
-r|c|CS 101|3||705||0
-r|c|CS 125|4||705||0
-r|c|CS 225|4||705||0
-r|c|ECE 220|4||705||0
-r|c|LING 402|3||705||0
-r|c|ECE 493|3 or 4||706||0
-r|c|MATH 441|3 or 4||706||0
-r|a|MATH 442||MATH 441|706||0
-r|a|MATH 489||MATH 441|706||0
-r|c|MATH 415|0 to 4||706||0
-r|c|MATH 444|3 or 4||706||0
-r|a|MATH 447||MATH 444|706||0
-r|c|MATH 446|3 or 4||706||0
-r|a|MATH 448||MATH 446|706||0
-r|c|MATH 482|3 or 4||706||0
-r|a|MATH 484||MATH 482|706||0
-r|c|STAT 408|4||706||0
-r|a|STAT 409||STAT 408|706||0
-r|a|STAT 410||STAT 408|706||0
-r|a|STAT 420||STAT 408|706||0
-r|a|STAT 430||STAT 408|706||0
-r|a|MATH 461||STAT 408|706||0
-r|c|CS 411|3 or 4||707||0
-r|c|CS 450|0 to 4||707||0
-r|a|CSE 401||CS 450|707||0
-r|c|CS 466|3 or 4||707||0
-r|c|ECE 448|3 or 4||707||0
-r|c|GEOG 489|4||707||0
-r|c|LING 402|3||707||0
-r|c|STAT 440|3 or 4||707||0
-r|c|TAM 470|3 or 4||707||0
-r|a|CSE 450||TAM 470|707||0
-r|r||||708|709|0
-r|r||||708|710|0
-r|c|CSE 401|3 or 4||711||0
-r|c|CSE 402|3 or 4||711||0
-r|c|CSE 408|4||711||0
-r|c|CSE 510|4||711||0
-r|c|CSE 527|4||711||0
-r|r||||712|713|0
-r|c|CHEM 576|4||712||0
-r|c|CS 466|3 or 4||712||0
-r|c|CEE 534|||712||0
-r|c|CEE 557|4||712||0
-r|c|CSE 566|4||712||0
-r|c|CHEM 550|4||712||0
-r|r||||712|714|0
-r|c|CSE 402|3 or 4||712||0
-r|c|CSE 422|3 or 4||712||0
-r|c|CSE 423|3 or 4||712||0
-r|c|CSE 426|3 or 4||712||0
-r|c|CSE 427|3 or 4||712||0
-r|c|CSE 429|3 or 4||712||0
-r|c|CSE 521|4||712||0
-r|c|CSE 522|4||712||0
-r|c|CSE 527|4||712||0
-r|r||||712|715|0
-r|c|CSE 530|4||712||0
-r|c|CSE 532|4||712||0
-r|r||||712|716|0
-r|c|CSE 450|3 or 4||712||0
-r|c|CSE 461|3 or 4||712||0
-r|c|CSE 560|4||712||0
-r|c|CSE 561|||712||0
-r|c|CSE 566|4||712||0
-r|c|CSE 412|2 to 4||712||0
-r|r||||712|717|0
-r|c|CSE 401|3 or 4||712||0
-r|c|CSE 414|4||712||0
-r|c|CSE 441|3 or 4||712||0
-r|c|CSE 510|4||712||0
-r|c|CSE 511|4||712||0
-r|c|CSE 512|4||712||0
-r|c|CSE 513|4||712||0
-r|c|CSE 515|||712||0
-r|c|CS 598|2 to 4||712||0
-r|c|CSE 517|4||712||0
-r|c|CSE 553|4||712||0
-r|r||||712|718|0
-r|c|TAM 598|1 to 4||712||0
-r|c|CS 598|2 to 4||712||0
-r|c|CEE 528|4||712||0
-r|c|ASTR 510|4||712||0
-r|r||||712|719|0
-r|c|CSE 485|3 or 4||712||0
-r|c|MSE 498|1 to 4||712||0
-r|c|AE 598|1 to 4||712||0
-r|r||||712|720|0
-r|c|CSE 441|3 or 4||712||0
-r|c|CSE 543|4||712||0
-r|c|ECE 513|4||712||0
-r|c|ECE 558|4||712||0
-r|r||||712|721|0
-r|c|CSE 450|3 or 4||712||0
-r|c|CSE 451|3 or 4||712||0
-r|c|CSE 517|4||712||0
-r|c|CSE 551|4||712||0
-r|c|CSE 552|4||712||0
-r|c|ME 570|4||712||0
-r|c|TAM 598|1 to 4||712||0
-r|r||||712|722|0
-r|c|CSE 428|3 or 4||712||0
-r|c|CSE 440|3 or 4||712||0
-r|c|CSE 448|4||712||0
-r|c|CSE 525|4||712||0
-r|c|STAT 530|4||712||0
-r|c|CSE 542|4||712||0
-r|c|STAT 430|3 or 4||712||0
-r|c|STAT 432|3 or 4||712||0
-r|c|CS 412|3 or 4||712||0
-r|c|CS 410|3 or 4||712||0
-r|r||||723|724|0
 #engineering/computer-engineering-bs|Computer Engineering, BS|Grainger Engineering|major||ok|
 r|c|ENG 100|1||||0
 r|c|MATH 221|4||||1
@@ -15926,22 +14496,6 @@ r|c|CS 541|4||864||4
 r|c|CS 584|4||864||4
 r|c|CS 588|4||864||4
 r|r||6|||865|5
-#las/minors/creative-writing|Creative Writing Minor|LAS|minor||ok|
-r|c|CW 100|3||||0
-r|r||||866|867|0
-r|c|CW 106|||866||0
-r|c|CW 206|||866||0
-r|c|CW 406|||866||0
-r|r||||866|32|0
-r|c|CW 104|||866||0
-r|c|CW 204|||866||0
-r|c|CW 404|||866||0
-r|r||||403|868|0
-r|r||||403|869|0
-r|c|CMN 423|||403||0
-r|c|JOUR 475|||403||0
-r|c|THEA 211|||403||0
-r|c|IS 410|||403||0
 #las/creative-writing-balas|Creative Writing, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -15971,49 +14525,6 @@ r|r||||878|881|1
 r|r||||882|883|1
 r|r||||882|884|1
 r|r||||882|885|1
-#las/minors/criminology-law-society|Criminology Law Society Minor|LAS|minor||ok|
-r|c|SOC 100|3-4||||0
-r|a|SOC 163||SOC 100|||0
-r|c|SOC 275|3||||0
-r|r||3|||886|0
-r|c|SOC 378|||||0
-r|c|SOC 477|||||0
-r|c|SOC 479|||||0
-r|c|SOC 101|||887||0
-r|c|SOC 225|||887||0
-r|c|SOC 310|||887||0
-r|c|SOC 373|||887||0
-r|c|SOC 375|||887||0
-r|c|SOC 378|||887||0
-r|c|SOC 390|||887||0
-r|c|SOC 396|||887||0
-r|c|SOC 400|||887||0
-r|c|SOC 477|||887||0
-r|c|SOC 479|||887||0
-r|c|SOC 490|||887||0
-r|c|SOC 496|||887||0
-#media/minors/critical-film-production|Critical Film Production Minor|Media|minor||ok|
-r|c|MACS 150|||888||0
-r|c|MACS 260|||888||0
-r|c|MACS 370|||888||0
-r|a|MACS 371||MACS 370|888||0
-r|r||||888|889|0
-r|c|MACS 261|||890||0
-r|c|MACS 262|||890||0
-r|c|MACS 361|||890||0
-r|r||||891|892|0
-r|c|MACS 203|||891||0
-r|c|MACS 205|||891||0
-r|c|MACS 261|||891||0
-r|c|MACS 262|||891||0
-r|c|MACS 282|||891||0
-r|c|MACS 284|||891||0
-r|c|MACS 361|||891||0
-r|c|MACS 366|||891||0
-r|c|MACS 372|||891||0
-r|c|MACS 380|||891||0
-r|c|MACS 485|||891||0
-r|r||||891|893|0
 #aces/crop-sciences-bs|Crop Sciences, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -16187,17 +14698,6 @@ r|c|HORT 205|3||909||2
 r|c|HORT 341|4||909||2
 r|c|NRES 201|4||909||2
 r|r||15||801|910|2
-#aces/minors/crop-soil-management|Crop Soil Management Minor|ACES|minor||ok|
-r|c|CPSC 112|4||||0
-r|c|CPSC 418|3||||0
-r|c|NRES 201|4||||0
-r|c|NRES 488|3||||0
-r|r||3|||911|0
-r|c|NRES 438|||||0
-r|c|NRES 471|||||0
-r|c|NRES 474|||||0
-r|c|NRES 475|||||0
-r|r||3|||912|0
 #ahs_faa/dance-ba-kinesiology-bs|Dance Ba Kinesiology, BS|AHS_FAA|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -16256,42 +14756,6 @@ r|r||53|||933|3
 r|r||50 (Minimum)|||934|3
 r|r|||||330|3
 r|r|||||935|3
-#faa/minors/dance|Dance Minor|Fine & Applied Arts|minor||ok|
-r|c|DANC 100|3||||0
-r|a|DANC 125||DANC 100|||0
-r|r||3|||936|0
-r|c|DANC 240|||||0
-r|c|DANC 340|||||0
-r|c|DANC 405|||||0
-r|c|DANC 426|||||0
-r|c|DANC 440|||||0
-r|c|DANC 476|||||0
-r|c|DANC 116|2||937||1
-r|c|DANC 209|2||937||1
-r|c|DANC 212|1||937||1
-r|c|DANC 216|2||937||1
-r|c|DANC 160|1 to 3||937||1
-r|c|DANC 260|1 to 5||937||1
-r|c|DANC 360|1 to 5||937||1
-r|c|DANC 460|1 to 5||937||1
-r|c|DANC 104|2||938||1
-r|c|DANC 200|3||938||1
-r|c|DANC 465|3||938||1
-r|c|DANC 201|2||939||1
-r|c|DANC 245|1||939||1
-r|c|DANC 246|3||939||1
-r|c|DANC 401|1||939||1
-r|c|DANC 231|1||940||2
-r|c|DANC 330|1||940||2
-r|c|DANC 331|1||940||2
-r|c|DANC 431|1||940||2
-r|c|DANC 162|1||940||2
-r|c|DANC 220|1||940||2
-r|c|DANC 256|1||940||2
-r|c|DANC 290|1||940||2
-r|c|DANC 424|1||940||2
-r|c|DANC 456|1||940||2
-r|c|MUSC 469|1 to 2||940||2
 #faa/dance-ba|Dance, BA|Fine & Applied Arts|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -16488,33 +14952,6 @@ r|c|FSHN 300|||973||1
 r|c|HDFS 300|||973||1
 r|c|HK 300|||973||1
 r|c|ETMA 311|||973||1
-#ahs/minors/disability-studies|Disability Studies Minor|Applied Health Sciences|minor||ok|
-r|c|HK 302|3||974||0
-r|c|RST 260|3||974||0
-r|c|SHS 433|3||974||0
-r|c|ARTD 420|3||975||0
-r|c|HDFS 208|3||975||0
-r|c|HK 405|3||975||0
-r|c|HK 407|3||975||0
-r|c|HK 411|3||975||0
-r|c|HK 442|3||975||0
-r|c|HK 446|3||975||0
-r|c|HK 463|3||975||0
-r|c|HK 472|3||975||0
-r|c|HK 480|4||975||0
-r|c|HK 481|2||975||0
-r|c|HK 482|3||975||0
-r|c|HK 484|3||975||0
-r|c|HK 485|3||975||0
-r|c|RST 230|3||975||0
-r|c|SHS 170|3||975||0
-r|c|SHS 222|3||975||0
-r|c|SHS 270|4||975||0
-r|c|SHS 380|3||975||0
-r|c|SHS 427|3||975||0
-r|c|SHS 480|2||975||0
-r|c|SPED 117|3||975||0
-r|c|SOCW 370|3||975||0
 #education/early-childhood-education-bs|Early Childhood Education, BS|Education|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -16950,14 +15387,6 @@ r|c|ESE 117|3||997||2
 r|c|ESE 118|3||997||2
 r|c|ESE 120|3||997||2
 r|c|ESE 140|3||997||2
-#las/minors/east-asian-languages-culture|East Asian Languages Culture Minor|LAS|minor||ok|
-r|r||5|||23|0
-r|c|CHIN 204|||||0
-r|c|JAPN 204|||||0
-r|c|KOR 204|||||0
-r|r||15|||998|0
-r|c|EALC 120|||||0
-r|r|||||999|0
 #las/east-asian-languages-cultures-balas|East Asian Languages Cultures, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -16980,22 +15409,6 @@ r|r|||||1006|1
 r|r||12|||1007|1
 r|r|||||1008|1
 r|c|EALC 398|3||||1
-#las/minors/ecology-conservation-biology|Ecology Conservation Biology Minor|LAS|minor||ok|
-r|c|IB 150|4||||0
-r|c|IB 203|4||||0
-r|c|IB 204|3-4||||0
-r|a|IB 201||IB 204|||0
-r|r||6-8|||234|0
-r|c|IB 348|||||0
-r|c|IB 362|||||0
-r|c|IB 431|||||0
-r|c|CPSC 431; IB 440|||||0
-r|c|IB 444|||||0
-r|c|IB 451|||||0
-r|c|IB 452|||||0
-r|c|IB 453|||||0
-r|c|IB 455|||||0
-r|r|||||1009|0
 #las/econometrics-quantitative-economics-bslas|Econometrics Quantitative Economics, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -17025,36 +15438,6 @@ r|r||3||1013|1014|1
 r|c|STAT 385|||1013||1
 r|c|CS 105|3||1013||1
 r|r||||1015|1016|1
-#las/minors/economics|Economics Minor|LAS|minor||ok|
-r|c|ECON 102|3||1017||0
-r|c|ECON 202|3||1017||0
-r|c|ECON 203|3||1017||0
-r|c|ECON 302|3||1017||0
-r|r||||1017|1018|0
-r|r||||1019|1020|0
-r|c|ECON 411|||1019||0
-r|c|ECON 414|||1019||0
-r|c|ECON 440|||1019||0
-r|c|ECON 450|||1019||0
-r|c|ECON 451|||1019||0
-r|c|ECON 452|||1019||0
-r|c|ECON 480|||1019||0
-r|c|ECON 481|||1019||0
-r|c|ECON 483|||1019||0
-r|c|ECON 482|||1019||0
-r|c|ECON 484|||1019||0
-r|c|ECON 490|||1019||0
-r|c|ECON 103|||1021||0
-r|c|ECON 303|||1021||0
-r|r||||1021|1022|0
-r|c|ECON 420|||1021||0
-r|c|ECON 425|||1021||0
-r|c|ECON 452|||1021||0
-r|c|ECON 490|||1021||0
-r|c|ECON 471|||1023||0
-r|r||||1023|1024|0
-r|c|ECON 465|||1023||0
-r|c|ECON 490|||1023||0
 #las/economics-balas|Economics, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -17083,37 +15466,6 @@ r|a|MATH 221||MATH 220|||1
 r|c|MATH 231|||||1
 r|r|||||1028|1
 r|r||18|||1029|1
-#engineering/minors/electrical-computer-engineering|Electrical Computer Engineering Minor|Grainger Engineering|minor||ok|
-r|r||||1030|23|0
-r|c|ECE 110|3||1030||0
-r|c|ECE 205|3||1030||0
-r|r||||1031|1032|0
-r|c|CS 101|3||1031||0
-r|c|CS 124|3||1031||0
-r|c|ECE 313|3||1033||0
-r|c|IE 300|3||1033||0
-r|c|BIOE 310|3||1033||0
-r|c|MATH 461|3 or 4||1033||0
-r|c|MATH 463|4||1033||0
-r|c|CEE 202|3||1033||0
-r|c|CS 361|3||1033||0
-r|r||||1034|1035|0
-r|c|ECE 210|4||1034||0
-r|r||||1034|1036|0
-r|r||||1034|1037|0
-r|c|ECE 310|3||1034||0
-r|c|ECE 329|3||1034||0
-r|c|ECE 330|3||1034||0
-r|c|ECE 340|3||1034||0
-r|k|ECE 342; ECE 343|4||1034||0
-r|r||||1038|1039|0
-r|c|ECE 120|4||1038||0
-r|c|ECE 220|4||1038||0
-r|r||||1038|1036|0
-r|r||||1038|1037|0
-r|c|ECE 385|3||1038||0
-r|c|ECE 391|4||1038||0
-r|c|ECE 411|4||1038||0
 #engineering/electrical-engineering-bs|Electrical Engineering, BS|Grainger Engineering|major||ok|
 r|c|ENG 100|1||||0
 r|c|CHEM 102|3||||1
@@ -17935,24 +16287,6 @@ r|c|PHYS 407|4||1079||4
 r|c|PHYS 446|3||1079||4
 r|r||32-39|||1082|5
 r|r|||||1083|5
-#aces/minors/engineering-technology-management-agricultural-systems|Engineering Technology Management Agricultural Systems Minor|ACES|minor||ok|
-r|c|ETMA 100|3||||0
-r|r||15|||1084|0
-r|c|ETMA 232|||||0
-r|c|ETMA 233|||||0
-r|c|ETMA 234|||||0
-r|c|ETMA 262|||||0
-r|c|ETMA 352|||||0
-r|c|ETMA 363|||||0
-r|c|ETMA 371|||||0
-r|c|ETMA 372|||||0
-r|c|ETMA 381|||||0
-r|c|ETMA 435|||||0
-r|c|ETMA 438|||||0
-r|c|ETMA 464|||||0
-r|c|ETMA 465|||||0
-r|c|ETMA 467|||||0
-r|c|ETMA 496|||||0
 #aces/engineering-technology-management-agricultural-systems-bs|Engineering Technology Management Agricultural Systems, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -18580,24 +16914,6 @@ r|c|CPSC 437|||1115||2
 r|c|ESE 465|||1115||2
 r|c|ESE 482|||1115||2
 r|c|GLBL 201|||1115||2
-#las/minors/english|English Minor|LAS|minor||ok|
-r|c|ENGL 200|3||||0
-r|c|ENGL 301|3||||0
-r|r||3|||1121|0
-r|r||3|||1122|0
-r|r||6|||1123|0
-r|r||3|||1124|0
-#las/minors/english-second-language|English Second Language Minor|LAS|minor||ok|
-r|c|LING 100|3||||0
-r|c|LING 489|3||||0
-r|c|EIL 411|3||||0
-r|r||9|||437|0
-r|c|EIL 422|||||0
-r|c|EIL 445|||||0
-r|c|EIL 460|||||0
-r|c|EIL 488|||||0
-r|c|LING 450|||||0
-r|a|EIL 456||LING 450|||0
 #las/english-balas/english-teaching|English: English Teaching, BALAS|LAS|conc|las/english-balas|ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -18691,93 +17007,6 @@ r|r||||1157|1138|1
 r|r||||1157|1139|1
 r|r||||1161|1162|1
 r|r||||1161|1163|1
-#bus/minors/entrepreneurship|Entrepreneurship Minor|Gies Business|minor||ok|
-r|c|BADM 346|3||1164||0
-r|c|TE 250|2||1164||0
-r|c|ANTH 279|||1165||0
-r|c|ECON 402|||1165||0
-r|c|ECON 482|||1165||0
-r|c|ECON 483|||1165||0
-r|c|GLBL 270|||1165||0
-r|c|HIST 164|||1165||0
-r|c|HIST 264|||1165||0
-r|c|PS 356|||1165||0
-r|c|ACE 280|||1166||0
-r|c|ADV 301|||1166||0
-r|c|ADV 409|||1166||0
-r|c|ANSC 471|||1166||0
-r|c|ARTS 321|||1166||0
-r|c|ARTS 351|||1166||0
-r|c|BADM 463|||1166||0
-r|c|BADM 464|||1166||0
-r|c|FIN 380|||1166||0
-r|c|FSHN 193|||1166||0
-r|c|IS 419|||1166||0
-r|c|SOCW 321|||1166||0
-r|c|SPAN 332|||1166||0
-r|c|TE 461|||1166||0
-r|c|UP 475|||1166||0
-r|c|ACCY 200|||1167||0
-r|c|ACE 220|||1167||0
-r|c|ACE 221|||1167||0
-r|c|ACE 345|||1167||0
-r|c|ACE 398|||1167||0
-r|c|ADV 391|||1167||0
-r|c|ARTD 301|||1167||0
-r|c|ARTD 328|||1167||0
-r|c|ARTD 420|||1167||0
-r|c|ARTD 426|||1167||0
-r|c|ARTS 220|||1167||0
-r|c|BADM 312|||1167||0
-r|c|BADM 329|||1167||0
-r|c|BADM 331|||1167||0
-r|c|BADM 365|||1167||0
-r|c|BADM 367|||1167||0
-r|c|BADM 371|||1167||0
-r|c|BADM 377|||1167||0
-r|c|BADM 395|||1167||0
-r|c|DTX 221|||1167||0
-r|c|DTX 251|||1167||0
-r|c|FIN 423|||1167||0
-r|c|LER 182|||1167||0
-r|c|ARTD 230|||1167||0
-r|c|TE 333|||1167||0
-r|c|TE 390|||1167||0
-r|c|TE 450|||1167||0
-r|c|TE 466|||1167||0
-r|c|ACE 242|||1168||0
-r|c|ACE 243|||1168||0
-r|c|ADV 175|||1168||0
-r|c|ARTD 217|||1168||0
-r|c|ARTD 317|||1168||0
-r|c|ARTS 245|||1168||0
-r|c|BADM 330|||1168||0
-r|c|BADM 372|||1168||0
-r|c|BADM 395|||1168||0
-r|c|CI 210|||1168||0
-r|c|EPOL 230|||1168||0
-r|c|EPOL 270|||1168||0
-r|c|EPOL 474|||1168||0
-r|c|GLBL 250|||1168||0
-r|c|PHIL 440|||1168||0
-r|c|PHIL 442|||1168||0
-r|c|TE 401|||1168||0
-r|c|TE 462|||1168||0
-r|c|UP 327|||1168||0
-r|c|UP 357|||1168||0
-#aces/minors/environmental-economics-law|Environmental Economics Law Minor|ACES|minor||ok|
-r|c|ACE 210|3||1169||0
-r|c|ACE 310|3||1169||0
-r|r||3-4||1169|23|0
-r|c|ACE 100|||1169||0
-r|c|ECON 102|||1169||0
-r|r||9||1169|1170|0
-r|c|ACE 306|||1169||0
-r|c|ACE 403|||1169||0
-r|c|ACE 406|||1169||0
-r|c|ACE 411|||1169||0
-r|c|ACE 456|||1169||0
-r|c|BADM 300|||1169||0
 #engineering/environmental-engineering-bs|Environmental Engineering, BS|Grainger Engineering|major||ok|
 r|c|CEE 190|4||||0
 r|c|CEE 495|0||||0
@@ -19369,125 +17598,6 @@ r|r|||||330|3
 r|r||||1188|1189|3
 r|r||||1188|1190|3
 r|r||||1188|1191|3
-#aces/minors/food-agribusiness-management|Food Agribusiness Management Minor|ACES|minor||ok|
-r|c|ACE 100|3-4||1192||0
-r|a|ECON 102||ACE 100|1192||0
-r|c|ACE 222|3||1192||0
-r|c|ACE 231|3||1192||0
-r|r||3||1192|1193|0
-r|c|ACE 210|||1192||0
-r|c|ACE 251|||1192||0
-r|c|ACE 306|||1192||0
-r|c|ACE 335|||1192||0
-r|c|ACE 345|||1192||0
-r|r||6-7||1192|234|0
-r|c|ACE 427|||1192||0
-r|c|ACE 428|||1192||0
-r|c|ACE 430|||1192||0
-r|c|ACE 431|||1192||0
-r|c|ACE 435|||1192||0
-r|c|ACE 436|||1192||0
-r|c|ACE 444|||1192||0
-#aces/minors/food-environmental-systems|Food Environmental Systems Minor|ACES|minor||ok|
-r|c|ACES 102|3||||0
-r|c|FSHN 101|3||||0
-r|c|NRES 100|3||||0
-r|r||3|||1194|0
-r|c|ANSC 100|||||0
-r|c|ANSC 101|||||0
-r|c|ANSC 110|||||0
-r|c|ANSC 223|||||0
-r|c|ANSC 224|||||0
-r|c|ANSC 250|||||0
-r|c|ACE 100|||||0
-r|c|ACE 210|||||0
-r|c|ACE 222|||||0
-r|c|ACE 231|||||0
-r|c|ACE 232|||||0
-r|c|ACE 251|||||0
-r|c|CPSC 112|||||0
-r|c|CPSC 116|||||0
-r|c|ETMA 100|||||0
-r|c|FSHN 120|||||0
-r|a|FSHN 220||FSHN 120|||0
-r|c|FSHN 232|||||0
-r|c|FSHN 260|||||0
-r|c|HORT 105|||||0
-r|c|HORT 106|||||0
-r|c|NRES 201|||||0
-r|c|NRES 219|||||0
-r|c|NRES 287|||||0
-r|r||6|||1195|0
-r|c|ACE 306|||||0
-r|c|ACE 310|||||0
-r|c|ACE 346|||||0
-r|c|ACE 403|||||0
-r|c|ACE 406|||||0
-r|c|ACE 411|||||0
-r|c|ACE 430|||||0
-r|c|ACE 431|||||0
-r|c|ACE 432|||||0
-r|c|ACE 435|||||0
-r|c|ACE 436|||||0
-r|c|ACE 451|||||0
-r|c|ACE 456|||||0
-r|c|ANSC 305|||||0
-r|c|ANSC 306|||||0
-r|c|ANSC 309|||||0
-r|c|ANSC 322|||||0
-r|c|ANSC 363|||||0
-r|c|ANSC 400|||||0
-r|c|ANSC 401|||||0
-r|c|ANSC 402|||||0
-r|c|ANSC 403|||||0
-r|c|ANSC 404|||||0
-r|c|ANSC 406|||||0
-r|c|ANSC 407|||||0
-r|c|ANSC 409|||||0
-r|c|ANSC 422|||||0
-r|c|ANSC 431|||||0
-r|c|ANSC 438|||||0
-r|c|ANSC 444|||||0
-r|c|ANSC 446|||||0
-r|c|ANSC 450|||||0
-r|c|ANSC 451|||||0
-r|c|ANSC 452|||||0
-r|c|ANSC 467|||||0
-r|c|CPSC 407|||||0
-r|c|CPSC 418|||||0
-r|c|CPSC 431|||||0
-r|c|ETMA 311|||||0
-r|c|FSHN 302|||||0
-r|c|FSHN 322|||||0
-r|c|FSHN 425|||||0
-r|c|FSHN 428|||||0
-r|c|NRES 325|||||0
-r|c|NRES 330|||||0
-r|c|NRES 348|||||0
-r|c|NRES 370|||||0
-r|c|NRES 409|||||0
-r|c|NRES 419|||||0
-r|c|NRES 420|||||0
-r|c|NRES 431|||||0
-r|c|NRES 474|||||0
-r|c|NRES 488|||||0
-r|c|PLPA 405|||||0
-#aces/minors/food-science|Food Science Minor|ACES|minor||ok|
-r|c|FSHN 101|3||1196||0
-r|c|FSHN 414|3||1196||0
-r|c|FSHN 471|3||1196||0
-r|c|FSHN 465|3||23||0
-r|k|FSHN 481; FSHN 483|4||23||0
-r|c|FSHN 232|||1197||0
-r|c|FSHN 260|||1197||0
-r|c|FSHN 302|||1197||0
-r|c|FSHN 416|||1197||0
-r|c|FSHN 418|||1197||0
-r|c|FSHN 460|||1197||0
-r|c|FSHN 466|||1197||0
-r|c|ANSC 350|||1197||0
-r|c|MCB 450|||1197||0
-r|c|ABE 483|||1197||0
 #aces/food-science-bs|Food Science, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -19598,17 +17708,6 @@ r|r|||||398|2
 r|r|||||399|2
 r|r|||||400|2
 r|r|||||401|2
-#las/minors/french|French Minor|LAS|minor||ok|
-r|c|FR 207|3||||0
-r|c|FR 211|3||||0
-r|c|FR 212|3||||0
-r|c|FR 205|2-3||||0
-r|a|FR 313||FR 205|||0
-r|r||3|||23|0
-r|c|FR 335|||||0
-r|c|FR 336|||||0
-r|c|FR 337|||||0
-r|r||6|||1205|0
 #las/french-balas/french-studies|French: French Studies, BALAS|LAS|conc|las/french-balas|ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -19637,104 +17736,6 @@ r|c|FR 336|||1207||2
 r|c|FR 337|||1207||2
 r|r||||1208|1209|2
 r|r||||1210|1211|2
-#ischool/minors/game-studies-design|Game Studies Design Minor|ISCHOOL|minor||ok|
-r|c|GSD 101|||1212||0
-r|r||||1213|455|0
-r|c|GSD 102|||1213||0
-r|c|IS 142|||1213||0
-r|c|GSD 202|||1213||0
-r|r||||1214|455|0
-r|c|GSD 103|||1214||0
-r|c|CI 210|||1214||0
-r|r||||191|1215|0
-r|c|CHLH 441|3 or 4||1216||1
-r|c|KIN 346|3||1217||1
-r|c|KIN 369|3||1217||1
-r|c|KIN 442|3 or 4||1217||1
-r|c|KIN 474|3 or 4||1217||1
-r|c|RST 199|1 to 5||1218||1
-r|c|CI 210|3||1219||2
-r|c|CI 437|3 or 4||1219||2
-r|c|CI 439|3 or 4||1219||2
-r|c|CI 483|2||1219||2
-r|c|CI 499|2 to 4||1219||2
-r|c|FAA 499|0 to 4||1220||3
-r|c|ART 310|3||1221||3
-r|c|ART 350|3||1221||3
-r|c|ART 499|1 to 4||1221||3
-r|c|ARTD 318|2||1221||3
-r|c|ARTD 418|3||1221||3
-r|c|ARTD 451|4||1221||3
-r|c|ARTD 499|1 to 4||1221||3
-r|c|ARTJ 301|3||1221||3
-r|c|ARTJ 302|3||1221||3
-r|c|ARTS 320|3||1221||3
-r|c|ARTS 340|3||1221||3
-r|c|ARTS 444|3 or 4||1221||3
-r|c|ARTS 445|3 or 4||1221||3
-r|c|ARTS 499|1 to 4||1221||3
-r|c|DANC 256|1||1222||3
-r|c|DANC 330|1||1222||3
-r|c|DANC 405|3||1222||3
-r|c|DANC 465|3||1222||3
-r|c|MUS 209|3||1223||3
-r|c|MUS 407|3||1223||3
-r|c|MUS 409|2||1223||3
-r|c|MUS 499|0 to 4||1223||3
-r|c|THEA 409|3 or 4||1224||3
-r|c|THEA 410|3 or 4||1224||3
-r|c|THEA 411|3||1224||3
-r|c|THEA 418|3 or 4||1224||3
-r|c|THEA 426|3||1224||3
-r|c|THEA 427|3||1224||3
-r|c|THEA 428|3||1224||3
-r|c|THEA 445|3||1224||3
-r|c|THEA 448|3||1224||3
-r|c|THEA 453|3||1224||3
-r|c|THEA 455|3||1224||3
-r|c|THEA 456|3||1224||3
-r|c|THEA 461|3 or 4||1224||3
-r|c|CS 415|3 or 4||1225||4
-r|c|CS 418|3 or 4||1225||4
-r|c|CS 419|3 or 4||1225||4
-r|c|GSD 399|0 to 3||1226||5
-r|c|GSD 403|3||1226||5
-r|c|GSD 405|3||1226||5
-r|c|GSD 409|3 or 4||1226||5
-r|c|INFO 303|3||1227||5
-r|c|INFO 416|3 or 4||1227||5
-r|c|INFO 418|3 or 4||1227||5
-r|c|INFO 424|3 or 4||1227||5
-r|c|INFO 448|3 or 4||1227||5
-r|c|IS 142|3||1228||5
-r|c|IS 145|3||1228||5
-r|c|IS 357|3||1228||5
-r|c|IS 410|2 to 4||1228||5
-r|c|IS 426|4||1228||5
-r|c|IS 436|3 or 4||1228||5
-r|c|ENGL 253|3||1229||6
-r|c|ENGL 277|3||1229||6
-r|c|ENGL 396|3||1229||6
-r|c|ADV 390|3||1230||7
-r|c|JOUR 101|3||1231||7
-r|c|JOUR 430|3 or 4||1231||7
-r|c|JOUR 460|1 to 4||1231||7
-r|c|MACS 323|1 to 3||1232||7
-r|c|MACS 326|3||1232||7
-r|c|MACS 370|4||1232||7
-r|c|MACS 371|4||1232||7
-r|c|MACS 372|3||1232||7
-r|c|MACS 480|3||1232||7
-r|c|MACS 481|3||1232||7
-r|c|MACS 485|3 or 4||1232||7
-r|c|MACS 496|3 or 4||1232||7
-#las/minors/gender-womens-studies|Gender Womens Studies Minor|LAS|minor||ok|
-r|r||6|||234|0
-r|c|GWS 201|||||0
-r|c|GWS 202|||||0
-r|c|GWS 350|||||0
-r|r||9|||1233|0
-r|r||3|||1234|0
 #las/gender-womens-studies-balas|Gender Womens Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -19756,16 +17757,6 @@ r|a|GWS 370||GWS 350|485||1
 r|r||15||1237|1238|1
 r|r||6||1239|1240|1
 r|r||||1239|1241|1
-#las/minors/geography-geographic-information-science|Geography Geographic Information Science Minor|LAS|minor||ok|
-r|r||6|||1242|0
-r|c|GGIS 101|||||0
-r|c|GGIS 103|||||0
-r|c|GGIS 104|||||0
-r|c|GGIS 106|||||0
-r|c|GGIS 210|||||0
-r|c|GGIS 221|||||0
-r|c|GGIS 224|||||0
-r|r||12|||1243|0
 #las/geography-geographic-information-science-balas|Geography Geographic Information Science, BALAS|LAS|major||ok|
 r|r||4-6||808|0|0
 r|r||3||808|1|0
@@ -20090,38 +18081,6 @@ r|c|GGIS 478|||1270||3
 r|c|GGIS 479|||1270||3
 r|c|GGIS 480|||1270||3
 r|c|GGIS 489|||1270||3
-#las/minors/geology|Geology Minor|LAS|minor||ok|
-r|r||3-4|||1271|0
-r|c|GEOL 100|||||0
-r|c|GEOL 104|||||0
-r|c|GEOL 107|||||0
-r|c|GEOL 111|||||0
-r|c|GEOL 115|||||0
-r|c|GEOL 117|||||0
-r|c|GEOL 118|||||0
-r|c|GEOL 143|||||0
-r|c|GEOL 199|1||||0
-r|c|GEOL 208|4||||0
-r|r||10-11|||1272|0
-r|c|GEOL 333|||||0
-r|c|GEOL 350|||||0
-r|c|GEOL 380|||||0
-r|c|GEOL 401|||||0
-r|c|GEOL 411|||||0
-r|c|GEOL 415|||||0
-r|c|GEOL 416|||||0
-r|c|GEOL 417|||||0
-r|c|GEOL 432|||||0
-r|c|GEOL 436|||||0
-r|c|GEOL 440|||||0
-r|c|GEOL 450|||||0
-r|c|GEOL 451|||||0
-r|c|GEOL 452|||||0
-r|c|GEOL 454|||||0
-r|c|GEOL 460|||||0
-r|c|GEOL 470|||||0
-r|c|GEOL 484|||||0
-r|c|GEOL 486|||||0
 #las/geology-bs|Geology, BS|LAS|major||ok|126
 r|c|CHEM 102|||1273||0
 r|c|CHEM 103|||1273||0
@@ -20325,60 +18284,6 @@ r|c|MSE 401|||1304||0
 r|a|PHYS 427||MSE 401|1304||0
 r|a|CHEM 444||MSE 401|1304||0
 r|r||||1304|1305|0
-#las/minors/german-business-commercial-studies|German Business Commercial Studies Minor|LAS|minor||ok|
-r|c|GER 211|3||||0
-r|c|GER 320|3||||0
-r|c|GER 321|3||||0
-r|c|GER 420|4||||0
-r|r||6-8|||1306|0
-r|c|GER 201|||||0
-r|c|GER 203|||||0
-r|c|GER 204|||||0
-r|c|GER 205|||||0
-r|c|GER 212|||||0
-r|c|GER 250|||||0
-r|a|GER 251||GER 250|||0
-r|c|GER 260|||||0
-r|a|GER 261||GER 260|||0
-r|c|GER 270|||||0
-r|c|GER 331|||||0
-r|c|GER 332|||||0
-r|c|GER 401|||||0
-r|c|PS 385|||||0
-r|c|GER 403|||||0
-r|c|GER 465|||||0
-r|c|GER 470|||||0
-r|c|GER 471|||||0
-r|c|GER 472|||||0
-r|c|GER 473|||||0
-r|c|GER 493|||||0
-r|c|GER 494|||||0
-#las/minors/german|German Minor|LAS|minor||ok|
-r|c|GER 211|3||||0
-r|c|GER 420|4||||0
-r|r||11-12|||1307|0
-r|c|GER 201|||||0
-r|c|GER 203|||||0
-r|c|GER 204|||||0
-r|c|GER 205|||||0
-r|c|GER 212|||||0
-r|c|GER 250|||||0
-r|a|GER 251||GER 250|||0
-r|c|GER 260|||||0
-r|a|GER 261||GER 260|||0
-r|c|GER 270|||||0
-r|c|GER 331|||||0
-r|c|GER 332|||||0
-r|c|GER 401|||||0
-r|c|PS 385|||||0
-r|c|GER 403|||||0
-r|c|GER 465|||||0
-r|c|GER 470|||||0
-r|c|GER 471|||||0
-r|c|GER 472|||||0
-r|c|GER 473|||||0
-r|c|GER 493|||||0
-r|c|GER 494|||||0
 #las/germanic-studies-balas/german-business-commercial-studies|Germanic Studies: German Business Commercial Studies, BALAS|LAS|conc|las/germanic-studies-balas|ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -20486,151 +18391,6 @@ r|c|SCAN 472|||||1
 r|c|SCAN 490|||||1
 r|c|SCAN 492|||||1
 r|c|SCAN 496|||||1
-#ler/minors/global-labor-studies|Global Labor Studies Minor|LER|minor||ok|
-r|c|LER 100|3||||0
-r|c|LER 130|3||||0
-r|r||6|||1314|0
-r|r||6|||1315|0
-#las/minors/global-markets-society|Global Markets Society Minor|LAS|minor||ok|
-r|c|GLBL 270|3||||0
-r|r||||1316|1317|0
-r|c|CMN 211|||1316||0
-r|c|CS 105|||1316||0
-r|c|ECON 102|||1316||0
-r|c|GGIS 205|||1316||0
-r|c|HIST 259|||1316||0
-r|c|PS 220|||1316||0
-r|c|PSYC 245|||1316||0
-r|c|SOC 160|||1316||0
-r|r||||1318|1319|0
-r|r||||1318|1320|0
-r|c|ANTH 368|||1318||0
-r|c|BADM 380|||1318||0
-r|c|GLBL 220|||1318||0
-r|c|HIST 310|||1318||0
-r|c|HIST 380|||1318||0
-r|c|PS 180|||1318||0
-r|c|PS 220|||1318||0
-r|c|PS 282|||1318||0
-r|c|PS 321|||1318||0
-r|c|PS 340|||1318||0
-r|c|PS 356|||1318||0
-r|c|PS 382|||1318||0
-r|c|PS 384|||1318||0
-r|r||||1318|1321|0
-r|c|ANTH 374|||1318||0
-r|c|ANTH 423|||1318||0
-r|c|GGIS 204|||1318||0
-r|c|GGIS 205|||1318||0
-r|c|GGIS 438|||1318||0
-r|c|GGIS 465|||1318||0
-r|c|GGIS 479|||1318||0
-r|c|HIST 264|||1318||0
-r|c|INFO 202|||1318||0
-r|c|ENVS 101|||1318||0
-r|c|PHYS 150|||1318||0
-r|c|SOC 350|||1318||0
-r|r||||1318|1322|0
-r|c|ANTH 104|||1318||0
-r|c|ANTH 270|||1318||0
-r|c|CWL 114|||1318||0
-r|c|CWL 441|||1318||0
-r|c|HIST 221|||1318||0
-r|c|HIST 260|||1318||0
-r|c|HIST 405|||1318||0
-r|c|HIST 430|||1318||0
-r|r||||1318|1323|0
-r|c|ANTH 278|||1318||0
-r|c|ANTH 379|||1318||0
-r|c|ANTH 420|||1318||0
-r|c|ANTH 466|||1318||0
-r|c|ECON 411|||1318||0
-r|c|ECON 414|||1318||0
-r|c|ECON 450|||1318||0
-r|c|ECON 482|||1318||0
-r|c|ENGL 476|||1318||0
-r|c|ESE 200|||1318||0
-r|c|GGIS 101|||1318||0
-r|c|GGIS 210|||1318||0
-r|c|GGIS 287|||1318||0
-r|c|GGIS 410|||1318||0
-r|c|GLBL 250|||1318||0
-r|c|GLBL 350|||1318||0
-r|c|GLBL 450|||1318||0
-r|c|HIST 202|||1318||0
-r|c|SOC 364|||1318||0
-r|c|SOC 373|||1318||0
-r|c|SOC 447|||1318||0
-r|c|SOC 470|||1318||0
-r|r||||1318|1324|0
-r|c|ANTH 466|||1318||0
-r|c|CMN 212|||1318||0
-r|c|CMN 232|||1318||0
-r|c|ECON 440|||1318||0
-r|c|GLBL 392|||1318||0
-r|c|HIST 480|||1318||0
-r|c|PSYC 245|||1318||0
-r|c|PSYC 455|||1318||0
-r|r||||1318|1325|0
-r|c|BTW 250|||1318||0
-r|c|BTW 261|||1318||0
-r|c|BTW 271|||1318||0
-r|c|CMN 211|||1318||0
-r|c|CMN 321|||1318||0
-r|c|CMN 323|||1318||0
-r|c|CMN 411|||1318||0
-r|c|CS 105|||1318||0
-r|c|ECON 202|||1318||0
-r|c|FR 485|||1318||0
-r|c|FR 486|||1318||0
-r|c|GER 320|||1318||0
-r|c|GER 321|||1318||0
-r|c|GGIS 379|||1318||0
-r|c|GGIS 380|||1318||0
-r|c|GGIS 473|||1318||0
-r|c|GGIS 479|||1318||0
-r|c|HIST 391|||1318||0
-r|c|HNDI 412|||1318||0
-r|c|SOC 280|||1318||0
-r|c|SOC 380|||1318||0
-r|c|SPAN 205|||1318||0
-r|c|SPAN 212|||1318||0
-r|c|SPAN 332|||1318||0
-r|c|STAT 200|||1318||0
-r|r||||1326|1327|0
-r|r||||1326|1328|0
-r|r||||1326|1329|0
-r|r||||1326|1330|0
-r|r||||1326|1331|0
-#las/minors/global-studies|Global Studies Minor|LAS|minor||ok|
-r|r||9||1332|1333|0
-r|r||||1332|1334|0
-r|r||||1332|1335|0
-r|r||||1332|1336|0
-r|r||||1332|1337|0
-r|r||||1332|1338|0
-r|r||||1332|1339|0
-r|r||||1332|1340|0
-r|r||||1332|1341|0
-r|r||3||1342|1343|0
-r|r||||1342|1344|0
-r|r||||1342|1345|0
-r|r||||1342|1346|0
-r|r||||1342|1347|0
-r|r||||1342|1348|0
-r|r||||1342|1349|0
-r|r||||1342|1350|0
-r|r||||1342|1351|0
-r|r||||1342|1352|0
-r|r||||1342|1353|0
-r|r||||1342|1354|0
-r|r||||1342|1355|0
-r|r||||1342|1356|0
-r|r||||1342|1357|0
-r|r||||1342|1358|0
-r|r||||1342|1359|0
-r|r||||1342|1360|0
-r|r||9||1361|1362|0
 #las/global-studies-balas|Global Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -20736,23 +18496,6 @@ r|r||9|||348|5
 r|r||37|||1389|5
 r|r||12|||350|5
 r|r|||||1390|5
-#ahs/minors/health-administration|Health Administration Minor|Applied Health Sciences|minor||ok|
-r|c|HK 206|3||1391||0
-r|c|HK 417|3||1391||0
-r|c|HK 421|3||1391||0
-r|c|HK 202|1||1392||0
-r|c|HK 208|3||1392||0
-r|c|HK 272|3||1392||0
-r|c|HK 305|3||1392||0
-r|c|HK 361|3||1392||0
-r|c|HK 416|3||1392||0
-r|c|HK 418|3||1392||0
-r|c|HK 419|3||1392||0
-r|c|HK 420|3||1392||0
-r|c|HK 422|3||1392||0
-r|c|HK 424|3||1392||0
-r|c|HK 472|3||1392||0
-r|c|HK 480|4||1392||0
 #ahs/kinesiology-bs/health-science|Health Science|Applied Health Sciences|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -20790,75 +18533,6 @@ r|c|HK 455|3||309||2
 r|c|HK 458|3||309||2
 r|c|HK 459|3||309||2
 r|r||Maximum of 6||309|310|2
-#las/minors/hindi-studies|Hindi Studies Minor|LAS|minor||ok|
-r|r||10|||1393|0
-r|c|HNDI 404|||||0
-r|c|HNDI 405|||||0
-r|c|HNDI 406|||||0
-r|r||6|||1394|0
-r|c|LING 115|||||0
-r|c|HNDI 412|||||0
-r|c|LING 222|||||0
-r|r||3-5|||1395|0
-r|c|SNSK 201|||||0
-r|c|SNSK 202|||||0
-r|c|ARAB 201|||||0
-r|c|ARAB 202|||||0
-r|c|PERS 201|||||0
-r|c|PERS 202|||||0
-r|c|HNDI 408|||||0
-r|r|||||1396|0
-#faa/minors/hip-hop-culture-arts|Hip Hop Culture Arts Minor|Fine & Applied Arts|minor||ok|
-r|c|AFRO 228|3||1397||0
-r|c|FAA 481|3||1397||0
-r|c|ARTD 217|3||1398||1
-r|c|ARTS 220|3||1398||1
-r|c|ARTS 221|3||1398||1
-r|c|ARTS 241|3||1398||1
-r|c|ARTS 245|3||1398||1
-r|c|ARTS 320|3||1398||1
-r|c|ARTS 420|3||1398||1
-r|c|ARTS 446|3||1398||1
-r|c|DANC 116|2||1398||1
-r|c|DANC 216|2||1398||1
-r|c|DANC 330|1||1398||1
-r|c|DANC 340|3||1398||1
-r|c|DANC 424|1||1398||1
-r|c|FAA 481|4||1398||1
-r|c|MUS 127|3||1398||1
-r|c|MUS 128|3||1398||1
-r|c|MUS 129|3||1398||1
-r|c|MUS 327|3||1398||1
-r|c|MUS 328|3||1398||1
-r|c|MUS 329|3||1398||1
-r|c|MUS 425|2||1398||1
-r|c|MUS 446|2||1398||1
-r|c|MUSC 457|1||1398||1
-r|c|UP 320|3||1398||1
-r|c|AFRO 132|3||1399||2
-r|c|ARTE 480|3||1399||2
-r|c|ARTH 260|3||1399||2
-r|c|EALC 230|3||1399||2
-r|c|EALC 369|3||1399||2
-r|c|FAA 201|3||1399||2
-r|c|FAA 480|3 or 4||1399||2
-r|c|GWS 462|3||1399||2
-r|c|LLS 240|3||1399||2
-r|c|MACS 320|3||1399||2
-r|c|MUS 132|3||1399||2
-r|c|MUS 411|3||1399||2
-r|c|MUS 418|3||1399||2
-r|c|THEA 263|3||1399||2
-r|c|UP 160|3||1399||2
-r|c|UP 330|3||1399||2
-r|c|UP 473|4||1399||2
-r|c|ART 160|3||1400||3
-r|c|MACS 140|3||1400||3
-r|c|MACS 150|4||1400||3
-r|c|THEA 151|3||1400||3
-r|r|||||1401|4
-r|r|||||1402|4
-r|r|||||1403|4
 #faa/hip-hop-culture-arts-ba|Hip Hop Culture Arts, BA|Fine & Applied Arts|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -20969,10 +18643,6 @@ r|r|||||330|3
 r|r||||1421|1189|3
 r|r||||1421|1190|3
 r|r||||1421|1191|3
-#las/minors/history|History Minor|LAS|minor||ok|
-r|c|HIST 200|3||||0
-r|r||3|||1422|0
-r|r||12|||1423|0
 #las/history-balas|History, BALAS|LAS|major||ok|
 r|r|||||1424|0
 r|r||6|||1425|0
@@ -21054,24 +18724,6 @@ r|r||||1447|1453|2
 r|c|ECON 102|3||1454||2
 r|a|ECON 103||ECON 102|1454||2
 r|r||3-4||1454|1455|2
-#aces/minors/horticulture|Horticulture Minor|ACES|minor||ok|
-r|c|HORT 100|||1456||0
-r|c|HORT 341|||1456||0
-r|r||||1457|1458|0
-r|r||||1457|1459|0
-#aces/minors/hospitality-management|Hospitality Management Minor|ACES|minor||ok|
-r|c|FSHN 140|3||1460||0
-r|c|FSHN 345|3||1460||0
-r|c|FSHN 346|3||1460||0
-r|c|FSHN 441|3||1460||0
-r|c|FSHN 442|3||1460||0
-r|c|FSHN 145|||1461||0
-r|c|FSHN 249|||1461||0
-r|c|FSHN 340|||1461||0
-r|c|FSHN 343|||1461||0
-r|c|ANSC 309|||1461||0
-r|c|FSHN 443|||1461||0
-r|c|LEAD 321|||1461||0
 #aces/hospitality-management-bs|Hospitality Management, BS|ACES|major||ok|
 r|r||4|||0|0
 r|r||3|||1|0
@@ -21243,35 +18895,6 @@ r|r|||||330|5
 r|r||||1188|935|5
 r|r||||1188|1190|5
 r|r||||1188|1191|5
-#aces/minors/industrial-agricultural-safety-health|Industrial Agricultural Safety Health Minor|ACES|minor||ok|
-r|c|ETMA 421|3||||0
-r|c|ETMA 422|3||||0
-r|c|ETMA 425|3||||0
-r|r||3|||1489|0
-r|c|ETMA 293|3||||0
-r|c|ETMA 295|1 to 4||||0
-r|c|ETMA 496|1 to 4||||0
-r|r||6|||1490|0
-r|c|ALEC 490|||||0
-r|c|FSHN 480|||||0
-r|c|HDFS 105|||||0
-r|c|HK 111|||||0
-r|c|HK 201|||||0
-r|c|HK 207|||||0
-r|c|HK 209|||||0
-r|c|HK 262|||||0
-r|c|HK 300|||||0
-r|c|HK 400|||||0
-r|c|HK 408|||||0
-r|c|HK 416|||||0
-r|c|HK 422|||||0
-r|c|HK 424|||||0
-r|c|HK 515|||||0
-r|c|NPRE 461|||||0
-r|c|PSYC 100|||||0
-r|c|PSYC 358|||||0
-r|c|PSYC 456|||||0
-r|r||18|||435|0
 #faa/industrial-design-bfa|Industrial Design, BFA|Fine & Applied Arts|major||ok|122
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -21471,40 +19094,6 @@ r|c|SE 310|3||1520||6
 r|c|SE 320|4||1520||6
 r|c|SE 424|3||1520||6
 r|r||11|||122|7
-#informatics-programs/minors/informatics|Informatics Minor|INFORMATICS-PROGRAMS|minor||ok|
-r|c|INFO 102|4||||0
-r|c|INFO 202|3||||0
-r|r||3|||23|0
-r|c|CS 105|||||0
-r|c|CS 101|||||0
-r|c|CS 124|||||0
-r|c|STAT 107|||||0
-r|k|ECE 120; ECE 220|||||0
-r|r||9|||1521|0
-r|c|INFO 202|3||||1
-r|r||3-4|||23|1
-r|c|CS 101|||||1
-r|c|CS 124|||||1
-r|c|ECE 220|||||1
-r|r||12|||1522|1
-r|c|INFO 102|4||||2
-r|c|INFO 202|3||||2
-r|r||3|||23|2
-r|c|CS 105|||||2
-r|c|CS 101|||||2
-r|c|CS 124|||||2
-r|c|STAT 107|||||2
-r|k|ECE 120; ECE 220|||||2
-r|r||9|||1523|2
-r|c|INFO 102|4||||3
-r|c|INFO 202|3||||3
-r|r||3|||23|3
-r|c|CS 105|||||3
-r|c|CS 101|||||3
-r|c|CS 124|||||3
-r|c|STAT 107|||||3
-r|k|ECE 120; ECE 220|||||3
-r|r||9|||1524|3
 #ischool/information-sciences-data-science-bs|Information Sciences Data Science, BS|ISCHOOL|major||ok|
 r|r||||1525||0
 r|c|MATH 220|4-5||12||0
@@ -21631,58 +19220,6 @@ r|c|TE 450|3||||1
 r|c|TE 461|3||||1
 r|c|TE 462|3||||1
 r|c|TE 466|2||||1
-#las/minors/integrative-biology|Integrative Biology Minor|LAS|minor||ok|
-r|c|IB 150|||1552||0
-r|c|IB 103|||1552||0
-r|c|IB 104|||1552||0
-r|c|IB 201|||1553||0
-r|c|IB 202|||1553||0
-r|c|IB 203|||1553||0
-r|c|IB 204|||1553||0
-r|c|IB 302|||1553||0
-r|r||||1554|1555|0
-r|c|IB 360|||1554||0
-r|c|IB 362|||1554||0
-r|c|IB 368|||1554||0
-r|c|IB 401|||1554||0
-r|c|IB 407|||1554||0
-r|c|IB 461|||1554||0
-r|c|IB 462|||1554||0
-r|c|IB 463|||1554||0
-r|c|IB 464|||1554||0
-r|c|IB 467|||1554||0
-r|c|IB 468|||1554||0
-r|c|IB 471|||1554||0
-r|r||||1554|1556|0
-r|c|IB 329|||1554||0
-r|c|IB 361|||1554||0
-r|c|IB 405|||1554||0
-r|c|IB 430|||1554||0
-r|c|IB 431|||1554||0
-r|c|IB 432|||1554||0
-r|c|IB 439|||1554||0
-r|c|IB 440|||1554||0
-r|c|IB 444|||1554||0
-r|c|IB 451|||1554||0
-r|c|IB 452|||1554||0
-r|c|IB 453|||1554||0
-r|c|IB 455|||1554||0
-r|c|IB 481|||1554||0
-r|c|IB 482|||1554||0
-r|c|IB 494|||1554||0
-r|r||||1554|1557|0
-r|c|IB 303|||1554||0
-r|c|IB 364|||1554||0
-r|c|IB 411|||1554||0
-r|c|IB 420|||1554||0
-r|c|IB 421|||1554||0
-r|c|IB 426|||1554||0
-r|c|IB 433|||1554||0
-r|c|IB 435|||1554||0
-r|c|IB 438|||1554||0
-r|c|IB 460|||1554||0
-r|c|IB 465|||1554||0
-r|r||||1554|1009|0
 #las/integrative-biology-bslas|Integrative Biology, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22229,65 +19766,6 @@ r|c|DTX 495|3||1585||2
 r|c|IE 340|4||1585||2
 r|c|IS 407|4||1585||2
 r|c|RST 216|3||1585||2
-#ahs/minors/interdisciplinary-health-technology|Interdisciplinary Health Technology Minor|Applied Health Sciences|minor||ok|
-r|c|HK 203|||1593||0
-r|c|HK 401|||1593||0
-r|c|IE 340|||1593||0
-r|r||3||1593|1594|0
-r|c|CS 101|||1593||0
-r|c|CS 124|||1593||0
-r|c|ECE 120|||1593||0
-r|r||3||191|1595|0
-r|c|HK 111|||191||0
-r|c|HK 154|||191||0
-r|c|HK 206|||191||0
-r|c|HK 208|||191||0
-r|c|HK 271|||191||0
-r|c|HK 272|||191||0
-r|c|HK 300|||191||0
-r|c|HK 340|||191||0
-r|c|HK 391|||191||0
-r|c|HK 402|||191||0
-r|c|HK 403|||191||0
-r|c|HK 458|||191||0
-r|c|HK 494|||191||0
-r|c|IE 445|||191||0
-r|c|IS 406|||191||0
-r|c|SHS 352|||191||0
-r|c|SHS 473|||191||0
-r|c|RST 216|||191||0
-r|c|RST 260|||191||0
-r|c|RST 316|||191||0
-r|r||3||191|1596|0
-r|c|ARTD 317|||191||0
-r|c|BDI 367|||191||0
-r|c|BDI 475|||191||0
-r|c|CS 440|||191||0
-r|c|CS 446|||191||0
-r|c|CS 465|||191||0
-r|c|CS 466|||191||0
-r|c|CS 467|||191||0
-r|c|ECE 365|||191||0
-r|c|ECE 380|||191||0
-r|c|ECE 416|||191||0
-r|c|ECE 434|||191||0
-r|c|ECE 437|||191||0
-r|c|IE 300|||191||0
-r|c|IE 397|||191||0
-r|a|IE 497||IE 397|191||0
-r|c|IE 398|||191||0
-r|a|IE 498||IE 398|191||0
-r|c|IE 405|||191||0
-r|c|IE 413|||191||0
-r|c|IE 431|||191||0
-r|c|INFO 333|||191||0
-r|c|INFO 407|||191||0
-r|c|IS 226|||191||0
-r|c|IS 316|||191||0
-r|c|IS 407|||191||0
-r|c|IS 445|||191||0
-r|c|IS 457|||191||0
-r|c|IS 459|||191||0
 #las/interdisciplinary-studies-balas/jewish-studies|Interdisciplinary Studies: Jewish Studies, BALAS|LAS|conc|las/interdisciplinary-studies-balas|ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22372,62 +19850,6 @@ r|c|MDVL 344|||1603||2
 r|r||21||1608|1609|2
 r|r||3||1610|1611|2
 r|r||||1610|1612|2
-#bus/minors/international-business|International Business Minor|Gies Business|minor||ok|
-r|c|BADM 338|3||1613||0
-r|c|BADM 380|3||1613||0
-r|c|BADM 381|3||1613||0
-r|c|BADM 382|3||1613||0
-r|c|BADM 383|3||1613||0
-r|c|BADM 383|3||1614||0
-r|r||3||1614|1615|0
-#aces/minors/international-development-economics|International Development Economics Minor|ACES|minor||ok|
-r|c|ACE 100|3-4||1616||0
-r|a|ECON 102||ACE 100|1616||0
-r|c|ACE 251|3||1616||0
-r|r||3||1616|23|0
-r|c|ACE 222|||1616||0
-r|c|ACE 254|||1616||0
-r|c|ACE 255|||1616||0
-r|c|ACE 270|||1616||0
-r|r||6||1616|234|0
-r|c|ACE 411|||1616||0
-r|c|ACE 436|||1616||0
-r|c|ACE 451|||1616||0
-r|c|ACE 455|||1616||0
-r|r||3||1616|1617|0
-#engineering/minors/international-engineering|International Engineering Minor|Grainger Engineering|minor||ok|
-r|r||12|||1618|0
-r|r||9|||1619|0
-r|c|ENG 299|0||||0
-#las/minors/islamic-world|Islamic World Minor|LAS|minor||ok|
-r|r||4|||1620|0
-r|r||3|||23|0
-r|c|HIST 135|||||0
-r|c|SAME 152|||||0
-r|c|REL 214|||||0
-r|r||12|||1621|0
-#las/minors/italian|Italian Minor|LAS|minor||ok|
-r|r|||||1622|0
-r|c|ITAL 204|4||||0
-r|r||15|||1623|0
-r|c|ITAL 200|||||0
-r|c|ITAL 210|||||0
-r|c|ITAL 220|||||0
-r|c|ITAL 240|||||0
-r|c|ITAL 270|||||0
-r|c|ITAL 310|||||0
-r|c|ITAL 380|||||0
-r|c|ITAL 390|||||0
-r|c|ITAL 406|||||0
-r|c|ITAL 413|||||0
-r|c|ITAL 414|||||0
-r|c|EURO 415|||||0
-r|c|ITAL 420|||||0
-r|c|ITAL 440|||||0
-r|c|ITAL 450|||||0
-r|c|ITAL 470|||||0
-r|c|ITAL 490|||||0
-r|c|ITAL 491|||||0
 #las/italian-balas|Italian, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22460,25 +19882,6 @@ r|c|ITAL 450|||||1
 r|c|ITAL 470|||||1
 r|c|ITAL 490|||||1
 r|r||15-18|||1626|1
-#faa/minors/japanese-arts-aesthetics|Japanese Arts Aesthetics Minor|Fine & Applied Arts|minor||ok|
-r|c|ARTJ 101|2||||0
-r|c|ARTJ 209|3||||0
-r|r||1-3|||1627|0
-r|c|ARTJ 199|||||0
-r|c|ARTJ 299|||||0
-r|r|||||1628|0
-r|r||6|||1629|0
-r|c|ARTJ 301|||||0
-r|c|ARTJ 302|||||0
-r|c|ARTJ 391|||||0
-r|c|ARTJ 397|||||0
-r|c|ARTJ 398|||||0
-r|c|ARTJ 399|||||0
-r|r|||||1630|0
-r|r||6|||1631|0
-r|r|||||1632|0
-r|r|||||1633|0
-r|r|||||1634|0
 #faa/jazz-performance-bmus|Jazz Performance, BMUS|Fine & Applied Arts|major||ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22540,46 +19943,6 @@ r|r|||||1650|4
 r|r|||||1189|4
 r|r|||||1651|4
 r|r|||||1652|4
-#las/minors/jewish-culture|Jewish Culture Minor|LAS|minor||ok|
-r|r||3|||1653|0
-r|r||3|||1654|0
-r|r||3|||1655|0
-r|r|||||1656|0
-r|r||9|||1657|0
-r|c|HEBR 199|||||0
-r|c|HEBR 201|||||0
-r|c|HEBR 202|||||0
-r|c|HEBR 205|||||0
-r|c|HEBR 403|||||0
-r|c|HEBR 404|||||0
-r|c|HEBR 405|||||0
-r|c|HEBR 406|||||0
-r|c|HEBR 407|||||0
-r|c|YDSH 203|||||0
-r|c|YDSH 204|||||0
-#media/minors/journalism|Journalism Minor|Media|minor||ok|
-r|c|JOUR 200|3||||0
-r|c|JOUR 205|3||||0
-r|a|JOUR 452||JOUR 205|||0
-r|c|JOUR 250|3||||0
-r|a|JOUR 456||JOUR 250|||0
-r|c|JOUR 311|3||||0
-r|a|JOUR 310||JOUR 311|||0
-r|c|JOUR 210|||1658||0
-r|c|JOUR 240|||1658||0
-r|c|JOUR 361|||1658||0
-r|c|JOUR 410|||1658||0
-r|c|JOUR 440|||1658||0
-r|c|JOUR 450|||1658||0
-r|c|JOUR 451|||1658||0
-r|c|JOUR 453|||1658||0
-r|c|JOUR 454|||1658||0
-r|c|JOUR 471|||1658||0
-r|c|JOUR 472|||1658||0
-r|c|JOUR 473|||1658||0
-r|c|JOUR 482|||1658||0
-r|c|JOUR 483|||1658||0
-r|r||18||1658|435|0
 #media/journalism-bs|Journalism, BS|Media|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22673,28 +20036,6 @@ r|r||78|||1689|2
 r|r||18|||967|2
 r|r|||||330|2
 r|r||124|||1690|2
-#faa/minors/landscape|Landscape Minor|Fine & Applied Arts|minor||ok|
-r|c|LA 101|2||1691||0
-r|c|LA 214|4||1692||0
-r|c|LA 221|3||1692||0
-r|c|LA 222|3||1692||0
-r|c|LA 242|3||1692||0
-r|c|LA 250|3||1692||0
-r|c|LA 315|3||1692||0
-r|c|LA 387|1 to 6||1692||0
-r|c|LA 427|4||1692||0
-r|c|LA 430|2||1692||0
-r|c|LA 446|4||1692||0
-r|c|LA 466|4||1692||0
-r|c|LA 480|2||1692||0
-r|r||||1692|1693|0
-#las/minors/latin-american-studies|Latin American Studies Minor|LAS|minor||ok|
-r|r||5-6|||1694|0
-r|r||15-16|||1695|0
-r|c|LAST 170|||||0
-r|r|||||1696|0
-r|r|||||1697|0
-r|r|||||1698|0
 #las/latin-american-studies-balas|Latin American Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22713,13 +20054,6 @@ r|r||12|||1701|1
 r|r||12|||1702|1
 r|c|LAST 490|3||||1
 r|r||3|||1703|1
-#las/minors/latina-latino-studies|Latina Latino Studies Minor|LAS|minor||ok|
-r|c|LLS 100|3||||0
-r|r||||1704|1705|0
-r|r||3||1704|1706|0
-r|r||3||1704|1707|0
-r|r||3||1704|1708|0
-r|r||6||1704|1709|0
 #las/latina-latino-studies-balas|Latina Latino Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22783,40 +20117,6 @@ r|a|LLS 495||LLS 490|1704||2
 r|r||6||1704|1715|2
 r|r||||1704|1716|2
 r|r||18||1704|1717|2
-#aces/minors/leadership-studies|Leadership Studies Minor|ACES|minor||ok|
-r|c|LEAD 260|3||1718||0
-r|c|LEAD 425|3||1718||0
-r|c|PSYC 245|3||1718||0
-r|c|LEAD 460|3||1718||0
-r|a|LEAD 480||LEAD 460|1718||0
-r|c|ACE 231|||1719||0
-r|c|ACE 291|||1719||0
-r|c|ACES 298|||1719||0
-r|c|AFAS 331|||1719||0
-r|c|AFAS 332|||1719||0
-r|c|LEAD 339|||1719||0
-r|c|LEAD 340|||1719||0
-r|c|LEAD 460|||1719||0
-r|c|LEAD 480|||1719||0
-r|c|HK 361|||1719||0
-r|c|ANSC 471|||1719||0
-r|c|BADM 310|||1719||0
-r|c|BADM 311|||1719||0
-r|c|BADM 314|||1719||0
-r|c|CMN 321|||1719||0
-r|c|HK 270|||1719||0
-r|c|JOUR 250|||1719||0
-r|c|HK 362|||1719||0
-r|c|MILS 341|||1719||0
-r|c|MILS 342|||1719||0
-r|c|NS 303|||1719||0
-r|c|NS 308|||1719||0
-r|c|PHIL 436|||1719||0
-r|c|PS 304|||1719||0
-r|c|PSYC 455|||1719||0
-r|c|RST 200|||1719||0
-r|c|SE 361|||1719||0
-r|c|SOCW 321|||1719||0
 #education/learning-education-studies-bs|Learning Education Studies, BS|Education|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -22903,72 +20203,6 @@ r|c|EPOL 473|||||1
 r|c|EPOL 491|||||1
 r|r|||||801|1
 r|r|||||1729|1
-#law/minors/legal-studies|Legal Studies Minor|Law|minor||ok|
-r|c|LAW 201|||1730||0
-r|c|LAW 301|||1730||0
-r|c|LAW 302|||1730||0
-r|c|LAW 303|||1730||0
-r|c|LAW 304|||1730||0
-r|c|LAW 305|||1730||0
-r|c|LLS 310|||1730||0
-r|c|SOC 479|||1730||0
-r|c|PS 323|||1730||0
-r|r||||1731|1732|1
-r|c|HDFS 330|||1731||1
-r|c|PHIL 106|||1731||1
-r|c|PHIL 107|||1731||1
-r|c|PHIL 380|||1731||1
-r|c|PHIL 435|||1731||1
-r|c|PHIL 436|||1731||1
-r|c|PS 301|||1731||1
-r|c|PS 214|||1731||1
-r|c|PS 302|||1731||1
-r|c|PS 305|||1731||1
-r|c|PS 306|||1731||1
-r|c|PS 322|||1731||1
-r|c|PS 386|||1731||1
-r|r||||1733|1732|1
-r|c|AAS 370; LLS 372|||1733||1
-r|c|AFRO 378; HIST 389|||1733||1
-r|c|ANTH 350|||1733||1
-r|c|GLBL 220|||1733||1
-r|c|GLBL 260|||1733||1
-r|c|SOC 201|||1733||1
-r|c|HDFS 320|||1733||1
-r|c|HDFS 330|||1733||1
-r|c|HDFS 420|||1733||1
-r|c|GWS 343|||1733||1
-r|c|LLS 473|||1733||1
-r|c|PHIL 106|||1733||1
-r|c|PHIL 214|||1733||1
-r|c|PHIL 380|||1733||1
-r|c|LLS 201|||1733||1
-r|c|PS 214|||1733||1
-r|c|PSYC 468|||1733||1
-r|r||||1734|1732|1
-r|c|ACE 210|||1734||1
-r|c|ACE 251|||1734||1
-r|c|ACE 255|||1734||1
-r|c|ACE 306|||1734||1
-r|c|ACE 310|||1734||1
-r|c|ACE 321|||1734||1
-r|c|ACE 403|||1734||1
-r|c|ACE 406|||1734||1
-r|c|ACE 410|||1734||1
-r|c|ACE 411|||1734||1
-r|c|ACE 456|||1734||1
-#las/minors/lgbt-queer-studies|Lgbt Queer Studies Minor|LAS|minor||ok|
-r|c|GWS 202|3||||0
-r|a|GWS 255||GWS 202|||0
-r|c|GWS 370|3||||0
-r|r||9|||1735|0
-r|c|GWS 385|||||0
-r|c|GWS 387|||||0
-r|c|GWS 459|||||0
-r|c|GWS 467|||||0
-r|c|GWS 470|||||0
-r|c|GWS 478|||||0
-r|r||3|||1736|0
 #las/liberal-studies-bls|Liberal Studies Bls|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -23118,22 +20352,6 @@ r|c|ADV 320|3||1753||1
 r|c|LEAD 425|3||1753||1
 r|c|LEAD 427|2||1753||1
 r|r||||1749|1746|1
-#las/minors/linguistics|Linguistics Minor|LAS|minor||ok|
-r|c|LING 100|3||||0
-r|r||6|||234|0
-r|c|LING 301|||||0
-r|c|LING 302|||||0
-r|c|LING 307|||||0
-r|r||9|||1755|0
-r|c|LING 301|||||0
-r|c|LING 302|||||0
-r|c|LING 307|||||0
-r|c|LING 210|||||0
-r|c|LING 225|||||0
-r|c|LING 250|||||0
-r|c|LING 400|||||0
-r|c|LING 401|||||0
-r|c|LING 406|||||0
 #las/linguistics-teaching-english-second-language-tesl-balas|Linguistics Teaching English Second Language Tesl, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -23620,43 +20838,6 @@ r|c|PHYS 486|4||||5
 r|c|PHYS 487|4||||5
 r|r||11|||122|6
 r|r||128|||71|6
-#engineering/minors/materials-science-engineering|Materials Science Engineering Minor|Grainger Engineering|minor||ok|
-r|r|||||1805|0
-r|c|MSE 280|3||||0
-r|c|MSE 401|3||||0
-r|r||3|||1806|0
-r|c|MSE 304|||||0
-r|c|MSE 402|||||0
-r|c|MSE 403|||||0
-r|c|MSE 405|||||0
-r|c|MSE 406|||||0
-r|r||9|||1807|0
-r|c|MSE 404|1.5||||0
-r|c|MSE 420|3||||0
-r|c|MSE 421|3 or 4||||0
-r|c|MSE 422|3||||0
-r|c|MSE 440|3||||0
-r|c|MSE 441|3||||0
-r|c|MSE 443|3||||0
-r|c|MSE 450|3 or 4||||0
-r|c|MSE 453|3||||0
-r|c|MSE 455|3||||0
-r|c|MSE 456|3||||0
-r|c|MSE 457|3 or 4||||0
-r|c|MSE 458|3 or 4||||0
-r|c|MSE 460|3||||0
-r|c|MSE 461|3||||0
-r|c|MSE 466|3||||0
-r|c|MSE 470|3||||0
-r|c|MSE 473|3||||0
-r|c|MSE 474|3||||0
-r|c|MSE 480|3 or 4||||0
-r|c|MSE 481|3 or 4||||0
-r|c|MSE 485|3 or 4||||0
-r|c|MSE 487|3 or 4||||0
-r|c|MSE 488|3 or 4||||0
-r|c|MSE 489|3 or 4||||0
-r|c|ECE 444|4||||0
 #engineering/materials-science-engineering-bs|Materials Science Engineering, BS|Grainger Engineering|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -23846,47 +21027,7 @@ r|c|MATH 473|||1826||2
 r|c|MATH 475|||1826||2
 r|c|CS 476|||1826||2
 r|c|CS 477|||1826||2
-#las/minors/mathematics|Mathematics Minor|LAS|minor||ok|
-r|c|MATH 241|4||||0
-r|r||15|||1827|0
-r|c|ASRM 406|||1828||0
-r|c|MATH 257|||1828||0
-r|c|MATH 415|||1828||0
-r|c|MATH 416|||1828||0
-r|c|MATH 417|||1828||0
-r|c|MATH 418|||1828||0
-r|c|MATH 427|||1828||0
-r|c|MATH 453|||1828||0
-r|c|MATH 412|||1829||0
-r|c|MATH 413|||1829||0
-r|c|MATH 414|||1829||0
-r|c|MATH 482|||1829||0
-r|c|MATH 285|||1830||0
-r|c|MATH 424|||1830||0
-r|c|MATH 425|||1830||0
-r|c|MATH 441|||1830||0
-r|c|MATH 442|||1830||0
-r|c|MATH 444|||1830||0
-r|c|MATH 446|||1830||0
-r|c|MATH 447|||1830||0
-r|c|MATH 448|||1830||0
-r|c|CS 450|||1830||0
-r|c|MATH 484|||1830||0
-r|c|MATH 487|||1830||0
-r|c|MATH 489|||1830||0
-r|c|MATH 314|||1831||0
-r|c|MATH 347|||1831||0
-r|c|MATH 402|||1832||0
-r|c|MATH 403|||1832||0
-r|c|MATH 423|||1832||0
-r|c|MATH 428|||1832||0
-r|c|MATH 432|||1832||0
-r|c|MATH 481|||1832||0
-r|c|MATH 461|||1833||0
-r|c|STAT 400|||1833||0
-r|c|STAT 410|||1833||0
-r|a|STAT 420||STAT 410|1833||0
-#las/mathematics-bslas|Mathematics, BSLAS|LAS|major||ok|
+#las/mathematics-bslas|Mathematics, BSLAS|LAS|major||ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -23931,7 +21072,7 @@ r|c|MATH 448|||1837||2
 r|c|MATH 453|||1837||2
 r|c|MATH 481|||1837||2
 r|r||6||1837|1840|2
-#las/mathematics-bslas/applied-mathematics|Mathematics: Applied Mathematics, BSLAS|LAS|conc|las/mathematics-bslas|ok|
+#las/mathematics-bslas/applied-mathematics|Mathematics: Applied Mathematics, BSLAS|LAS|conc|las/mathematics-bslas|ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -23975,7 +21116,7 @@ r|c|MATH 412|3||1842||3
 r|a|MATH 413||MATH 412|1842||3
 r|a|MATH 482||MATH 412|1842||3
 r|r||3||1842|1843|3
-#las/mathematics-bslas/data-optimization|Mathematics: Data Optimization, BSLAS|LAS|conc|las/mathematics-bslas|ok|
+#las/mathematics-bslas/data-optimization|Mathematics: Data Optimization, BSLAS|LAS|conc|las/mathematics-bslas|ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -24015,7 +21156,7 @@ r|a|MATH 484||MATH 412|1845||3
 r|c|STAT 410; MATH 464|3||1845||3
 r|a|STAT 420; ASRM 450||STAT 410; MATH 464|1845||3
 r|c|MATH 482|3||1845||3
-#las/mathematics-bslas/graduate-preparatory|Mathematics: Graduate Preparatory, BSLAS|LAS|conc|las/mathematics-bslas|ok|
+#las/mathematics-bslas/math-doctoral-preparation|Mathematics: Math Doctoral Preparation, BSLAS|LAS|conc|las/mathematics-bslas|ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -24058,50 +21199,7 @@ r|a|MATH 432||MATH 423|1848||3
 r|a|MATH 481||MATH 423|1848||3
 r|c|MATH 441|3||1848||3
 r|r||6||1848|1840|3
-#las/mathematics-bslas/math-doctoral-preparation|Mathematics: Math Doctoral Preparation, BSLAS|LAS|conc|las/mathematics-bslas|ok|
-r|r||4-6|||0|0
-r|r||3|||1|0
-r|r||6|||2|0
-r|r||6|||3|0
-r|r||6|||4|0
-r|r||3|||6|0
-r|r||3|||7|0
-r|r||3|||8|0
-r|r||6-10|||9|0
-r|r|||||1834|0
-r|r||0-20|||30|0
-r|c|LAS 101|1||31||1
-r|r||||31|32|1
-r|k|LAS 100; LAS 101|3||31||1
-r|r||||31|32|1
-r|c|LAS 102|1||31||1
-r|c|MATH 220|4 or 5||1846||2
-r|a|MATH 221||MATH 220|1846||2
-r|c|MATH 231|3||1846||2
-r|c|MATH 241|4||1846||2
-r|c|MATH 347|3 or 4||1846||2
-r|a|MATH 314||MATH 347|1846||2
-r|c|MATH 416|3||1846||2
-r|c|MATH 417|3||1846||2
-r|a|MATH 427||MATH 417|1846||2
-r|c|MATH 461|3 or 4||1846||2
-r|a|STAT 400||MATH 461|1846||2
-r|c|CS 101|3||1846||2
-r|a|CS 124||CS 101|1846||2
-r|r||12||1846|1847|2
-r|r||||1848|1849|3
-r|c|MATH 424|3||1848||3
-r|a|MATH 447||MATH 424|1848||3
-r|c|MATH 418|3||1848||3
-r|a|MATH 428||MATH 418|1848||3
-r|c|MATH 448|3||1848||3
-r|c|MATH 423|3||1848||3
-r|a|MATH 425||MATH 423|1848||3
-r|a|MATH 432||MATH 423|1848||3
-r|a|MATH 481||MATH 423|1848||3
-r|c|MATH 441|3||1848||3
-r|r||6||1848|1840|3
-#las/mathematics-bslas/teaching-mathematics|Mathematics: Teaching Mathematics, BSLAS|LAS|conc|las/mathematics-bslas|ok|
+#las/mathematics-bslas/teaching-mathematics|Mathematics: Teaching Mathematics, BSLAS|LAS|conc|las/mathematics-bslas|ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r|||||803|0
@@ -24830,11 +21928,6 @@ r|c|MACS 485|||1150||1
 r|c|MACS 496|||1150||1
 r|r||||1875|1876|1
 r|r||||1877|1878|1
-#media/minors/media|Media Minor|Media|minor||ok|
-r|r||3|||1879|0
-r|r||3|||1880|0
-r|r||3|||1881|0
-r|r||9|||1882|0
 #media/media-ba|Media, BA|Media|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -25112,46 +22205,6 @@ r|c|GGIS 221|||1926||14
 r|c|PS 101|3||1926||14
 r|c|ECON 102|3||1926||14
 r|r||3-5||1926|1930|14
-#aces/minors/military-leadership|Military Leadership Minor|ACES|minor||ok|
-r|c|LEAD 260|||1931||0
-r|c|LEAD 425|||1931||0
-r|r||14||1932|1933|0
-r|c|AFAS 221|||1932||0
-r|c|AFAS 222|||1932||0
-r|c|AFAS 331|||1932||0
-r|c|AFAS 332|||1932||0
-r|c|AFAS 341|||1932||0
-r|c|AFAS 342|||1932||0
-r|r||13||1932|1934|0
-r|c|MILS 201|||1932||0
-r|c|MILS 202|||1932||0
-r|c|MILS 301|||1932||0
-r|c|MILS 302|||1932||0
-r|c|MILS 341|||1932||0
-r|c|MILS 342|||1932||0
-r|r||12||1932|1935|0
-r|c|NS 204|||1932||0
-r|c|NS 303|||1932||0
-r|c|NS 307|||1932||0
-r|c|NS 308|||1932||0
-r|r||12||1932|1936|0
-r|c|NS 303|||1932||0
-r|c|NS 308|||1932||0
-r|c|NS 321|||1932||0
-r|c|NS 323|||1932||0
-#faa/minors/minoritarian-aesthetics|Minoritarian Aesthetics Minor|Fine & Applied Arts|minor||ok|
-r|c|FAA 201|||1937||0
-r|r||||1937|739|0
-r|r||||1937|1938|0
-r|r||||1937|1939|0
-r|c|FAA 494|||1940||0
-r|c|FAA 495|||1940||0
-r|c|FAA 496|||1940||0
-r|c|FAA 490|||1940||0
-r|r||||1941|1942|0
-r|c|FAA 493|||1941||0
-r|c|FAA 490|||1941||0
-r|r||||1941|1403|0
 #las/molecular-cellular-biology-data-science-bslas|Molecular Cellular Biology Data Science, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -25225,16 +22278,6 @@ r|r||||1953|1956|2
 r|c|MCB 292|||1953||2
 r|r||||1953|1957|2
 r|r||||1953|1958|2
-#las/minors/molecular-cellular-biology|Molecular Cellular Biology Minor|LAS|minor||ok|
-r|c|MCB 244|3||||0
-r|a|MCB 246||MCB 244|||0
-r|c|MCB 250|3||||0
-r|c|MCB 251|2||||0
-r|c|MCB 252|3||||0
-r|c|MCB 253|2||||0
-r|c|MCB 354|3||||0
-r|a|MCB 450||MCB 354|||0
-r|r||3-5|||1959|0
 #las/molecular-cellular-biology-bslas|Molecular Cellular Biology, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -25930,15 +22973,6 @@ r|r|||||1999|6
 r|r|||||1189|6
 r|r|||||1651|6
 r|r|||||1652|6
-#faa/minors/music|Music Minor|Fine & Applied Arts|minor||ok|
-r|c|MUS 101|2-3||2019||0
-r|a|MUS 102||MUS 101|2019||0
-r|a|MUS 103||MUS 101|2019||0
-r|c|MUS 110|3||829||0
-r|r||6||2020|2021|0
-r|r||||2020|2022|0
-r|r||||2023|2024|0
-r|r||||2023|2025|0
 #faa/music-open-studies-bmus|Music Open Studies, BMUS|Fine & Applied Arts|major||ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -26096,38 +23130,6 @@ r|r||7|||2060|5
 r|r|||||2050|5
 r|r|||||2061|5
 r|r|||||2051|5
-#faa/minors/musical-theatre-performing-artists|Musical Theatre Performing Artists Minor|Fine & Applied Arts|minor||ok|
-r|c|MUS 101|2 or 3||2062||0
-r|a|MUS 102||MUS 101|2062||0
-r|a|MUS 103||MUS 101|2062||0
-r|c|MUS 222|1||2062||0
-r|c|THEA 170|3||2062||0
-r|c|MUSC 105|4||2063||0
-r|c|MUS 107|2||2063||0
-r|c|DANC 209|2 or 1||2063||0
-r|a|DANC 212||DANC 209|2063||0
-r|r||||2064|2065|0
-r|c|MUSC 468|2||2064||0
-r|c|MUSC 469|1 to 2||2064||0
-r|c|MUS 125|1||2064||0
-r|c|MUS 422|2||2064||0
-r|c|MUS 472|1||2064||0
-r|c|MUS 101|2 or 3||2066||1
-r|a|MUS 102||MUS 101|2066||1
-r|a|MUS 103||MUS 101|2066||1
-r|c|MUS 222|1||2066||1
-r|c|DANC 116|4||2066||1
-r|a|DANC 216||DANC 116|2066||1
-r|c|MUSC 105|4||2067||1
-r|c|MUS 107|2||2067||1
-r|c|DANC 209|2 or 1||2067||1
-r|a|DANC 212||DANC 209|2067||1
-r|r||||2068|2065|1
-r|c|MUSC 468|2||2068||1
-r|c|MUSC 469|1 to 2||2068||1
-r|c|MUS 125|1||2068||1
-r|c|MUS 422|2||2068||1
-r|c|MUS 472|1||2068||1
 #faa/musicology-bmus|Musicology, BMUS|Fine & Applied Arts|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -26173,49 +23175,6 @@ r|r||||1969|2077|3
 r|r||12-16||1969|2078|3
 r|r||||1969|2079|3
 r|r||||1969|2080|3
-#aces/minors/natural-resource-conservation|Natural Resource Conservation Minor|ACES|minor||ok|
-r|c|NRES 102|3||2081||0
-r|a|NRES 100||NRES 102|2081||0
-r|c|NRES 287|3||2081||0
-r|a|NRES 219||NRES 287|2081||0
-r|r||12||2082|2083|0
-r|c|NRES 108|||2082||0
-r|c|NRES 201|||2082||0
-r|c|NRES 210|||2082||0
-r|c|NRES 219|||2082||0
-r|a|NRES 287||NRES 219|2082||0
-r|c|NRES 310|||2082||0
-r|c|NRES 302|||2082||0
-r|c|NRES 325|||2082||0
-r|c|NRES 340|||2082||0
-r|c|NRES 348|||2082||0
-r|c|NRES 351|||2082||0
-r|c|NRES 362|||2082||0
-r|c|NRES 407|||2082||0
-r|c|NRES 409|||2082||0
-r|c|NRES 415|||2082||0
-r|c|NRES 418|||2082||0
-r|c|NRES 419|||2082||0
-r|c|NRES 420|||2082||0
-r|c|NRES 421|||2082||0
-r|c|NRES 427|||2082||0
-r|c|NRES 428|||2082||0
-r|c|NRES 429|||2082||0
-r|c|NRES 434|||2082||0
-r|c|NRES 438|||2082||0
-r|c|NRES 439|||2082||0
-r|c|NRES 454|||2082||0
-r|c|NRES 455|||2082||0
-r|c|NRES 465|||2082||0
-r|c|NRES 471|||2082||0
-r|c|NRES 472|||2082||0
-r|c|NRES 474|||2082||0
-r|c|NRES 475|||2082||0
-r|c|NRES 480|||2082||0
-r|c|NRES 482|||2082||0
-r|c|NRES 485|||2082||0
-r|c|NRES 487|||2082||0
-r|c|NRES 488|||2082||0
 #aces/natural-resources-environmental-sciences-bs|Natural Resources Environmental Sciences, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -27214,16 +24173,6 @@ r|c|FSHN 422|3||2162||1
 r|c|FSHN 424|3||2162||1
 r|c|FSHN 426|3||2162||1
 r|c|FSHN 427|3||2162||1
-#aces/minors/nutrition|Nutrition Minor|ACES|minor||ok|
-r|c|FSHN 220|4||2163||0
-r|c|FSHN 420|3||2163||0
-r|c|FSHN 426|3||2163||0
-r|c|FSHN 427|3||2163||0
-r|c|ANSC 420|||2164||0
-r|c|FSHN 322|||2164||0
-r|c|FSHN 421|||2164||0
-r|c|FSHN 428|||2164||0
-r|c|FSHN 429|||2164||0
 #bus/operations-management-bs|Operations Management, BS|Gies Business|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -27274,13 +24223,6 @@ r|c|BADM 395|3||2167||2
 r|c|BADM 353|3||2167||2
 r|c|BADM 445|4||2167||2
 r|c|BADM 453|3||2167||2
-#las/minors/philosophy|Philosophy Minor|LAS|minor||ok|
-r|c|PHIL 203|4||||0
-r|c|PHIL 206|4||||0
-r|r||6|||2168|0
-r|c|PHIL 103|3||||0
-r|a|PHIL 202||PHIL 103|||0
-r|r||3|||2169|0
 #las/philosophy-balas|Philosophy, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -27307,16 +24249,7 @@ r|r|||||2174|1
 r|r|||||2175|1
 r|r|||||247|1
 r|r|||||2176|1
-#engineering/minors/physics|Physics Minor|Grainger Engineering|minor||ok|
-r|c|PHYS 211|4||||0
-r|c|PHYS 212|4||||0
-r|c|PHYS 214|2||||0
-r|a|PHYS 213||PHYS 214|||0
-r|c|PHYS 225|2||||0
-r|c|PHYS 325|3||||0
-r|c|PHYS 435|3||||0
-r|c|PHYS 485|3||||0
-#engineering/physics-bs|Physics, BS|Grainger Engineering|major||ok|
+#engineering/physics-bs|Physics, BS|Grainger Engineering|major||ok|128
 r|r||4-6|||0|0
 r|r||3|||1|0
 r|r||6|||2|0
@@ -27514,20 +24447,6 @@ r|c|CPSC 266|||2178||2
 r|c|CPSC 304|||2178||2
 r|c|CPSC 370|||2178||2
 r|r||||224|2180|2
-#las/minors/political-civic-leadership|Political Civic Leadership Minor|LAS|minor||ok|
-r|c|PS 100|3||||0
-r|c|PS 101|||||0
-r|c|GLBL 100|||||0
-r|c|GLBL 220|||||0
-r|r||3|||2181|0
-r|r||3|||2182|0
-r|r||3|||2183|0
-r|r||3|||2184|0
-r|r||2|||2185|0
-#las/minors/political-science|Political Science Minor|LAS|minor||ok|
-r|c|PS 100|3||||0
-r|r||6|||2186|0
-r|r||9|||2187|0
 #las/political-science-balas/citizen-politics|Political Science: Citizen Politics, BALAS|LAS|conc|las/political-science-balas|ok|
 r|c|PS 100|3||||0
 r|r||3|||2188|0
@@ -27740,14 +24659,6 @@ r|c|PS 397|3||2213||1
 r|c|PS 456|3 or 4||2213||1
 r|c|PS 457|3 or 4||2213||1
 r|c|PS 494|3||2213||1
-#las/minors/portuguese|Portuguese Minor|LAS|minor||ok|
-r|c|PORT 401|4||||0
-r|c|PORT 402|3||||0
-r|r||9|||2214|0
-r|c|PORT 403|||||0
-r|c|PORT 404|||||0
-r|c|PORT 406|||||0
-r|c|PORT 410|||||0
 #las/portuguese-balas|Portuguese, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -27766,24 +24677,6 @@ r|c|PORT 406|3||||1
 r|c|PORT 410|3||||1
 r|r||12|||2215|1
 r|r||15-18|||2216|1
-#las/minors/psychology|Psychology Minor|LAS|minor||ok|
-r|c|PSYC 100|3-4||||0
-r|c|PSYC 235|3||||0
-r|r||||2217|2218|0
-r|c|PSYC 204|||2217||0
-r|c|PSYC 210|||2217||0
-r|c|PSYC 220|||2217||0
-r|c|PSYC 224|||2217||0
-r|c|PSYC 230|||2217||0
-r|c|PSYC 248|||2217||0
-r|r||||2219|2218|0
-r|c|PSYC 201|||2219||0
-r|c|PSYC 216|||2219||0
-r|c|PSYC 238|||2219||0
-r|c|PSYC 239|||2219||0
-r|c|PSYC 245|||2219||0
-r|c|PSYC 250|||2219||0
-r|r||6||2219|2220|0
 #las/psychology-bslas|Psychology, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -28275,27 +25168,6 @@ r|c|PSYC 408|||2275||2
 r|c|PSYC 428|||2275||2
 r|c|PSYC 465|||2275||2
 r|c|PSYC 468|||2275||2
-#ahs/minors/public-health|Public Health Minor|Applied Health Sciences|minor||ok|
-r|c|HK 111|3||2276||0
-r|c|HK 207|3||2276||0
-r|c|HK 408|3||2276||0
-r|c|HK 410|4||2276||0
-r|c|HK 110|3||103||0
-r|c|HK 206|3||103||0
-r|c|HK 208|3||103||0
-r|c|HK 271|3||103||0
-r|c|HK 305|3||103||0
-r|c|HK 412|3||103||0
-r|c|HK 413|3||103||0
-r|c|HK 414|3||103||0
-r|c|HK 416|3||103||0
-r|c|HK 417|3||103||0
-r|c|HK 419|3||103||0
-r|c|HK 420|3||103||0
-r|c|HK 423|3||103||0
-r|c|HK 424|3||103||0
-r|c|HK 472|3||103||0
-r|c|HK 474|3||103||0
 #ahs/public-health-bs|Public Health, BS|Applied Health Sciences|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -28461,77 +25333,6 @@ r|c|HK 411|3||||2
 r|c|HK 423|3||||2
 r|r||3|||2285|2
 r|r||3|||2286|2
-#media/minors/public-relations|Public Relations Minor|Media|minor||ok|
-r|r||||2287|2288|0
-r|c|JOUR 200|||2287||0
-r|c|ADV 310|||2287||0
-r|c|ADV 410|||2287||0
-r|r||||2289|2290|0
-r|c|ADV 350|||2289||0
-r|c|JOUR 210|||2289||0
-r|c|CMN 220|||2289||0
-r|r||||2291|2292|0
-r|c|ADV 393|||2291||0
-r|c|ADV 490|||2291||0
-r|c|ADV 494|||2291||0
-r|c|JOUR 360|||2291||0
-r|c|JOUR 453|||2291||0
-r|c|JOUR 460|||2291||0
-r|c|CMN 321|||2291||0
-r|c|CMN 377|||2291||0
-r|c|CMN 464|||2291||0
-#engineering/minors/quantum-information-science|Quantum Information Science Minor|Grainger Engineering|minor||ok|
-r|c|CS 478|||2293||0
-r|c|ECE 305|||2293||0
-r|c|ECE 404|||2293||0
-r|c|ECE 405|||2293||0
-r|c|ECE 406|||2293||0
-r|c|PHYS 370|||2293||0
-r|c|CS 374|||2294||0
-r|c|MATH 416|||2294||0
-r|c|MSE 404|||2294||0
-r|c|PHYS 403|||2294||0
-r|c|PHYS 446|||2294||0
-r|c|PHYS 485|||2294||0
-r|c|PHYS 486|||2294||0
-r|c|PHYS 487|||2294||0
-r|c|PHYS 495|||2294||0
-#ahs/minors/recreation-sport-tourism|Recreation Sport Tourism Minor|Applied Health Sciences|minor||ok|
-r|c|RST 100|3||2295||0
-r|c|RST 210|3||2295||0
-r|r||3||2295|2296|0
-r|c|RST 120|||2295||0
-r|c|RST 130|||2295||0
-r|c|RST 150|||2295||0
-r|c|RST 120|||2297||0
-r|c|RST 130|||2297||0
-r|c|RST 150|||2297||0
-r|c|RST 180|||2297||0
-r|c|RST 185|||2297||0
-r|c|RST 200|||2297||0
-r|c|RST 204|||2297||0
-r|c|RST 205|||2297||0
-r|c|RST 216|||2297||0
-r|c|RST 226|||2297||0
-r|c|RST 230|||2297||0
-r|c|RST 238|||2297||0
-r|c|RST 240|||2297||0
-r|c|RST 242|||2297||0
-r|c|RST 255|||2297||0
-r|c|RST 260|||2297||0
-r|c|RST 290|||2297||0
-r|c|RST 301|||2298||0
-r|c|RST 316|||2298||0
-r|c|RST 317|||2298||0
-r|c|RST 325|||2298||0
-r|c|RST 335|||2298||0
-r|c|RST 340|||2298||0
-r|c|RST 350|||2298||0
-r|c|RST 354|||2298||0
-r|c|RST 360|||2298||0
-r|c|RST 370|||2298||0
-r|c|RST 407|||2298||0
-r|c|RST 440|||2298||0
 #ahs/recreation-sport-tourism-bs|Recreation Sport Tourism, BS|Applied Health Sciences|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -28690,8 +25491,6 @@ r|r||||2308|2311|1
 r|c|RST 150|3||||2
 r|c|RST 350|3||||2
 r|c|RST 450|3||||2
-#las/minors/religion|Religion Minor|LAS|minor||ok|
-r|r||18|||2313|0
 #las/religion-balas|Religion, BALAS|LAS|major||ok|120
 r|r|||||2314|0
 r|c|REL 230|3||||0
@@ -28702,9 +25501,6 @@ r|r|||||2317|0
 r|r||9|||2318|0
 r|r||6|||2319|0
 r|r||3|||2320|0
-#las/minors/russian-east-european-eurasian-studies|Russian East European Eurasian Studies Minor|LAS|minor||ok|
-r|r||6-8|||2321|0
-r|r||15|||2322|0
 #las/russian-east-european-eurasian-studies-balas|Russian East European Eurasian Studies, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -28724,35 +25520,6 @@ r|c|REES 201|||||1
 r|c|REES 495|||||1
 r|r|||||2326|1
 r|r||18|||2327|1
-#las/minors/russian-language-literature|Russian Language Literature Minor|LAS|minor||ok|
-r|r||3|||2328|0
-r|c|RUSS 115|||||0
-r|c|RUSS 261|||||0
-r|c|SLAV 117|||||0
-r|c|SLAV 120|||||0
-r|r||6-8|||2329|0
-r|c|RUSS 201|||||0
-r|c|RUSS 202|||||0
-r|r||9|||2330|0
-#las/minors/scandinavian-studies|Scandinavian Studies Minor|LAS|minor||ok|
-r|c|SCAN 102|4||||0
-r|r||18-22|||2331|0
-r|c|SCAN 203|||||0
-r|c|SCAN 204|||||0
-r|c|SCAN 215|||||0
-r|c|SCAN 225|||||0
-r|c|SCAN 251|||||0
-r|c|SCAN 252|||||0
-r|c|SCAN 305|||||0
-r|c|SCAN 306|||||0
-r|c|SCAN 376|||||0
-r|c|SCAN 463|||||0
-r|c|SCAN 470|||||0
-r|c|SCAN 472|||||0
-r|c|SCAN 490|||||0
-r|c|SCAN 492|||||0
-r|c|SCAN 494|||||0
-r|c|SCAN 496|||||0
 #education/secondary-education-bs|Secondary Education, BS|Education|major||ok|
 r|c|EDUC 101|1||||0
 r|r||4||2332|2333|1
@@ -28825,60 +25592,6 @@ r|c|MATH 405|3 or 4||||2
 r|c|MATH 453|3 or 4||||2
 r|c|STAT 200|3||||2
 r|a|STAT 400||STAT 200|||2
-#engineering/minors/semiconductor-engineering|Semiconductor Engineering Minor|Grainger Engineering|minor||ok|
-r|c|ECE 340|||2344||0
-r|a|MSE 304||ECE 340|2344||0
-r|c|IE 330|||2344||0
-r|a|IE 361||IE 330|2344||0
-r|c|ECE 444|||2344||0
-r|a|ME 487||ECE 444|2344||0
-r|c|MSE 460|||2344||0
-r|c|NPRE 429|||2344||0
-r|c|ME 432|||2344||0
-r|a|ECE 443||ME 432|2344||0
-r|c|ECE 304|||2345||0
-r|c|ECE 441|||2345||0
-r|c|ECE 442|||2345||0
-r|c|ECE 460|||2345||0
-r|c|ECE 481|||2345||0
-r|c|ECE 488|||2345||0
-r|c|ECE 495|||2345||0
-r|c|IE 360|||2345||0
-r|c|IE 412|||2345||0
-r|c|IE 431|||2345||0
-r|c|SE 411|||2345||0
-r|c|MSE 461|||2345||0
-r|c|MSE 485|||2345||0
-r|c|MSE 487|||2345||0
-r|c|MSE 488|||2345||0
-r|c|ME 453|||2345||0
-r|c|ME 455|||2345||0
-r|c|NPRE 321|||2345||0
-r|c|NPRE 423|||2345||0
-r|c|PHYS 370|||2345||0
-r|c|PHYS 402|||2345||0
-r|c|PHYS 404|||2345||0
-r|c|PHYS 427|||2345||0
-r|c|PHYS 460|||2345||0
-r|c|PHYS 486|||2345||0
-r|c|PHYS 487|||2345||0
-r|r||||2345|2346|0
-#las/minors/slavic-literature-language-culture|Slavic Literature Language Culture Minor|LAS|minor||ok|
-r|r||3|||2328|0
-r|c|BCS 115|||||0
-r|c|POL 115|||||0
-r|c|REES 200|||||0
-r|c|REES 201|||||0
-r|c|RUSS 261|||||0
-r|c|SLAV 117|||||0
-r|c|SLAV 120|||||0
-r|c|UKR 113|||||0
-r|r||6-8|||2347|0
-r|k|BCS 201; BCS 202|||||0
-r|k|CZCH 201; CZCH 202|||||0
-r|k|POL 201; POL 202|||||0
-r|k|UKR 201; UKR 202|||||0
-r|r||9|||2348|0
 #las/slavic-studies-balas/czech-studies|Slavic Studies: Czech Studies, BALAS|LAS|conc|las/slavic-studies-balas|ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29078,12 +25791,6 @@ r|c|SOCW 455|||||1
 r|c|SOCW 475|||||1
 r|c|SOCW 480|||||1
 r|r||53|||2394|1
-#las/minors/sociology|Sociology Minor|LAS|minor||ok|
-r|c|SOC 100|4||||0
-r|c|SOC 200|3||||0
-r|c|SOC 280|4||||0
-r|r||6|||2395|0
-r|r||3-6|||2396|0
 #las/sociology-balas|Sociology, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29112,60 +25819,6 @@ r|c|SOC 450|||||2
 r|c|SOC 495|||||2
 r|r||14|||2400|2
 r|r||12|||2401|2
-#minors/socw|Socw Minor|MINORS|minor||ok|
-r|c|SOCW 200|||2402||0
-r|c|SOCW 296|||2402||0
-r|c|SOCW 410|||2402||0
-r|c|SOCW 451|||2402||0
-r|c|SOCW 220|||2403||0
-r|c|SOCW 240|||2403||0
-r|c|SOCW 245|||2403||0
-r|c|SOCW 297|||2403||0
-r|c|SOCW 310|||2403||0
-r|c|SOCW 315|||2403||0
-r|c|SOCW 321|||2403||0
-r|c|SOCW 330|||2403||0
-r|c|SOCW 360|||2403||0
-r|c|SOCW 370|||2403||0
-r|c|SOCW 380|||2403||0
-r|c|SOCW 412|||2403||0
-r|c|SOCW 416|||2403||0
-r|c|SOCW 418|||2403||0
-r|c|SOCW 420|||2403||0
-r|c|SOCW 425|||2403||0
-r|c|SOCW 445|||2403||0
-r|c|SOCW 455|||2403||0
-r|c|SOCW 475|||2403||0
-r|c|SOCW 480|||2403||0
-#las/minors/south-asian-studies-interdisciplinary|South Asian Studies Interdisciplinary Minor|LAS|minor||ok|
-r|r||||2404|2405|0
-r|c|ANTH 130|||2406||0
-r|r||||2407|2408|0
-r|c|ANTH 221|||2407||0
-r|c|CWL 207|||2407||0
-r|c|CWL 208|||2407||0
-r|c|HNDI 405|||2407||0
-r|c|HNDI 406|||2407||0
-r|c|HNDI 408|||2407||0
-r|c|HNDI 412|||2407||0
-r|c|HIST 430|||2407||0
-r|c|LING 115|||2407||0
-r|c|ASST 346|||2407||0
-r|c|REL 104|||2407||0
-r|c|REL 260|||2407||0
-r|c|REL 286|||2407||0
-r|c|REL 287|||2407||0
-r|c|REL 291|||2407||0
-r|c|REL 350|||2407||0
-r|c|REL 403|||2407||0
-r|c|REL 408|||2407||0
-r|c|REL 495|||2407||0
-r|c|REL 520|||2407||0
-r|c|REL 567|||2407||0
-#las/minors/spanish|Spanish Minor|LAS|minor||ok|
-r|c|SPAN 228|3||2409||0
-r|r||6-9||2409|2410|0
-r|r||6-9||2409|2411|0
 #las/spanish-balas|Spanish, BALAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29182,33 +25835,6 @@ r|c|SPAN 228|||||1
 r|r|||||2413|1
 r|r|||||2414|1
 r|r||15-21|||2415|1
-#aces/minors/spatial-quantitative-methods-natural-resources-environmental-sciences|Spatial Quantitative Methods Natural Resources Environmental Sciences Minor|ACES|minor||ok|
-r|r||3-4||2416|23|0
-r|c|NRES 340|||2416||0
-r|c|NRES 421|||2416||0
-r|c|CPSC 440|||2416||0
-r|c|NRES 445|||2416||0
-r|c|STAT 200|||2416||0
-r|r||3-4||2417|23|0
-r|c|NRES 401|||2417||0
-r|c|NRES 403|||2417||0
-r|c|NRES 407|||2417||0
-r|c|NRES 427|||2417||0
-r|c|NRES 482|||2417||0
-r|c|NRES 490|||2417||0
-r|c|IB 494|||2417||0
-r|c|ABE 227|||2417||0
-r|c|ABE 228|||2417||0
-r|r||3-5||2418|23|0
-r|c|CPSC 444|||2418||0
-r|c|NRES 454|||2418||0
-r|c|NRES 455|||2418||0
-r|c|NRES 465|||2418||0
-r|c|GGIS 460|||2418||0
-r|c|GGIS 476|||2418||0
-r|c|GGIS 477|||2418||0
-r|c|GGIS 478|||2418||0
-r|c|GGIS 489|||2418||0
 #education/special-education-bs|Special Education, BS|Education|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29256,28 +25882,6 @@ r|c|SPED 453|4||||1
 r|c|SPED 462|3||||1
 r|c|SPED 470|3||||1
 r|c|SPED 471|3||||1
-#ahs/minors/speech-hearing-science|Speech Hearing Science Minor|Applied Health Sciences|minor||ok|
-r|c|SHS 170|3||||0
-r|r||6-7|||234|0
-r|c|SHS 222|||||0
-r|c|SHS 240|||||0
-r|c|SHS 300|||||0
-r|c|SHS 320|||||0
-r|c|SHS 352|||||0
-r|r||8-9|||2424|0
-r|c|SHS 120|||||0
-r|c|SHS 200|||||0
-r|c|SHS 271|||||0
-r|c|SHS 280|||||0
-r|c|SHS 301|||||0
-r|c|SHS 375|||||0
-r|c|SHS 380|||||0
-r|c|SHS 389|||||0
-r|c|SHS 427|||||0
-r|c|SHS 433|||||0
-r|c|SHS 450|||||0
-r|c|SHS 451|||||0
-r|c|SHS 473|||||0
 #ahs/speech-hearing-science-bs|Speech Hearing Science, BS|Applied Health Sciences|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29421,26 +26025,6 @@ r|c|CS 412|||2441||0
 r|c|CS 446|||2441||0
 r|c|CS 481|||2441||0
 r|c|CS 482|||2441||0
-#las/minors/statistics|Statistics Minor|LAS|minor||ok|
-r|r|||||2442|0
-r|c|CPSC 241|||2443||0
-r|c|ECON 202|||2443||0
-r|c|EPSY 280|||2443||0
-r|c|PSYC 235|||2443||0
-r|c|STAT 100|||2443||0
-r|c|STAT 107|||2443||0
-r|c|SOC 280|||2443||0
-r|c|STAT 200|||2444||0
-r|c|STAT 207|||2444||0
-r|c|STAT 212|||2444||0
-r|c|ECON 203|||2444||0
-r|c|MATH 225|||2445||0
-r|c|MATH 257|||2445||0
-r|c|MATH 415|||2445||0
-r|c|STAT 400|||2446||0
-r|c|STAT 408|||2446||0
-r|c|MATH 461|||2446||0
-r|r||||2447|2448|0
 #las/statistics-bslas|Statistics, BSLAS|LAS|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -29977,21 +26561,6 @@ r|r||9|||348|5
 r|r||48|||1721|5
 r|r||7|||2476|5
 r|r|||||1390|5
-#las/minors/sub-saharan-african-languages|Sub Saharan African Languages Minor|LAS|minor||ok|
-r|r||6|||1777|0
-r|r|||||2487|0
-r|r||6|||2488|0
-r|r|||||2489|0
-r|c|LING 100|||||0
-r|c|LING 400|||||0
-r|r|||||2490|0
-r|c|LING 412|||||0
-r|r|||||2491|0
-r|r||6|||2492|0
-r|r|||||2493|0
-r|r|||||2494|0
-r|r|||||2495|0
-r|r|||||2496|0
 #bus/supply-chain-bs|Supply Chain, BS|Gies Business|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -30048,61 +26617,6 @@ r|c|BADM 374|3||2498||2
 r|c|BADM 377|3||2498||2
 r|c|BADM 379|3||2498||2
 r|c|BADM 453|3||2498||2
-#provost/minors/sustainability-energy-environment|Sustainability Energy Environment Minor|PROVOST|minor||ok|
-r|c|ENVS 301|3||||0
-r|c|ENVS 492|4||||0
-r|c|ANTH 278|||2499||0
-r|c|CPSC 336|||2499||0
-r|c|ESE 200|||2499||0
-r|c|ESE 210|||2499||0
-r|c|NRES 287|||2499||0
-r|c|ACE 210|||2500||0
-r|c|ACE 255|||2500||0
-r|c|ACE 406|||2500||0
-r|c|AGCM 330|||2500||0
-r|c|ATMS 322|||2500||0
-r|c|ENSU 303|||2500||0
-r|c|ESE 311|||2500||0
-r|c|ESE 482|||2500||0
-r|c|GGIS 410|||2500||0
-r|c|GGIS 465|||2500||0
-r|c|LA 370|||2500||0
-r|c|LA 446|||2500||0
-r|c|MDIA 223|||2500||0
-r|c|NRES 224|||2500||0
-r|c|NRES 325|||2500||0
-r|c|NRES 425|||2500||0
-r|c|NRES 428|||2500||0
-r|c|NRES 472|||2500||0
-r|c|PS 225|||2500||0
-r|c|RST 242|||2500||0
-r|c|SOC 447|||2500||0
-r|c|UP 460|||2500||0
-r|c|UP 486|||2500||0
-r|c|ABE 452|||2501||0
-r|c|ANTH 361|||2501||0
-r|c|ARTD 326|||2501||0
-r|c|ARTS 321|||2501||0
-r|c|ATMS 307|||2501||0
-r|c|CEE 330|||2501||0
-r|c|CHEM 360|||2501||0
-r|c|ECE 333|||2501||0
-r|c|ENSU 310|||2501||0
-r|c|ESE 320|||2501||0
-r|c|ESE 445|||2501||0
-r|c|FAA 230|||2501||0
-r|c|GEOL 333|||2501||0
-r|c|GGIS 220|||2501||0
-r|c|HK 408|||2501||0
-r|c|HORT 435|||2501||0
-r|c|IB 440|||2501||0
-r|c|LA 466|||2501||0
-r|c|ME 400|||2501||0
-r|c|MSE 489|||2501||0
-r|c|NPRE 201|||2501||0
-r|c|NRES 219|||2501||0
-r|c|NRES 348|||2501||0
-r|c|NRES 429|||2501||0
 #aces/sustainability-food-environmental-systems-bs|Sustainability Food Environmental Systems, BS|ACES|major||ok|
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -30812,32 +27326,6 @@ r|c|EPSY 201|3||||2
 r|c|EDPR 438|8||||2
 r|c|EDPR 442|8||||2
 r|r||120|||435|3
-#las/minors/teacher-education-minor-english-second-language|Teacher Education Minor English Second Language Minor|LAS|minor||ok|
-r|c|LING 100|3||||0
-r|c|EIL 411|3||||0
-r|c|LING 489|3||||0
-r|c|EIL 460|3||||0
-r|r||3|||23|0
-r|c|LING 450|||||0
-r|c|EIL 456|||||0
-r|c|CI 446|||||0
-r|r||3|||23|0
-r|c|EIL 422|||||0
-r|c|EIL 488|||||0
-r|r||3|||23|0
-r|c|EIL 214|||||0
-r|c|EIL 215|||||0
-#education/minors/teacher-education-secondary-school|Teacher Education Secondary School Minor|Education|minor||ok|
-r|c|EDUC 201|3||1292||0
-r|c|EDUC 202|3||1292||0
-r|c|CI 401|3||1292||0
-r|c|CI 403|3||1292||0
-r|c|CI 404|3||1292||0
-r|c|CI 473|3||1292||0
-r|c|EPSY 201|3||1292||0
-r|c|EPSY 485|3||1292||0
-r|c|SPED 405|3||1292||0
-r|c|EDPR 442|12||1292||0
 #las/teaching-french-ba|Teaching French, BA|LAS|major||ok|120
 r|c|FR 207|3||||0
 r|c|FR 211|3||||0
@@ -30920,57 +27408,6 @@ r|c|EPOL 201|3||2605||1
 r|c|EPSY 201|3||2605||1
 r|c|SPED 405|3||2605||1
 r|c|EDPR 442|12||2605||1
-#eng_bus/minors/technology-management|Technology Management Minor|ENG_BUS|minor||ok|
-r|c|BADM 365|3||2610||0
-r|c|ACCY 200|3||2610||0
-r|c|FIN 221|3||2611||0
-r|c|MSE 101|3||2612||0
-r|c|ECE 317|3||2612||0
-r|c|TAM 201|3||2612||0
-r|c|TMGT 367|3||2613||0
-r|c|TMGT 366|3||2613||0
-r|c|TMGT 460|3||2613||0
-r|c|TMGT 461|2||2613||0
-#faa/minors/theatre|Theatre Minor|Fine & Applied Arts|minor||ok|
-r|c|THEA 100|1||2614||0
-r|c|THEA 101|3||2614||0
-r|c|THEA 208|3||2614||0
-r|r||3||2614|2615|0
-r|c|THEA 304|||2614||0
-r|c|THEA 364|||2614||0
-r|r||||2616|2617|0
-r|r||||2616|2618|0
-r|c|THEA 110|||2616||0
-r|c|THEA 209|||2616||0
-r|c|THEA 211|||2616||0
-r|c|THEA 218|||2616||0
-r|c|THEA 260|||2616||0
-r|c|THEA 263|||2616||0
-r|c|THEA 304|||2616||0
-r|c|THEA 323|||2616||0
-r|c|THEA 364|||2616||0
-r|c|THEA 410|||2616||0
-r|c|THEA 411|||2616||0
-r|c|THEA 417|||2616||0
-r|c|THEA 418|||2616||0
-r|c|THEA 467|||2616||0
-r|c|THEA 483|||2616||0
-r|r||||2616|2619|0
-r|c|THEA 100|||2616||0
-r|c|THEA 126|||2616||0
-r|c|THEA 153|||2616||0
-r|c|THEA 170|||2616||0
-r|c|THEA 175|||2616||0
-r|c|THEA 220|||2616||0
-r|c|THEA 222|||2616||0
-r|c|THEA 231|||2616||0
-r|c|THEA 270|||2616||0
-r|c|THEA 402|||2616||0
-r|c|THEA 407|||2616||0
-r|c|THEA 418|||2616||0
-r|c|THEA 433|||2616||0
-r|c|THEA 452|||2616||0
-r|c|THEA 456|||2616||0
 #faa/theatre-bfa|Theatre, BFA|Fine & Applied Arts|major||ok|120
 r|r||4-6|||0|0
 r|r||3|||1|0
@@ -31908,27 +28345,6 @@ r|r|||||2690|4
 r|r|||||1189|4
 r|r|||||1651|4
 r|r|||||1652|4
-#aces/minors/wildlife-fisheries|Wildlife Fisheries Minor|ACES|minor||ok|
-r|c|NRES 219|3||2691||0
-r|a|IB 203||NRES 219|2691||0
-r|c|NRES 348|3||2691||0
-r|r||||2691|2552|0
-r|c|NRES 407|||2691||0
-r|c|NRES 409|||2691||0
-r|r||||2691|2552|0
-r|c|NRES 465|||2691||0
-r|c|NRES 420|||2691||0
-r|c|NRES 429|||2691||0
-r|c|NRES 480|||2691||0
-r|c|NRES 485|||2691||0
-r|r||||2691|2552|0
-r|c|NRES 302|||2691||0
-r|c|IB 407|||2691||0
-r|c|NRES 415|||2691||0
-r|c|NRES 461|||2691||0
-r|c|IB 462; NRES 442|||2691||0
-r|c|NRES 463|||2691||0
-r|c|NRES 464|||2691||0
 `;
 /* ============================================================
    PROGRAM ENGINE — reads the 2026-2027 requirement dataset
@@ -31993,7 +28409,9 @@ const PROG_LIST = Object.values(PROGRAMS).sort((a, b) => a.name.localeCompare(b.
    prog.kids) still work normally. Minors are untouched. */
 const ALLOWED_MAJORS = ['las/mathematics-bslas', 'las/actuarial-science-bslas', 'engineering/physics-bs'];
 const MAJOR_LIST = PROG_LIST.filter(p => p.kind === 'major' && ALLOWED_MAJORS.indexOf(p.slug) > -1);
-const MINOR_LIST = PROG_LIST.filter(p => p.kind === 'minor');
+const CSMIN_SLUG = 'engineering/minors/computer-science';
+const MINOR_LIST = PROG_LIST.filter(p => p.slug === CSMIN_SLUG);
+if (PROGRAMS[CSMIN_SLUG]) { PROGRAMS[CSMIN_SLUG].reqs = []; PROGRAMS[CSMIN_SLUG].custom = 'csminor'; }
 
 /* ---------- hours ---------- */
 function hrsOf(s, codes) {
@@ -32056,6 +28474,7 @@ function readRule(txt, hours) {
     };
   }
   if (lvl && need && /course/i.test(txt)) {
+    if (/\bmathematics\b/i.test(txt)) return { kind: 'bucket', need: need, m: { subj: ['MATH'], min: +lvl[1] * 100 }, why: 'MATH at the ' + lvl[1] + '00 level or above' };
     return { kind: 'bucket', need: need, m: { min: +lvl[1] * 100 }, why: 'any subject at the ' + lvl[1] + '00 level or above' };
   }
   return { kind: 'manual', need: need };
@@ -32064,13 +28483,13 @@ function readRule(txt, hours) {
 /* ---------- turn requirement rows into satisfiable slots ---------- */
 const WORDN = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 const LIST_RE = /select|choose|from the following|list below|one of the|electives?\s*:|courses? from|any of the/i;
-const SELECT_RE = /select|choose|one of the following|any of the following|from the following/i;
+const SELECT_RE = /select|choose|one of the following|any of the following|from the following|(?:courses?|classes) from\b/i;
 function headHours(sec) {
   const m = /(?::|\s)\s*(\d{1,2})\s*$/.exec((sec || '').trim());
   return m ? +m[1] : 0;
 }
 function headCourses(sec) {
-  const m = /\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+courses?\b/i.exec(sec || '');
+  const m = /\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?:additional\s+)?(?:courses?|classes|labs?)\b/i.exec(sec || '');
   return m ? (WORDN[m[1].toLowerCase()] || +m[1]) : 0;
 }
 /* Decide whether a section is a menu of options rather than a list of required courses.
@@ -32160,15 +28579,24 @@ function buildGroups(prog) {
     }
 
     pending = null;
-    let pendingOr = false, lastSlot = null, collect = null;
-    g.rows.forEach(function (r) {
+    let pendingOr = false, lastSlot = null, collect = null, seq = null, lastColl = null;
+    g.rows.forEach(function (r, ri) {
       if (r.t === 'r' && /^OR$/i.test(r.title.trim())) { pendingOr = true; return; }
       if (r.t !== 'r') {
         const opt = r.codes;
+        if (seq) {                           // "select one of the following sequences": each row is one whole sequence
+          if (r.t !== 'a' && r.hours) seq = null;
+          else { if (opt.length) seq.opts.push(opt); return; }
+        }
         if (collect) {                       // inside a "select one of the following" run
-          opt.forEach(c => { if (collect.m.list.indexOf(c) < 0) collect.m.list.push(c); });
-          collect.options = collect.m.list;
-          return;
+          // a course that states its own hours right after options that state none is a new required course
+          if (r.t !== 'a' && r.hours && collect.need && !collect.optHrs && collect.m.list.length) collect = null;
+          else {
+            if (r.hours) collect.optHrs = 1;
+            opt.forEach(c => { if (collect.m.list.indexOf(c) < 0) collect.m.list.push(c); });
+            collect.options = collect.m.list;
+            return;
+          }
         }
         if (r.t === 'a' && lastSlot) { lastSlot.opts.push(opt); return; }
         if (pendingOr && lastSlot) { lastSlot.opts.push(opt); pendingOr = false; return; }
@@ -32177,7 +28605,12 @@ function buildGroups(prog) {
         G.items.push(slot); lastSlot = slot;
         return;
       }
-      pendingOr = false; lastSlot = null; collect = null;
+      pendingOr = false; lastSlot = null; collect = null; seq = null;
+      if (/one of the following sequences?/i.test(r.title)) {
+        seq = { kind: 'slot', opts: [], need: hrsOf(r.hours), hours: r.hours };
+        G.items.push(seq);
+        return;
+      }
       const cnt = headCourses(r.title);
       const need = hrsOf(r.hours);
       if (SELECT_RE.test(r.title) && (need || cnt)) {
@@ -32186,9 +28619,15 @@ function buildGroups(prog) {
           why: need ? need + ' hrs from the courses listed under it' : cnt + ' of the courses listed under it'
         };
         G.items.push(collect);
+        if (/\babove\b.*\blist\b/i.test(r.title) && lastColl) {    // "an additional course from the above list": same options, plus any course the rule names
+          lastColl.m.list.concat(r.title.match(/\b[A-Z]{2,6}\s\d{3}\b/g) || []).forEach(c => { if (collect.m.list.indexOf(c) < 0) collect.m.list.push(c); });
+          collect.options = collect.m.list; collect = null;
+        } else lastColl = collect;
         return;
       }
       const parsed = readRule(r.title, r.hours);
+      const nxt = g.rows[ri + 1];
+      if (parsed.kind === 'manual' && nxt && nxt.t !== 'r' && r.title.length <= 70) return;   // a short heading for the course rows that follow
       G.items.push(Object.assign({ text: r.title, hours: r.hours }, parsed));
     });
     out.push(G);
@@ -32196,13 +28635,108 @@ function buildGroups(prog) {
   return out;
 }
 
+
+/* ---------- Computer Science Minor: hand-written audit ----------
+   Source: 2026-2027 catalog, catalog.illinois.edu/undergraduate/engineering/minors/computer-science/
+   - CS 173, CS 124, CS 128, CS 225 (13 hrs) + two upper-level CS courses (6 hrs)
+   - Substitutions: CS 125 for CS 124; CS 126 for CS 128; ECE 120 + ECE 220 for CS 124 + CS 128;
+     one of MATH 213/347/412/413 for CS 173 (MATH 347/412/413 are not upper-level courses)
+   - Upper-level: CS 300/400 level; not CS 397/398 (special permission only) and not CS 400, 401, 402,
+     403, 413, 491, 492, 493, 494, 497, 499. Must be UIUC credit (one may be study abroad).
+   - Transfer equivalents may satisfy the required courses, but the minor still needs 16 total hours.
+   - Open to any student except CS (incl. CS + X) and Computer Engineering majors. */
+const CSMIN_UPPER_EXCL = ['CS 397', 'CS 398', 'CS 400', 'CS 401', 'CS 402', 'CS 403', 'CS 413', 'CS 491', 'CS 492', 'CS 493', 'CS 494', 'CS 497', 'CS 499'];
+function auditCSMinor(courses) {
+  const taken = new Set();
+  const free = () => courses.filter(c => !taken.has(c.key) && !c.ph);
+  const find = code => free().find(c => c.code === code);
+  const res = { groups: [], missing: [], manual: [], need: 19, got: 0, consumed: [], upperN: 0, hrs: 0, floor: 16 };
+  const use = c => { taken.add(c.key); res.consumed.push(c); };
+  const G1 = { n: 'Required courses (13 hrs)', items: [], need: 13, got: 0 };
+  const G2 = { n: 'Two upper-level CS courses (6 hrs)', items: [], need: 6, got: 0 };
+  res.groups.push(G1, G2);
+  G1.items.push({ kind: 'flag', txt: 'Open to any student except Computer Science (including CS + X) and Computer Engineering majors.' });
+
+  const ok = (G, label, hrs, got, via, it) => { G.got += Math.min(got, hrs); G.items.push({ kind: 'ok', label: label, hrs: hrs, sat: via, sub: via !== label, it: it }); };
+  const miss = (G, label, hrs, it, options, txt) => { G.items.push({ kind: 'miss', label: label, hrs: hrs, it: it, options: options }); res.missing.push((txt || label) + ' (' + hrs + ' hrs)'); };
+
+  // CS 173
+  const dm = ['CS 173', 'MATH 213', 'MATH 347', 'MATH 412', 'MATH 413'];
+  const dmHit = dm.map(find).find(Boolean);
+  const dmIt = { alt: dm.slice(1), altNote: 'MATH 213, 347, 412 or 413 may substitute (MATH 347/412/413 do not count as upper-level).' };
+  if (dmHit) { use(dmHit); ok(G1, 'CS 173', 3, dmHit.h, dmHit.code, dmIt); }
+  else miss(G1, 'CS 173', 3, dmIt, dm);
+
+  // CS 124 + CS 128 (or ECE 120 + ECE 220)
+  const a = find('CS 124') || find('CS 125'), b = find('CS 128') || find('CS 126');
+  const e1 = find('ECE 120'), e2 = find('ECE 220');
+  const aIt = { alt: ['CS 125'], combo: [['ECE 120', 'ECE 220']], altNote: 'CS 125 may substitute for CS 124. ECE 120 + ECE 220 together replace CS 124 + CS 128.' };
+  const bIt = { alt: ['CS 126'], combo: [['ECE 120', 'ECE 220']], altNote: 'CS 126 may substitute for CS 128. ECE 120 + ECE 220 together replace CS 124 + CS 128.' };
+  if (!(a && b) && e1 && e2) {
+    use(e1); use(e2);
+    const h = Math.min(e1.h + e2.h, 6);
+    G1.got += h;
+    G1.items.push({ kind: 'ok', label: 'CS 124', hrs: 3, sat: 'ECE 120 + ECE 220', sub: true, it: aIt });
+    G1.items.push({ kind: 'ok', label: 'CS 128', hrs: 3, sat: 'ECE 120 + ECE 220', sub: true, it: bIt });
+  } else {
+    if (a) { use(a); ok(G1, 'CS 124', 3, a.h, a.code, aIt); } else miss(G1, 'CS 124', 3, aIt, ['CS 124', 'CS 125']);
+    if (b) { use(b); ok(G1, 'CS 128', 3, b.h, b.code, bIt); } else miss(G1, 'CS 128', 3, bIt, ['CS 128', 'CS 126']);
+  }
+
+  // CS 225
+  const ds = find('CS 225');
+  if (ds) { use(ds); ok(G1, 'CS 225', 4, ds.h, 'CS 225'); } else miss(G1, 'CS 225', 4, null, ['CS 225']);
+
+  // two upper-level CS courses, UIUC credit (one may be study abroad)
+  const isUpper = c => c.subj === 'CS' && c.num >= 300 && c.num < 500 && CSMIN_UPPER_EXCL.indexOf(c.code) < 0;
+  const rank = c => (c.prior ? 2 : 0) + (c.wild ? 1 : 0);
+  const cand = free().filter(isUpper).sort((x, y) => rank(x) - rank(y));
+  const up = []; let abroad = 0;
+  cand.forEach(c => {
+    if (up.length >= 2) return;
+    if (c.prior && c.prior !== 'Study abroad') return;
+    if (c.prior === 'Study abroad') { if (abroad >= 1) return; abroad++; }
+    up.push(c);
+  });
+  up.forEach(c => use(c));
+  res.upperN = up.length;
+  let upH = 0;
+  for (let i = 0; i < 2; i++) {
+    if (up[i]) {
+      upH += up[i].h;
+      G2.items.push({ kind: 'ok', label: up[i].code, hrs: up[i].h, sat: up[i].prior ? 'study abroad (needs a course modification)' : up[i].wild ? 'planned placeholder' : 'upper-level CS course' });
+    } else {
+      miss(G2, 'Upper-level CS course (' + (i + 1) + ' of 2)', 3, null, ['CS 3--', 'CS 4--'], 'Upper-level CS course ' + (i + 1) + ' of 2');
+    }
+  }
+  G2.got = Math.min(upH, 6);
+  G2.items.push({ kind: 'flag', txt: 'CS 300/400-level only, UIUC credit (one may be study abroad). Not allowed: CS 397/398 without CS Academic Office permission, and CS 400, 401, 402, 403, 413, 491, 492, 493, 494, 497, 499.' });
+  courses.filter(c => c.subj === 'CS' && c.num >= 300 && c.num < 500 && !c.ph).forEach(function (c) {
+    if (CSMIN_UPPER_EXCL.indexOf(c.code) > -1) G2.items.push({ kind: 'flag', txt: c.code + ' cannot count as an upper-level course for the CS minor.' });
+    else if (c.prior && c.prior !== 'Study abroad') G2.items.push({ kind: 'flag', txt: c.code + ' is ' + c.prior + ' credit. The upper-level courses must be taken for University of Illinois credit.' });
+  });
+
+  // 16-hour floor (catalog footnote 1)
+  res.hrs = res.consumed.reduce((t, c) => t + c.h, 0);
+  res.got = G1.got + G2.got;
+  if (!res.missing.length && res.hrs < res.floor) {
+    const G3 = { n: 'Minimum credit', items: [], need: 0, got: 0 };
+    G3.items.push({ kind: 'miss', label: 'Additional CS coursework approved by the CS Academic Office', hrs: res.floor - res.hrs });
+    res.missing.push('Additional approved CS coursework (' + (res.floor - res.hrs) + ' hrs short of the 16-hour minimum)');
+    res.groups.push(G3);
+  }
+  return res;
+}
+
 /* ---------- audit one program against the plan ---------- */
 function auditProgram(prog, courses, used) {
+  if (prog.custom === 'csminor') return auditCSMinor(courses);
   const taken = new Set();
   const avail = () => courses.filter(c => !taken.has(c.key) && (!used || !used.has(c.key)));
   const take = c => { taken.add(c.key); if (used) used.add(c.key); };
-  const res = { groups: [], missing: [], manual: [], need: 0, got: 0, consumed: [] };
+  const res = { groups: [], missing: [], manual: [], need: 0, got: 0, consumed: [], free: [] };
   const find = code => avail().find(c => c.code === code);
+  const deferred = [];
 
   buildGroups(prog).forEach(g => {
     const G = { n: g.name, items: [], need: 0, got: 0 };
@@ -32219,7 +28753,7 @@ function auditProgram(prog, courses, used) {
       const label = it.opts.map(o => o.join(' & ')).join(' or ');
       if (hitOpt) {
         hitCourses.forEach(take); res.consumed.push(...hitCourses);
-        const counted = Math.min(hitCourses.reduce((a, c) => a + c.h, 0), need || 99);
+        const counted = need || hitCourses.reduce((a, c) => a + c.h, 0);   // a satisfied requirement earns the hours the catalog lists for it
         G.got += counted; res.got += counted;
         const primary = it.opts[0].join(' & ');
         const via = hitOpt.join(' & ');
@@ -32233,17 +28767,20 @@ function auditProgram(prog, courses, used) {
       }
     });
 
-    g.items.filter(i => i.kind === 'bucket').forEach(it => {
+    const runBucket = it => {
       G.need += it.need; res.need += it.need;
       let got = 0, n = 0; const parts = [];
+      const anyOpen = it.open && !(it.m.list && it.m.list.length);   // free-elective rule: any leftover course counts
       avail().forEach(cs => {
         if (it.need && got >= it.need) return;
         if (it.countNeed && n >= it.countNeed) return;
-        if (!matches(cs, it.m)) return;
-        take(cs); res.consumed.push(cs); got += cs.h; n++; parts.push(cs.code);
+        if (!matches(cs, anyOpen ? {} : it.m)) return;
+        if (anyOpen) taken.add(cs.key); else take(cs);
+        (anyOpen ? res.free : res.consumed).push(cs); got += cs.h; n++; parts.push(cs.code);
       });
       if (it.need) got = Math.min(got, it.need);
-      G.got += got; res.got += got;
+      const credit = it.need ? got : 0;     // count-only rules ("choose 3 courses") state no hours, so they add none
+      G.got += credit; res.got += credit;
       const done = it.countNeed ? n >= it.countNeed : it.need ? got >= it.need : false;
       const have = it.countNeed ? n + ' of ' + it.countNeed + ' courses' : it.need ? got + ' of ' + it.need + ' hrs' : n + ' taken';
       G.items.push({
@@ -32254,7 +28791,8 @@ function auditProgram(prog, courses, used) {
       });
       if ((it.need || it.countNeed) && !done) res.missing.push(it.text.slice(0, 70) + ' — ' + (it.countNeed ? (it.countNeed - n) + ' more courses' : (it.need - got) + ' hrs short'));
       if (!it.need && !it.countNeed) res.manual.push(it.text + ' — choice list, hours not stated');
-    });
+    };
+    g.items.filter(i => i.kind === 'bucket').forEach(it => { if (it.open) deferred.push(() => runBucket(it)); else runBucket(it); });
 
     g.items.filter(i => i.kind === 'note').forEach(it => {
       const mine = courses.filter(c => it.options.indexOf(c.code) > -1).map(c => c.code);
@@ -32265,6 +28803,7 @@ function auditProgram(prog, courses, used) {
       res.manual.push(it.text);
     });
   });
+  deferred.forEach(f => f());
   return res;
 }
 /* ============================================================
@@ -32275,7 +28814,7 @@ const el = (t, c, x) => { const n = document.createElement(t); if (c) n.classNam
 const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
 let state = {
-  prog: 'engineering/computer-science-bs', minors: [],
+  prog: 'las/mathematics-bslas', minors: [CSMIN_SLUG],
   sems: [], prior: [], lang: { mode: 'none', note: '' },
   flags: { langExempt: false }, manual: {}, tab: 'major', view: 'plan'
 };
@@ -32443,8 +28982,8 @@ function degreeAudit() {
   const minors = state.minors.filter(s => PROGRAMS[s]).map(function (s) {
     const mi = PROGRAMS[s];
     const r = auditProgram(mi, courses, null);
-    const advDistinct = r.consumed.filter(c => c.num >= 300 && !used.has(c.key)).reduce((a, c) => a + c.h, 0);
-    return { id: s, mi: mi, r: r, advDistinct: advDistinct };
+    const shared = r.consumed.filter(c => used.has(c.key)).length;
+    return { id: s, mi: mi, r: r, shared: shared };
   });
 
   let total = 0, upper = 0;
@@ -32982,15 +29521,17 @@ function renderAudit() {
   }
 
   if (state.tab === 'minors') {
-    if (!state.minors.length) body.appendChild(el('div', 'hint', 'No minors added. Pick one from “Add minor” in the header — the audit checks eligibility, hours, and the ≥6 advanced hours that cannot be double-counted with your major.'));
+    if (!state.minors.length) body.appendChild(el('div', 'hint', 'No minors added. Pick one from “Add minor” in the header — the audit checks the four required courses, the two upper-level CS courses, accepted substitutions, and the 16-hour minimum.'));
     A.minors.forEach(m => {
       const s = el('div', 'summary');
       s.innerHTML = '<h3>' + esc(m.mi.name) + '</h3><div class="hint">' + esc(m.mi.coll) + '</div>';
       const pills = el('div', 'pillrow');
-      pills.appendChild(el('span', 'pill ' + (m.advDistinct >= 6 ? 'ok' : 'warn'), m.advDistinct + '/6 advanced hrs not shared with the major'));
+      pills.appendChild(el('span', 'pill ' + (m.r.upperN >= 2 ? 'ok' : 'warn'), m.r.upperN + '/2 upper-level CS courses (UIUC credit)'));
+      pills.appendChild(el('span', 'pill ' + (m.r.hrs >= m.r.floor ? 'ok' : 'warn'), m.r.hrs + ' hrs counted · 16 minimum'));
+      if (m.shared) pills.appendChild(el('span', 'pill warn', m.shared + ' course' + (m.shared === 1 ? '' : 's') + ' also used by your major'));
       const measurable = m.r.need > 0 || m.r.missing.length;
       pills.appendChild(el('span', 'pill ' + (m.r.missing.length ? 'miss' : measurable ? 'ok' : 'warn'),
-        m.r.missing.length ? m.r.missing.length + ' gaps' : measurable ? 'requirements met' : 'nothing measurable in the data — read the rules below'));
+        m.r.missing.length ? m.r.missing.length + (m.r.missing.length === 1 ? ' gap' : ' gaps') : measurable ? 'requirements met' : 'nothing measurable in the data — read the rules below'));
       const rm = el('button', 'btn line sm', 'Remove');
       rm.onclick = () => { state.minors = state.minors.filter(x => x !== m.id); rerender(); };
       pills.appendChild(rm);
@@ -33007,8 +29548,9 @@ function renderAudit() {
     const pills = el('div', 'pillrow');
     pills.appendChild(el('span', 'pill ' + (prog.total ? (A.total >= prog.total ? 'ok' : 'miss') : 'warn'), A.total + (prog.total ? ' of ' + prog.total : '') + ' hrs'));
     if (A.priorHrs) pills.appendChild(el('span', 'pill ok', A.priorHrs + ' hrs from AP / transfer credit'));
-    pills.appendChild(el('span', 'pill', A.upper + ' hrs at 300+'));
+    pills.appendChild(el('span', 'pill ' + (A.upper >= 40 ? 'ok' : 'warn'), A.upper + ' of 40 hrs at 300+ (upper-division minimum)'));
     s.appendChild(pills);
+    if (prog.coll === 'LAS') s.appendChild(el('div', 'hint', 'LAS majors also need 12 hours of 300/400-level, non-S/U major courses taken on this campus.'));
     if (!prog.total) s.appendChild(el('div', 'hint', 'This program page does not state a total-hours figure in the dataset, so no total is assumed. Check your college\'s minimum.'));
     body.appendChild(s);
 
@@ -33346,12 +29888,23 @@ $('#exportBtn').onclick = () => {
   a.href = URL.createObjectURL(blob); a.download = 'illini-plan-' + state.prog.split('/').pop() + '.json'; a.click();
   toast('Plan exported as JSON');
 };
+function sanitizeState() {
+  if (!state.prior) state.prior = [];
+  if (state.priorOpen === undefined) state.priorOpen = false;
+  if (state.sems && state.sems.length) normalizeSems();
+  const cur = PROGRAMS[state.prog];
+  const root = cur && cur.parent ? cur.parent : state.prog;
+  if (!cur || ALLOWED_MAJORS.indexOf(root) < 0) state.prog = 'las/mathematics-bslas';
+  state.minors = (state.minors || []).filter(s => PROGRAMS[s]);
+  if (!state.lang) state.lang = { mode: 'none' };
+  renderChrome(); renderFilters();
+}
 $('#importBtn').onclick = () => {
   const i = document.createElement('input'); i.type = 'file'; i.accept = '.json';
   i.onchange = () => {
     const f = i.files[0]; if (!f) return;
     const r = new FileReader();
-    r.onload = () => { try { state = Object.assign(state, JSON.parse(r.result)); rerender(); toast('Plan imported'); } catch (e) { toast('That file could not be read as a plan'); } };
+    r.onload = () => { try { const d = JSON.parse(r.result); if (!d || !Array.isArray(d.sems)) throw 0; state = Object.assign(state, d); sanitizeState(); rerender(); toast('Plan imported'); } catch (e) { toast('That file could not be read as a plan'); } };
     r.readAsText(f);
   };
   i.click();
