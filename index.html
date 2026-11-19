@@ -28522,7 +28522,8 @@ function classify(prog) {
     const dup = courseRows.some(r => r.codes.some(c => (seen[g.tbl] || {})[c] > 1));
     g.hrs = headHours(g.name); g.count = headCourses(g.name);
     g.ruleOnly = courseRows.length === 0;
-    g.list = !g.ruleOnly && (
+    const isTrack = !!(prog && prog.synthetic) && /\btrack\b/i.test(g.name);   // a whole track is a section of required courses and "choose" rows, never one big menu
+    g.list = !g.ruleOnly && !isTrack && (
       LIST_RE.test(g.name) || /:$/.test(g.name.trim()) || dup ||
       (courseRows.length >= 12 && !hasAlt && !g.hrs)
     );
@@ -28612,7 +28613,8 @@ function buildGroups(prog) {
         return;
       }
       const cnt = headCourses(r.title);
-      const need = hrsOf(r.hours);
+      const tm = /\bchoose\s+(?:a\s+minimum\s+of\s+|at\s+least\s+)?(\d{1,2})\s+(?:credit\s+)?hours?\b/i.exec(r.title);
+      const need = hrsOf(r.hours) || (tm ? +tm[1] : 0);   // "Choose 11 hours from the following:" states its hours only in the text
       if (SELECT_RE.test(r.title) && (need || cnt)) {
         collect = {
           kind: 'bucket', text: r.title, need: need, countNeed: cnt, m: { list: [] }, options: [],
